@@ -1,0 +1,16 @@
+.tileRow {
+    margin: 10px 10px;
+}
+
+.tile {
+    div {
+        visibility: hidden;
+    }
+    border-radius: 5px;
+    transition: background-color 0.25s ease;
+}
+
+.gridContainer {
+    //border: 2.5px solid black;
+    //padding: 5px;
+}
