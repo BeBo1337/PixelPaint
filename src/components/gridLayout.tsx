@@ -1,72 +1,77 @@
-import React from "react";
-import { Tile } from "../models";
-import styles from "./styles.module.scss";
-
+import { useState, useEffect, FC } from 'react'
+import { Tile } from '../models'
+import styles from './styles.module.scss'
+import { clone, cloneDeep } from 'lodash'
 
 interface GridLayoutProps {
-  random?: boolean;
+    rows: number
+    columns: number
+    color?: boolean
+    puzzle: Tile[]
+    onTileClicked?: Function
 }
 
-const GridLayout: React.FC<GridLayoutProps> = ({ random }: GridLayoutProps) => {
-  let rows = 7;
-  let cols = 7;
-  const [highlighted, setHighlighted] = React.useState<
-    Array<{ i: number; j: number }>
-  >([]);
+const GridLayout: FC<GridLayoutProps> = ({
+    color,
+    puzzle,
+    rows,
+    columns,
+    onTileClicked
+}: GridLayoutProps) => {
+    const [canvas, setCanvas] = useState(cloneDeep(puzzle))
 
-  React.useEffect(() => {
-    if (random) {
-      let i = 0;
-      const arr: Tile[] = [];
-      while (i < 18) {
-        const rI = Math.round(Math.random() * 6);
-        const rJ = Math.round(Math.random() * 6);
-        if (!arr.find((e) => e.i === rI && e.j === rJ)) {
-          arr.push({ i: rI, j: rJ });
-          ++i;
+    useEffect(() => {
+        setCanvas(cloneDeep(puzzle))
+        if (!color) {
+            for (const tile of canvas) {
+                tile.highlighted = false
+            }
+            setCanvas(cloneDeep(canvas))
         }
-      }
-      setHighlighted(arr);
+    }, [puzzle])
+
+    const onClick = (index: number) => {
+        canvas[index].highlighted = !canvas[index].highlighted
+        if (onTileClicked) {
+            onTileClicked(index, canvas[index].highlighted)
+        }
+        setCanvas(cloneDeep(canvas))
     }
-  }, []);
 
-  const divClicked = (tile: Tile) => {
-    if (isHighlighted(tile.i, tile.j)) {
-      setHighlighted(highlighted.filter((e) => !(e.i === tile.i && e.j === tile.j)));
-    } else {
-      setHighlighted([...highlighted, tile]);
-    }
-  };
-
-  const isHighlighted = (i: number, j: number) => {
-    return !!highlighted.find((e) => e.i === i && e.j === j);
-  };
-
-  return (
-    <div className={`container-fluid ${styles.gridContainer}`}>
-      {Array.from({ length: rows }, (_, i) => {
-        return (
-          <div className={`row justify-content-center ${styles.tileRow}`}>
-            {Array.from({ length: cols }, (_, j) => {
-              return (
-                <div
-                  className={`${styles.tile}`}
-                  style={{
-                    backgroundColor: isHighlighted(i, j) ? "red" : "black",
-                    margin: random ? "-2.5px 2.5px" : "0px 5px",
-                    width: random ? "40px" : "100px", //was width: random ? "2vw" : "4vw"
-                    height: random ? "40px" : "100px", //was height: random ? "2vw" : "4vw"
-                  }}
-                  onClick={() => (random ? null : divClicked({ i, j }))}
-                >
-                </div>
-              );
+    return (
+        <div className={`container-fluid ${styles.gridContainer}`}>
+            {Array.from({ length: rows }, (_, i) => {
+                return (
+                    <div
+                        className={`row justify-content-center ${styles.tileRow}`}
+                        key={i}
+                    >
+                        {Array.from({ length: columns }, (_, j) => {
+                            const index = i * columns + j
+                            const isHighlighted = canvas[index]?.highlighted
+                            return (
+                                <div
+                                    className={`${styles.tile}`}
+                                    key={`${i}-${j}`}
+                                    style={{
+                                        backgroundColor: isHighlighted
+                                            ? 'red'
+                                            : 'black',
+                                        margin: color
+                                            ? '-2.5px 2.5px'
+                                            : '0px 5px',
+                                        width: color ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
+                                        height: color ? '40px' : '100px' //was height: random ? "2vw" : "4vw"
+                                    }}
+                                    onClick={() => onClick(index)}
+                                ></div>
+                            )
+                        })}
+                    </div>
+                )
             })}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+        </div>
+    )
+}
 
-export default GridLayout;
+export default GridLayout

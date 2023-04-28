@@ -1,19 +1,21 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 
-import React from 'react'
+import { useState, useEffect, FC } from 'react'
 import './App.css'
-import GridLayout from './components/gridLayout'
+import GameManager from './components/GameManager'
 
-const App: React.FC<{}> = () => {
-  return (
-    <div className="App">
-      <GridLayout random={true}/>
-      <GridLayout />
-    </div>
-  )
+const App: FC<{}> = () => {
+    const [rows, setRows] = useState(7)
+    const [colums, setColums] = useState(7)
+    const [maxColored, setMaxColored] = useState(18)
+    return (
+        <div className="App">
+            <GameManager rows={rows} columns={colums} maxColored={maxColored} />
+        </div>
+    )
 }
 
 export default App
