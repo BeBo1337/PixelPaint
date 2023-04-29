@@ -19,10 +19,10 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
 
     useEffect(() => {
         setTimeout(() => {
+            if (timeLeft === 0) onTimeOver()
             if (timeLeft <= 10) setWarning(true)
             if (timeLeft > 0) setTime(timeLeft - 1)
         }, 1000)
-        if (timeLeft === 0) onTimeOver()
     }, [timeLeft])
 
     const calculateTime = (time: number) => {
@@ -36,7 +36,13 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
     }
 
     return (
-        <div className={`${styles.timeContainer}`}>
+        <div
+            className={
+                warning
+                    ? `${styles.timeContainerBlink}`
+                    : `${styles.timeContainer}`
+            }
+        >
             <h1 style={{ color: warning ? 'red' : 'aqua' }}>
                 {calculateTime(timeLeft)}
             </h1>

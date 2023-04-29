@@ -4,7 +4,6 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
 import { useState, useEffect, FC } from 'react'
-import './App.css'
 import GameManager from './components/GameManager'
 
 const App: FC<{}> = () => {

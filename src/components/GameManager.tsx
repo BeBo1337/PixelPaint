@@ -51,7 +51,6 @@ const GameManager: FC<GameManagerProps> = ({
 
     const handleTimeOver = () => {
         gameOver = true
-        console.log('gameover')
         alert('gameover')
         setClickable(!clickable)
     }

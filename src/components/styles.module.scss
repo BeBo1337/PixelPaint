@@ -11,8 +11,28 @@
 }
 
 .timeContainer {
-    border-radius: 5px;
-    border-color: aqua;
     background-color: black;
-    transition: background-color 0.25s ease;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.timeContainerBlink {
+    background-color: black;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+        80% {
+            opacity: 0.5;
+        }
+    }
+    h1 {
+        transition: color 0.25s ease;
+        animation: blink 1s linear infinite;
+    }
 }
