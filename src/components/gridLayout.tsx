@@ -6,23 +6,25 @@ import { clone, cloneDeep } from 'lodash'
 interface GridLayoutProps {
     rows: number
     columns: number
-    color?: boolean
+    picture?: boolean
+    clickableCanvas?: boolean
     puzzle: Tile[]
     onTileClicked?: Function
 }
 
 const GridLayout: FC<GridLayoutProps> = ({
-    color,
-    puzzle,
     rows,
     columns,
+    picture,
+    clickableCanvas,
+    puzzle,
     onTileClicked
 }: GridLayoutProps) => {
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
 
     useEffect(() => {
         setCanvas(cloneDeep(puzzle))
-        if (!color) {
+        if (!picture) {
             for (const tile of canvas) {
                 tile.highlighted = false
             }
@@ -31,11 +33,13 @@ const GridLayout: FC<GridLayoutProps> = ({
     }, [puzzle])
 
     const onClick = (index: number) => {
-        canvas[index].highlighted = !canvas[index].highlighted
-        if (onTileClicked) {
-            onTileClicked(index, canvas[index].highlighted)
+        if (clickableCanvas) {
+            canvas[index].highlighted = !canvas[index].highlighted
+            if (onTileClicked) {
+                onTileClicked(index, canvas[index].highlighted)
+            }
+            setCanvas(cloneDeep(canvas))
         }
-        setCanvas(cloneDeep(canvas))
     }
 
     return (
@@ -57,11 +61,11 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         backgroundColor: isHighlighted
                                             ? 'red'
                                             : 'black',
-                                        margin: color
+                                        margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: color ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
-                                        height: color ? '40px' : '100px' //was height: random ? "2vw" : "4vw"
+                                        width: picture ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
+                                        height: picture ? '40px' : '100px' //was height: random ? "2vw" : "4vw"
                                     }}
                                     onClick={() => onClick(index)}
                                 ></div>

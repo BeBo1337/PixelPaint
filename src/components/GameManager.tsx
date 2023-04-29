@@ -1,6 +1,7 @@
 import { useEffect, useState, FC } from 'react'
 import GridLayout from './GridLayout'
 import { generateRandomTiles } from '../utils/GameFuncs'
+import TimerCountdown from './TimerCountdown'
 import { max } from 'lodash'
 import { Tile } from '../models'
 
@@ -8,16 +9,19 @@ interface GameManagerProps {
     rows: number
     columns: number
     maxColored: number
+    gameOver?: boolean
 }
 
 const GameManager: FC<GameManagerProps> = ({
     rows,
     columns,
-    maxColored
+    maxColored,
+    gameOver
 }: GameManagerProps) => {
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
-    const [currentColored, setCurrentColored] = useState<number>(0)
+    const [coloredRegularTiles, setCurrentColored] = useState<number>(0)
+    const [clickable, setClickable] = useState<boolean>(true)
     const [puzzle, setPuzzle] = useState<Tile[]>(
         generateRandomTiles(rows, columns, maxColored)
     )
@@ -32,31 +36,43 @@ const GameManager: FC<GameManagerProps> = ({
             }
         } else {
             if (highlighted) {
-                setCurrentColored(currentColored + 1)
-            } else setCurrentColored(currentColored - 1)
+                setCurrentColored(coloredRegularTiles + 1)
+            } else setCurrentColored(coloredRegularTiles - 1)
         }
     }
 
     useEffect(() => {
-        if (coloredObjectiveTiles === maxColored && currentColored == 0) {
-            alert('Game over')
+        if (coloredObjectiveTiles === maxColored && coloredRegularTiles == 0) {
             setPuzzle(generateRandomTiles(rows, columns, maxColored))
             setColoredObjectiveTiles(0)
             setCurrentColored(0)
         }
-    }, [coloredObjectiveTiles, currentColored])
+    }, [coloredObjectiveTiles, coloredRegularTiles])
+
+    const handleTimeOver = () => {
+        gameOver = true
+        console.log('gameover')
+        alert('gameover')
+        setClickable(!clickable)
+    }
 
     return (
         <div className="App">
+            <TimerCountdown
+                time={20}
+                isWarning={false}
+                onTimeOver={handleTimeOver}
+            />
             <GridLayout
                 rows={rows}
                 columns={columns}
-                color={true}
+                picture={true}
                 puzzle={puzzle}
             />
             <GridLayout
                 rows={rows}
                 columns={columns}
+                clickableCanvas={clickable}
                 puzzle={puzzle}
                 onTileClicked={onTileClicked}
             />
