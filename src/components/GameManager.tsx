@@ -1,9 +1,10 @@
 import { useEffect, useState, FC } from 'react'
-import GridLayout from './GridLayout'
-import { generateRandomTiles } from '../utils/GameFuncs'
+import GridLayout from './gridLayout'
+import { generateTiles } from '../utils/GameFuncs'
 import TimerCountdown from './TimerCountdown'
 import { max } from 'lodash'
 import { Tile } from '../models'
+import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
 interface GameManagerProps {
     rows: number
@@ -16,15 +17,19 @@ const GameManager: FC<GameManagerProps> = ({
     rows,
     columns,
     maxColored,
-    gameOver
+    gameOver,
 }: GameManagerProps) => {
+    let puzzlePayload : PuzzlePayload
+    puzzlePayload = generateTiles(rows, columns, maxColored)
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
     const [coloredRegularTiles, setCurrentColored] = useState<number>(0)
     const [clickable, setClickable] = useState<boolean>(true)
     const [puzzle, setPuzzle] = useState<Tile[]>(
-        generateRandomTiles(rows, columns, maxColored)
+        puzzlePayload.tiles
     )
+    const [amount, setAmount] = useState<number>(puzzlePayload.amount)
+    const [showPic,setShowPic] = useState<boolean>(true);
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
@@ -39,13 +44,20 @@ const GameManager: FC<GameManagerProps> = ({
                 setCurrentColored(coloredRegularTiles + 1)
             } else setCurrentColored(coloredRegularTiles - 1)
         }
+        //for other game mode, maybe this wont be here
+        //if(coloredObjectiveTiles + coloredRegularTiles === 2)
+           // setShowPic(false);
     }
 
     useEffect(() => {
-        if (coloredObjectiveTiles === maxColored && coloredRegularTiles == 0) {
-            setPuzzle(generateRandomTiles(rows, columns, maxColored))
+        
+        if (coloredObjectiveTiles === amount && coloredRegularTiles == 0) {
+            puzzlePayload = generateTiles(rows, columns, maxColored)
+            setAmount(puzzlePayload.amount)
+            setPuzzle(puzzlePayload.tiles)
             setColoredObjectiveTiles(0)
-            setCurrentColored(0)
+            setCurrentColored(0)            
+            setShowPic(true)
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
@@ -66,11 +78,13 @@ const GameManager: FC<GameManagerProps> = ({
                 rows={rows}
                 columns={columns}
                 picture={true}
+                showPicture={showPic}
                 puzzle={puzzle}
             />
             <GridLayout
                 rows={rows}
                 columns={columns}
+                showPicture={true}
                 clickableCanvas={clickable}
                 puzzle={puzzle}
                 onTileClicked={onTileClicked}

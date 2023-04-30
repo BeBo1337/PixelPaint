@@ -7,6 +7,8 @@ interface GridLayoutProps {
     rows: number
     columns: number
     picture?: boolean
+    showPicture?: boolean
+    score?: number
     clickableCanvas?: boolean
     puzzle: Tile[]
     onTileClicked?: Function
@@ -16,6 +18,8 @@ const GridLayout: FC<GridLayoutProps> = ({
     rows,
     columns,
     picture,
+    showPicture,
+    score,
     clickableCanvas,
     puzzle,
     onTileClicked
@@ -65,7 +69,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
                                         width: picture ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
-                                        height: picture ? '40px' : '100px' //was height: random ? "2vw" : "4vw"
+                                        height: picture ? '40px' : '100px', //was height: random ? "2vw" : "4vw"
+                                        visibility: showPicture ? 'visible' : 'hidden'
                                     }}
                                     onClick={() => onClick(index)}
                                 ></div>
