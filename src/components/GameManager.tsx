@@ -17,19 +17,18 @@ const GameManager: FC<GameManagerProps> = ({
     rows,
     columns,
     maxColored,
-    gameOver,
+    gameOver
 }: GameManagerProps) => {
-    let puzzlePayload : PuzzlePayload
-    puzzlePayload = generateTiles(rows, columns, maxColored)
+    const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
+        generateTiles(rows, columns, maxColored)
+    )
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
     const [coloredRegularTiles, setCurrentColored] = useState<number>(0)
     const [clickable, setClickable] = useState<boolean>(true)
-    const [puzzle, setPuzzle] = useState<Tile[]>(
-        puzzlePayload.tiles
-    )
+    const [puzzle, setPuzzle] = useState<Tile[]>(puzzlePayload.tiles)
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
-    const [showPic,setShowPic] = useState<boolean>(true);
+    const [showPic, setShowPic] = useState<boolean>(true)
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
@@ -46,20 +45,22 @@ const GameManager: FC<GameManagerProps> = ({
         }
         //for other game mode, maybe this wont be here
         //if(coloredObjectiveTiles + coloredRegularTiles === 2)
-           // setShowPic(false);
+        // setShowPic(false);
     }
 
     useEffect(() => {
-        
         if (coloredObjectiveTiles === amount && coloredRegularTiles == 0) {
-            puzzlePayload = generateTiles(rows, columns, maxColored)
-            setAmount(puzzlePayload.amount)
-            setPuzzle(puzzlePayload.tiles)
-            setColoredObjectiveTiles(0)
-            setCurrentColored(0)            
-            setShowPic(true)
+            setPayload(generateTiles(rows, columns, maxColored))
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
+
+    useEffect(() => {
+        setAmount(puzzlePayload.amount)
+        setPuzzle(puzzlePayload.tiles)
+        setColoredObjectiveTiles(0)
+        setCurrentColored(0)
+        setShowPic(true)
+    }, [puzzlePayload])
 
     const handleTimeOver = () => {
         gameOver = true
@@ -70,7 +71,7 @@ const GameManager: FC<GameManagerProps> = ({
     return (
         <div className="App">
             <TimerCountdown
-                time={20}
+                time={40}
                 isWarning={false}
                 onTimeOver={handleTimeOver}
             />

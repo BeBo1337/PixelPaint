@@ -1,34 +1,30 @@
 import { Tile } from '../models'
 import { Preset } from '../models'
 import { presets } from '../models/presets'
-import { Coordinate } from '../models';
-import { PuzzlePayload } from '../payloads/PuzzlePayload';
+import { Coordinate } from '../models'
+import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
-let presetsAvailable = presets.length;
+let presetsAvailable = presets.length
 
-export const generateTiles = (rows: number,
+export const generateTiles = (
+    rows: number,
     columns: number,
-    maxCount: number) : PuzzlePayload =>
-{
-    if(presetsAvailable > 0)
-    {
-        return generatePresetTiles();
+    maxCount: number
+): PuzzlePayload => {
+    debugger
+    if (presetsAvailable > 0) {
+        return generatePresetTiles()
     }
-    return generateRandomTiles(rows,columns,maxCount);
+    return generateRandomTiles(rows, columns, maxCount)
 }
-const generatePresetTiles = () : PuzzlePayload=>
-{
-    let tiles: Tile[] = []; 
-    let randomPreset: Preset;
-    randomPreset = presets[0];
-    //atm with a for loop and doesnt generate randomly because barely presets..
-    for(let i = 0;i<presets.length;i++)
-    {
-        randomPreset = presets[i];
-    }
-    presetsAvailable--;
-    tiles = randomPreset.picture;
-    return {tiles: tiles, amount: randomPreset.amount}
+
+const generatePresetTiles = (): PuzzlePayload => {
+    let tiles: Tile[] = []
+    let randomPreset: Preset
+    presetsAvailable = presetsAvailable - 1
+    randomPreset = presets[presetsAvailable]
+    tiles = randomPreset.picture
+    return { tiles: tiles, amount: randomPreset.amount }
 }
 
 //Generates maxCount number of tiles to highlight in the grid
@@ -45,7 +41,7 @@ const generateRandomTiles = (
     while (toColor.length < maxCount) {
         const i = Math.floor(Math.random() * rows)
         const j = Math.floor(Math.random() * columns)
-        if (!findColored({i, j})) {
+        if (!findColored({ i, j })) {
             toColor.push({ i, j })
         }
     }
@@ -55,9 +51,9 @@ const generateRandomTiles = (
             tiles.push({
                 i,
                 j,
-                highlighted: !!findColored({i, j})
+                highlighted: !!findColored({ i, j })
             })
         }
     }
-   return {tiles: tiles, amount: maxCount}
+    return { tiles: tiles, amount: maxCount }
 }

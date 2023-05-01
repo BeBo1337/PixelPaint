@@ -1,6 +1,6 @@
 import { Tile } from './Tile.model'
 
-export interface Coordinate{
+export interface Coordinate {
     i: number
     j: number
 }
