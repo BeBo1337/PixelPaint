@@ -71,7 +71,7 @@ const GameManager: FC<GameManagerProps> = ({
     return (
         <div className="App">
             <TimerCountdown
-                time={40}
+                time={600}
                 isWarning={false}
                 onTimeOver={handleTimeOver}
             />
