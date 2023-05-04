@@ -11,7 +11,6 @@ export const generateTiles = (
     columns: number,
     maxCount: number
 ): PuzzlePayload => {
-    debugger
     if (presetsAvailable > 0) {
         return generatePresetTiles()
     }
@@ -19,12 +18,10 @@ export const generateTiles = (
 }
 
 const generatePresetTiles = (): PuzzlePayload => {
-    let tiles: Tile[] = []
     let randomPreset: Preset
     presetsAvailable = presetsAvailable - 1
     randomPreset = presets[presetsAvailable]
-    tiles = randomPreset.picture
-    return { tiles: tiles, amount: randomPreset.amount }
+    return { tiles: randomPreset.picture, amount: randomPreset.amount }
 }
 
 //Generates maxCount number of tiles to highlight in the grid
@@ -35,6 +32,8 @@ const generateRandomTiles = (
 ): PuzzlePayload => {
     const tiles: Tile[] = []
     const toColor: Coordinate[] = []
+
+    //Checks if tile coordinates are already in the puzzle
     const findColored = (c: Coordinate) =>
         toColor.find((e) => e.i === c.i && e.j === c.j)
 

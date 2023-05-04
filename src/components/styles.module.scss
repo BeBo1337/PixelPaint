@@ -10,15 +10,22 @@
     transition: background-color 0.25s ease;
 }
 
-.timeContainer {
+.topBarContainer{
     background-color: black;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    color: white;
+    font-size: 40px;
+}
+
+.timeContainer {
     width: 100%;
     margin: auto;
     text-align: center;
 }
 
 .timeContainerBlink {
-    background-color: black;
     width: 100%;
     margin: auto;
     text-align: center;
