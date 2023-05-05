@@ -19,10 +19,6 @@ export const generateTiles = (
 }
 
 const generatePresetTiles = (): PuzzlePayload => {
-    // let tiles: Tile[] = []
-    // let randomPreset: Preset
-    // presetsAvailable = presetsAvailable - 1
-    // randomPreset = presets[presetsAvailable]
     const randomPreset: Preset = GetNextPreset(3)
     return { tiles: randomPreset.picture, amount: randomPreset.amount }
 }
