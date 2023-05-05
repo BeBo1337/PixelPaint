@@ -3,6 +3,7 @@ import { Preset } from '../models'
 import { presets } from '../models/presets'
 import { Coordinate } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
+import { GetNextPreset } from '../models/presetTable'
 
 let presetsAvailable = presets.length
 
@@ -18,9 +19,7 @@ export const generateTiles = (
 }
 
 const generatePresetTiles = (): PuzzlePayload => {
-    let randomPreset: Preset
-    presetsAvailable = presetsAvailable - 1
-    randomPreset = presets[presetsAvailable]
+    const randomPreset: Preset = GetNextPreset(3)
     return { tiles: randomPreset.picture, amount: randomPreset.amount }
 }
 
