@@ -1,4 +1,3 @@
-import { padStart } from 'lodash'
 import { FC, useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 import { colors } from '@mui/material'
@@ -36,16 +35,14 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
     }
 
     return (
-        <div
-            className={
-                warning
-                    ? `${styles.timeContainerBlink}`
-                    : `${styles.timeContainer}`
-            }
-        >
-            <h1 style={{ color: warning ? 'red' : 'aqua' }}>
-                {calculateTime(timeLeft)}
-            </h1>
+
+        <div  className={
+            warning
+                ? `${styles.timeContainerBlink}`
+                : `${styles.timeContainer}`
+        } style={{ color: warning ? 'red' : 'aqua' , fontSize: `40px`, fontWeight: 'bold'}}>
+            {calculateTime(timeLeft)}
+            
         </div>
     )
 }

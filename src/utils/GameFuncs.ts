@@ -35,6 +35,8 @@ const generateRandomTiles = (
 ): PuzzlePayload => {
     const tiles: Tile[] = []
     const toColor: Coordinate[] = []
+
+    //Checks if tile coordinates are already in the puzzle
     const findColored = (c: Coordinate) =>
         toColor.find((e) => e.i === c.i && e.j === c.j)
 

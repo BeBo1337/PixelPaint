@@ -1,7 +1,7 @@
 import { useEffect, useState, FC } from 'react'
+import TopBar from './TopBar'
 import GridLayout from './gridLayout'
 import { generateTiles } from '../utils/GameFuncs'
-import TimerCountdown from './TimerCountdown'
 import { max } from 'lodash'
 import { Tile } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
@@ -22,6 +22,7 @@ const GameManager: FC<GameManagerProps> = ({
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
         generateTiles(rows, columns, maxColored)
     )
+    const [score, setScore] = useState<number>(0)
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
     const [coloredRegularTiles, setCurrentColored] = useState<number>(0)
@@ -29,6 +30,7 @@ const GameManager: FC<GameManagerProps> = ({
     const [puzzle, setPuzzle] = useState<Tile[]>(puzzlePayload.tiles)
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
     const [showPic, setShowPic] = useState<boolean>(true)
+    
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
@@ -45,12 +47,13 @@ const GameManager: FC<GameManagerProps> = ({
         }
         //for other game mode, maybe this wont be here
         //if(coloredObjectiveTiles + coloredRegularTiles === 2)
-        // setShowPic(false);
+        //setShowPic(false);
     }
 
     useEffect(() => {
-        if (coloredObjectiveTiles === amount && coloredRegularTiles == 0) {
+        if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
             setPayload(generateTiles(rows, columns, maxColored))
+            setScore(score + 1)
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
@@ -70,10 +73,9 @@ const GameManager: FC<GameManagerProps> = ({
 
     return (
         <div className="App">
-            <TimerCountdown
-                time={40}
-                isWarning={false}
-                onTimeOver={handleTimeOver}
+            <TopBar
+                timeOverFunction={handleTimeOver}
+                score={score}
             />
             <GridLayout
                 rows={rows}

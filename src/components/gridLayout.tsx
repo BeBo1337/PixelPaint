@@ -47,7 +47,7 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     return (
-        <div className={`container-fluid ${styles.gridContainer}`}>
+        <div className={`container-fluid ${styles.gridContainer}`} style={{paddingTop: '10px'}}>
             {Array.from({ length: rows }, (_, i) => {
                 return (
                     <div
