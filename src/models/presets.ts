@@ -41,4 +41,4 @@ picture: [
 amount: 29,
 size: 49};
 
-export const presets: Preset[] = [target,diagonals,arrow]
+export const presets: Preset[] = [target, diagonals, arrow]
