@@ -19,10 +19,10 @@ const GameManager: FC<GameManagerProps> = ({
     maxColored,
     gameOver
 }: GameManagerProps) => {
-    const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
-        generateTiles(rows, columns, maxColored)
-    )
     const [score, setScore] = useState<number>(0)
+    const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
+        generateTiles(rows, columns, maxColored, score)
+    )
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
     const [coloredRegularTiles, setCurrentColored] = useState<number>(0)
@@ -30,7 +30,6 @@ const GameManager: FC<GameManagerProps> = ({
     const [puzzle, setPuzzle] = useState<Tile[]>(puzzlePayload.tiles)
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
     const [showPic, setShowPic] = useState<boolean>(true)
-    
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
@@ -52,7 +51,7 @@ const GameManager: FC<GameManagerProps> = ({
 
     useEffect(() => {
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
-            setPayload(generateTiles(rows, columns, maxColored))
+            setPayload(generateTiles(rows, columns, maxColored, score))
             setScore(score + 1)
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
@@ -73,10 +72,7 @@ const GameManager: FC<GameManagerProps> = ({
 
     return (
         <div className="App">
-            <TopBar
-                timeOverFunction={handleTimeOver}
-                score={score}
-            />
+            <TopBar timeOverFunction={handleTimeOver} score={score} />
             <GridLayout
                 rows={rows}
                 columns={columns}

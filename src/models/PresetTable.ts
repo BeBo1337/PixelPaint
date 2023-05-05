@@ -1,5 +1,6 @@
-import { Preset } from '../models'
-import { presets as PresetsList } from '../models/presets'
+import { Preset } from '.'
+import { presets as PresetsList } from './presets'
+import { GetNumberInRange } from '../utils/GenericFuncs'
 
 interface PresetTable {
     [key: number]: Preset[]
@@ -19,7 +20,8 @@ export const GetNextPreset = (difficulty: number): Preset => {
     var presetsList: Preset[] = presetTable[difficulty]
     var numInRange: number = GetNumberInRange(0, presetsList.length - 1)
     var res: Preset = presetsList[numInRange]
-    PresetsList.splice(numInRange, 1)
+
+    presetsList.splice(numInRange, 1)
 
     return res
 }
@@ -34,11 +36,5 @@ const GetPresetTable = (): PresetTable => {
         })
     }
 
-    console.log(presetTable)
-
     return presetTable
-}
-
-const GetNumberInRange = (start: number, end: number): number => {
-    return Math.floor(Math.random() * (end - start + 1))
 }

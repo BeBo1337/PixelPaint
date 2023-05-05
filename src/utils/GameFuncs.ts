@@ -3,23 +3,33 @@ import { Preset } from '../models'
 import { presets } from '../models/presets'
 import { Coordinate } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
-import { GetNextPreset } from '../models/presetTable'
+import { GetNextPreset } from '../models/PresetTable'
+import { GetNumberInRange } from '../utils/GenericFuncs'
+import Constants from '../utils/GameConstants'
 
 let presetsAvailable = presets.length
 
 export const generateTiles = (
     rows: number,
     columns: number,
-    maxCount: number
+    maxCount: number,
+    score: number
 ): PuzzlePayload => {
-    if (presetsAvailable > 0) {
+    let n: number = Constants.SHOULD_GENERATE_RANDOM
+
+    if (score >= Constants.SCORE_CHECKPOINT) {
+        n = GetNumberInRange(1, 3)
+    }
+
+    if (presetsAvailable > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
         return generatePresetTiles()
     }
+
     return generateRandomTiles(rows, columns, maxCount)
 }
 
 const generatePresetTiles = (): PuzzlePayload => {
-    const randomPreset: Preset = GetNextPreset(3)
+    const randomPreset: Preset = GetNextPreset(GetNumberInRange(1, 3))
     return { tiles: randomPreset.picture, amount: randomPreset.amount }
 }
 
@@ -37,8 +47,9 @@ const generateRandomTiles = (
         toColor.find((e) => e.i === c.i && e.j === c.j)
 
     while (toColor.length < maxCount) {
-        const i = Math.floor(Math.random() * rows)
-        const j = Math.floor(Math.random() * columns)
+        const i = GetNumberInRange(0, rows - 1)
+        const j = GetNumberInRange(0, columns - 1)
+
         if (!findColored({ i, j })) {
             toColor.push({ i, j })
         }
