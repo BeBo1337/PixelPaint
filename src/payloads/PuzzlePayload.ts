@@ -1,7 +1,7 @@
-import { Tile } from "../models"
+import { Tile } from '../models'
 
-export interface PuzzlePayload
-{
+export interface PuzzlePayload {
     tiles: Tile[]
     amount: number
+    difficulty: number
 }

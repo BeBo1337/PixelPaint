@@ -7,17 +7,16 @@ interface TopBarProps {
     score: number
 }
 
-const TopBar: FC<TopBarProps> = ({timeOverFunction, score} : TopBarProps) => {
-    return(
+const TopBar: FC<TopBarProps> = ({ timeOverFunction, score }: TopBarProps) => {
+    return (
         <div className={`${styles.topBarContainer}`}>
             <TimerCountdown
-            time={600}
-            isWarning={false}
-            onTimeOver={timeOverFunction}
+                time={600}
+                isWarning={false}
+                score={score}
+                onTimeOver={timeOverFunction}
             />
-            <h1>
-                SCORE: {score}
-            </h1>
+            <h1>SCORE: {score}</h1>
         </div>
     )
 }

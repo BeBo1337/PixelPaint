@@ -30,7 +30,11 @@ export const generateTiles = (
 
 const generatePresetTiles = (): PuzzlePayload => {
     const randomPreset: Preset = GetNextPreset(GetNumberInRange(1, 3))
-    return { tiles: randomPreset.picture, amount: randomPreset.amount }
+    return {
+        tiles: randomPreset.picture,
+        amount: randomPreset.amount,
+        difficulty: randomPreset.difficulty
+    }
 }
 
 //Generates maxCount number of tiles to highlight in the grid
@@ -64,5 +68,5 @@ const generateRandomTiles = (
             })
         }
     }
-    return { tiles: tiles, amount: maxCount }
+    return { tiles: tiles, amount: maxCount, difficulty: 1 }
 }
