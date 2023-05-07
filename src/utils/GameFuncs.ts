@@ -22,14 +22,18 @@ export const generateTiles = (
     }
 
     if (presetsAvailable > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
-        return generatePresetTiles()
+        return generatePresetTiles(rows)
     }
 
     return generateRandomTiles(rows, columns, maxCount)
 }
 
-const generatePresetTiles = (): PuzzlePayload => {
-    const randomPreset: Preset = GetNextPreset(GetNumberInRange(1, 3))
+const generatePresetTiles = (size: number): PuzzlePayload => {
+    let randomPreset = {} as Preset
+    console.log(size)
+    if (size === 7) randomPreset = GetNextPreset(GetNumberInRange(1, 3))
+    if (size === 8) randomPreset = GetNextPreset(GetNumberInRange(4, 4))
+    console.log(randomPreset)
     return {
         tiles: randomPreset.picture,
         amount: randomPreset.amount,
