@@ -10,7 +10,7 @@
     transition: background-color 0.25s ease;
 }
 
-.topBarContainer{
+.topBarContainer {
     background-color: black;
     display: flex;
     align-items: center;
@@ -38,8 +38,6 @@
             opacity: 0.5;
         }
     }
-    h1 {
-        transition: color 0.25s ease;
-        animation: blink 1s linear infinite;
-    }
+    transition: color 0.25s ease;
+    animation: blink 1s linear infinite;
 }

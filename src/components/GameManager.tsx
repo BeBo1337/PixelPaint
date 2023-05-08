@@ -29,6 +29,7 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
+
         if (objectiveTile) {
             if (highlighted) {
                 setColoredObjectiveTiles(coloredObjectiveTiles + 1)
@@ -47,16 +48,20 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
 
     useEffect(() => {
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
-            setScore(score + 1)
-            if (score === 0) {
-                setRows(rows + 1)
-                setColums(columns + 1)
+            setScore((score) => score + 1)
+            if (
+                score === Constants.CHECKPOINT_8X8 ||
+                score === Constants.CHECKPOINT_9X9
+            ) {
+                setRows((rows) => rows + 1)
+                setColums((columns) => columns + 1)
             }
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
     useEffect(() => {
-        setPayload(generateTiles(rows, columns, tilesToGen, score))
+        if (score !== 0)
+            setPayload(generateTiles(rows, columns, tilesToGen, score))
     }, [score])
 
     useEffect(() => {
