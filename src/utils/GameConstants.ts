@@ -1,6 +1,10 @@
 const Constants = {
     SHOULD_GENERATE_RANDOM: 1,
-    SCORE_CHECKPOINT: 10
+    SCORE_CHECKPOINT: 10,
+    START_DIMENSIONS: 7,
+    START_RANDOM_TILES: 15,
+    CHECKPOINT_8X8: 0,
+    CHECKPOINT_9X9: 50
 }
 
 export default Constants

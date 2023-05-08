@@ -22,11 +22,12 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
     useEffect(() => {
         setTimeout(() => {
             if (timeLeft === 0) onTimeOver()
+            else setTime(timeLeft - 1)
             if (timeLeft <= 10) setWarning(true)
             if (prevScore < score) {
                 setTime(timeLeft + 1)
                 setPrevScore(score)
-            } else if (prevScore === score) setTime(timeLeft - 1)
+            }
         }, 1000)
     }, [timeLeft, score])
 

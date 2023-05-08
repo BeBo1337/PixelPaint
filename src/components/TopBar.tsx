@@ -11,7 +11,7 @@ const TopBar: FC<TopBarProps> = ({ timeOverFunction, score }: TopBarProps) => {
     return (
         <div className={`${styles.topBarContainer}`}>
             <TimerCountdown
-                time={600}
+                time={120}
                 isWarning={false}
                 score={score}
                 onTimeOver={timeOverFunction}

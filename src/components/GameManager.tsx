@@ -4,24 +4,20 @@ import GridLayout from './gridLayout'
 import { generateTiles } from '../utils/GameFuncs'
 import { max } from 'lodash'
 import { Tile } from '../models'
+import Constants from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
 interface GameManagerProps {
-    rows: number
-    columns: number
-    maxColored: number
     gameOver?: boolean
 }
 
-const GameManager: FC<GameManagerProps> = ({
-    rows,
-    columns,
-    maxColored,
-    gameOver
-}: GameManagerProps) => {
+const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
+    const [rows, setRows] = useState(Constants.START_DIMENSIONS)
+    const [columns, setColums] = useState(Constants.START_DIMENSIONS)
+    const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)
     const [score, setScore] = useState<number>(0)
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
-        generateTiles(rows, columns, maxColored, score)
+        generateTiles(rows, columns, tilesToGen, score)
     )
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
@@ -33,6 +29,7 @@ const GameManager: FC<GameManagerProps> = ({
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
+
         if (objectiveTile) {
             if (highlighted) {
                 setColoredObjectiveTiles(coloredObjectiveTiles + 1)
@@ -51,10 +48,21 @@ const GameManager: FC<GameManagerProps> = ({
 
     useEffect(() => {
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
-            setPayload(generateTiles(rows, columns, maxColored, score))
-            setScore(score + 1)
+            setScore((score) => score + 1)
+            if (
+                score === Constants.CHECKPOINT_8X8 ||
+                score === Constants.CHECKPOINT_9X9
+            ) {
+                setRows((rows) => rows + 1)
+                setColums((columns) => columns + 1)
+            }
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
+
+    useEffect(() => {
+        if (score !== 0)
+            setPayload(generateTiles(rows, columns, tilesToGen, score))
+    }, [score])
 
     useEffect(() => {
         setAmount(puzzlePayload.amount)

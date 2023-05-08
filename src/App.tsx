@@ -7,12 +7,9 @@ import { useState, useEffect, FC } from 'react'
 import GameManager from './components/GameManager'
 
 const App: FC<{}> = () => {
-    const [rows, setRows] = useState(7)
-    const [colums, setColums] = useState(7)
-    const [maxColored, setMaxColored] = useState(5)
     return (
         <div className="App">
-            <GameManager rows={rows} columns={colums} maxColored={maxColored} />
+            <GameManager />
         </div>
     )
 }

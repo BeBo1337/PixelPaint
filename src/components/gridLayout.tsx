@@ -27,13 +27,13 @@ const GridLayout: FC<GridLayoutProps> = ({
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
 
     useEffect(() => {
-        setCanvas(cloneDeep(puzzle))
+        const newCanvas = cloneDeep(puzzle)
         if (!picture) {
-            for (const tile of canvas) {
+            for (const tile of newCanvas) {
                 tile.highlighted = false
             }
-            setCanvas(cloneDeep(canvas))
         }
+        setCanvas(newCanvas)
     }, [puzzle])
 
     const onClick = (index: number) => {
@@ -47,7 +47,10 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     return (
-        <div className={`container-fluid ${styles.gridContainer}`} style={{paddingTop: '10px'}}>
+        <div
+            className={`container-fluid ${styles.gridContainer}`}
+            style={{ paddingTop: '10px' }}
+        >
             {Array.from({ length: rows }, (_, i) => {
                 return (
                     <div
@@ -70,7 +73,9 @@ const GridLayout: FC<GridLayoutProps> = ({
                                             : '0px 5px',
                                         width: picture ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
                                         height: picture ? '40px' : '100px', //was height: random ? "2vw" : "4vw"
-                                        visibility: showPicture ? 'visible' : 'hidden'
+                                        visibility: showPicture
+                                            ? 'visible'
+                                            : 'hidden'
                                     }}
                                     onClick={() => onClick(index)}
                                 ></div>
