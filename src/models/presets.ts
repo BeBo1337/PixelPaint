@@ -1,3 +1,4 @@
+import { head } from 'lodash';
 import { Preset } from '.'
 
 //Under not including 20 tiles is difficulty 1
@@ -70,6 +71,45 @@ picture: [
 amount: 14,
 size: 49};
 
+const weight: Preset = {difficulty: 1, name: "Weight", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: false},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: true},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: true},{i:2, j:6, highlighted: true}
+    ,{i:3, j:0, highlighted: true},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: true},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: true}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: true},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
+    ],
+amount: 15,
+size: 49};
+
+const dots: Preset = {difficulty: 1, name: "Dots", 
+picture: [
+     {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: true},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: true},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: false},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: false}
+    ,{i:4, j:0, highlighted: false},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: true},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: true},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: true},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: true}
+    ],
+amount: 15,
+size: 49};
+
+const waves: Preset = {difficulty: 1, name: "Waves", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: true},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: true},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: true},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: true}
+    ,{i:2, j:0, highlighted: false},{i:2, j:1, highlighted: true},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: true},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: false},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: false},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: false}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: true},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
+    ],
+amount: 16,
+size: 49};
+
 const snowFlake: Preset = {difficulty: 1, name: "SnowFlake", 
 picture: [
      {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
@@ -81,6 +121,45 @@ picture: [
     ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: true},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
     ],
 amount: 16,
+size: 49};
+
+const headPhones: Preset = {difficulty: 1, name: "HeadPhones", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: true},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: true},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: false},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: true}
+    ,{i:3, j:0, highlighted: true},{i:3, j:1, highlighted: false},{i:3, j:2, highlighted: false},{i:3, j:3, highlighted: false},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: false},{i:3, j:6, highlighted: true}
+    ,{i:4, j:0, highlighted: false},{i:4, j:1, highlighted: true},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: false}
+    ,{i:5, j:0, highlighted: true},{i:5, j:1, highlighted: true},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: true}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: true},{i:6, j:6, highlighted: false}
+    ],
+amount: 17,
+size: 49};
+
+const necklace: Preset = {difficulty: 1, name: "Necklace", 
+picture: [
+     {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: true}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: true},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: false},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: false},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: true},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: true},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: false},{i:3, j:2, highlighted: false},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: false},{i:3, j:6, highlighted: false}
+    ,{i:4, j:0, highlighted: false},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: true},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: true},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: false}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: true},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: true},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: true},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: true},{i:6, j:6, highlighted: false}
+    ],
+amount: 17,
+size: 49};
+
+const smallTarget: Preset = {difficulty: 1, name: "SmallTarget", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: true},{i:1, j:2, highlighted: true},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: true},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: false},{i:2, j:1, highlighted: true},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: true},{i:2, j:6, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: false},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: false}
+    ,{i:4, j:0, highlighted: false},{i:4, j:1, highlighted: true},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: false}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: true},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: true},{i:5, j:4, highlighted: true},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
+    ],
+amount: 17,
 size: 49};
 
 const anchor: Preset = {difficulty: 1, name: "Anchor", 
@@ -133,6 +212,19 @@ picture: [
     ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: true},{i:6, j:3, highlighted: true},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: true},{i:6, j:6, highlighted: false}
     ],
 amount: 17,
+size: 49};
+
+const asymmetrical: Preset = {difficulty: 1, name: "Asymmetrical", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: false},{i:1, j:4, highlighted: true},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: true}
+    ,{i:2, j:0, highlighted: false},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: true},{i:2, j:5, highlighted: true},{i:2, j:6, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: false},{i:3, j:2, highlighted: false},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: false},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: false}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: true},{i:4, j:2, highlighted: true},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: true},{i:5, j:4, highlighted: true},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
+    ],
+amount: 18,
 size: 49};
 
 const hourGlass: Preset = {difficulty: 1, name: "HourGlass", 
@@ -304,6 +396,19 @@ picture: [
 amount: 24,
 size: 49};
 
+const cyborg: Preset = {difficulty: 2, name: "Cyborg", 
+picture: [
+     {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: true}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: true},{i:1, j:2, highlighted: true},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: true},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: false}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: true},{i:2, j:3, highlighted: true},{i:2, j:4, highlighted: true},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: true}
+    ,{i:3, j:0, highlighted: true},{i:3, j:1, highlighted: false},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: true},{i:3, j:5, highlighted: false},{i:3, j:6, highlighted: true}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: true},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: false},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: true},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: false},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: true},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: false}
+    ],
+amount: 25,
+size: 49};
+
 const diagArrows: Preset = {difficulty: 2, name: "DiagArrows", 
 picture: [
      {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: true}
@@ -423,6 +528,19 @@ const symmetrical: Preset = {
     amount: 31,
     size: 49};  
 
+const totem: Preset = {difficulty: 3, name: "Totem", 
+picture: [
+     {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: true},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: true}
+    ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: true}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: true},{i:2, j:3, highlighted: true},{i:2, j:4, highlighted: true},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: true}
+    ,{i:3, j:0, highlighted: true},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: true},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: true}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: true},{i:4, j:3, highlighted: true},{i:4, j:4, highlighted: true},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: true},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: true},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: false}
+    ,{i:6, j:0, highlighted: true},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: true},{i:6, j:3, highlighted: true},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: true}
+    ],
+amount: 31,
+size: 49};
+
 const stairs: Preset = {difficulty: 3, name: "Stairs", 
 picture: [
      {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: true},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: true},{i:0, j:6, highlighted: true}
@@ -445,6 +563,19 @@ picture: [
     ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: true},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: true}
     ,{i:5, j:0, highlighted: true},{i:5, j:1, highlighted: true},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: true},{i:5, j:6, highlighted: true}
     ,{i:6, j:0, highlighted: true},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: true},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: true},{i:6, j:5, highlighted: true},{i:6, j:6, highlighted: true}
+    ],
+amount: 31,
+size: 49};
+
+const doorway: Preset = {difficulty: 3, name: "Doorway", 
+picture: [
+     {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: true},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: true},{i:0, j:6, highlighted: true}
+    ,{i:1, j:0, highlighted: true},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: true},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: true},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: true}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: false},{i:2, j:2, highlighted: false},{i:2, j:3, highlighted: true},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: true}
+    ,{i:3, j:0, highlighted: true},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: true},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: true}
+    ,{i:4, j:0, highlighted: true},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: true},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: false},{i:4, j:6, highlighted: true}
+    ,{i:5, j:0, highlighted: true},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: true},{i:5, j:3, highlighted: true},{i:5, j:4, highlighted: true},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: true}
+    ,{i:6, j:0, highlighted: true},{i:6, j:1, highlighted: false},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: true},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: true}
     ],
 amount: 31,
 size: 49};
@@ -822,6 +953,20 @@ picture: [
 amount: 32,
 size: 64};
 
+const s: Preset = {difficulty: 4, name: "S", 
+picture: [
+     {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: true},{i:0, j:2, highlighted: true},{i:0, j:3, highlighted: true},{i:0, j:4, highlighted: true},{i:0, j:5, highlighted: true},{i:0, j:6, highlighted: false},{i:0, j:7, highlighted: false}
+    ,{i:1, j:0, highlighted: true},{i:1, j:1, highlighted: true},{i:1, j:2, highlighted: false},{i:1, j:3, highlighted: false},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: true},{i:1, j:6, highlighted: true},{i:1, j:7, highlighted: false}
+    ,{i:2, j:0, highlighted: true},{i:2, j:1, highlighted: true},{i:2, j:2, highlighted: true},{i:2, j:3, highlighted: false},{i:2, j:4, highlighted: false},{i:2, j:5, highlighted: false},{i:2, j:6, highlighted: false},{i:2, j:7, highlighted: false}
+    ,{i:3, j:0, highlighted: false},{i:3, j:1, highlighted: true},{i:3, j:2, highlighted: true},{i:3, j:3, highlighted: true},{i:3, j:4, highlighted: true},{i:3, j:5, highlighted: true},{i:3, j:6, highlighted: true},{i:3, j:7, highlighted: false}
+    ,{i:4, j:0, highlighted: false},{i:4, j:1, highlighted: false},{i:4, j:2, highlighted: false},{i:4, j:3, highlighted: false},{i:4, j:4, highlighted: false},{i:4, j:5, highlighted: true},{i:4, j:6, highlighted: true},{i:4, j:7, highlighted: true}
+    ,{i:5, j:0, highlighted: true},{i:5, j:1, highlighted: false},{i:5, j:2, highlighted: false},{i:5, j:3, highlighted: false},{i:5, j:4, highlighted: false},{i:5, j:5, highlighted: false},{i:5, j:6, highlighted: true},{i:5, j:7, highlighted: true}
+    ,{i:6, j:0, highlighted: true},{i:6, j:1, highlighted: true},{i:6, j:2, highlighted: false},{i:6, j:3, highlighted: false},{i:6, j:4, highlighted: false},{i:6, j:5, highlighted: false},{i:6, j:6, highlighted: true},{i:6, j:7, highlighted: true}
+    ,{i:7, j:0, highlighted: false},{i:7, j:1, highlighted: false},{i:7, j:2, highlighted: true},{i:7, j:3, highlighted: true},{i:7, j:4, highlighted: true},{i:7, j:5, highlighted: true},{i:7, j:6, highlighted: true},{i:7, j:7, highlighted: false}
+    ],
+amount: 33,
+size: 64};
+
 const alien1: Preset = {difficulty: 4, name: "Alien1", 
 picture: [
      {i:0, j:0, highlighted: true},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false},{i:0, j:7, highlighted: true}
@@ -906,7 +1051,7 @@ picture: [
 amount: 36,
 size: 64};
 
-const Slime: Preset = {difficulty: 5, name: "Slime", 
+const slime: Preset = {difficulty: 5, name: "Slime", 
 picture: [
      {i:0, j:0, highlighted: false},{i:0, j:1, highlighted: false},{i:0, j:2, highlighted: false},{i:0, j:3, highlighted: false},{i:0, j:4, highlighted: false},{i:0, j:5, highlighted: false},{i:0, j:6, highlighted: false},{i:0, j:7, highlighted: false}
     ,{i:1, j:0, highlighted: false},{i:1, j:1, highlighted: false},{i:1, j:2, highlighted: true},{i:1, j:3, highlighted: true},{i:1, j:4, highlighted: false},{i:1, j:5, highlighted: false},{i:1, j:6, highlighted: false},{i:1, j:7, highlighted: false}
@@ -1121,12 +1266,13 @@ export const presets: Preset[] = [target,diagonals,arrow,flower,snowFlake2,umbre
     twinMusicNote,ladder,coin,snowFlake,jellyFish,key,heart,qMark,hourGlass,android,
     spaceShip,musicNote,smiley,anchor,diagArrows,newSquare,bunny,snake,sign,eight,
     one,two,three,reticle,utensils,shuriken,across,creeper,alien1,sideWaysTri,
-    pSmiley,moon,valve,dagger,octopus,checkers,abstract1,waraxe,bolt,
-    abstract2,sails,gasMask,grave,rope,orb,sparks,alien2,emerald,beatle,fence,
-    cat,bat,skully,staff,medal,banner,candy,abstract3,bowArrow,wrench,doubleArrows,
-    pokeBall,Slime,minotaur,chest,worm,eyeNoid,symmetrical,claws,dungeon,shuriken2,stairs
-    ,tableTop,gate]
+    pSmiley,moon,valve,dagger,octopus,checkers,abstract1,waraxe,bolt,abstract2,
+    sails,gasMask,grave,rope,orb,sparks,alien2,emerald,beatle,fence,cat,bat,skully,
+    staff,medal,banner,candy,abstract3,bowArrow,wrench,doubleArrows,pokeBall,
+    slime,minotaur,chest,worm,eyeNoid,symmetrical,claws,dungeon,shuriken2,stairs,
+    tableTop,gate,cyborg,totem,doorway,dots,s,waves,headPhones,smallTarget,asymmetrical,necklace,
+    weight]
 
-    //7x7: lvl1 : 11, lvl2 : 19, lvl3 : 8
+    //7x7: lvl1 : 18, lvl2 : 20, lvl3 : 10
 
-    //8x8: lvl4 : 23, lvl5: 18
+    //8x8: lvl4 : 24, lvl5: 18
