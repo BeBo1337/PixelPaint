@@ -29,9 +29,11 @@ export const generateTiles = (
 }
 
 const generatePresetTiles = (size: number): PuzzlePayload => {
+    console.log(GetNumberInRange(4, 5))
     let randomPreset = {} as Preset
     if (size === 7) randomPreset = GetNextPreset(GetNumberInRange(1, 3))
-    if (size === 8) randomPreset = GetNextPreset(GetNumberInRange(4, 4))
+    if (size === 8) randomPreset = GetNextPreset(GetNumberInRange(4, 5))
+
     return {
         tiles: randomPreset.picture,
         amount: randomPreset.amount,
