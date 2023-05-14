@@ -48,11 +48,6 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
                     ? `${styles.timeContainerBlink}`
                     : `${styles.timeContainer}`
             }
-            style={{
-                color: warning ? 'red' : 'aqua',
-                fontSize: `40px`,
-                fontWeight: 'bold'
-            }}
         >
             {calculateTime(timeLeft)}
         </div>

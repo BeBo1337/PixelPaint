@@ -1,35 +1,25 @@
-.tileRow {
-    margin: 10px 10px;
-}
-
-.tile {
-    div {
-        visibility: hidden;
-    }
-    border-radius: 5px;
-    transition: background-color 0.25s ease;
+// app header
+.appStyle {
+    background: linear-gradient(#333, #555555);
+    height: 100vh;
 }
 
 .topBarContainer {
-    background-color: black;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    color: white;
-    font-size: 40px;
-}
-
-.timeContainer {
-    width: 100%;
-    margin: auto;
+    background: linear-gradient(#e2a9a9, rgb(151, 151, 151));
+    padding: 30px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 2.5em;
+    font-weight: bold;
+    box-shadow: 0px 0px 25px 0px rgb(0, 0, 0);
+    margin-bottom: 15px;
 }
 
 .timeContainerBlink {
     width: 100%;
     margin: auto;
     text-align: center;
-
     @keyframes blink {
         50% {
             opacity: 0;
@@ -40,4 +30,27 @@
     }
     transition: color 0.25s ease;
     animation: blink 1s linear infinite;
+}
+
+.tileRow {
+    margin: 10px 10px;
+}
+
+.tile {
+    div {
+        visibility: hidden;
+    }
+    border-radius: 5px;
+    transition: background-color 0.25s ease;
+    &:hover {
+        opacity: 0.5;
+        cursor: pointer;
+    }
+    box-shadow: 0px 0px 4px 0px rgb(255, 255, 255);
+}
+
+.timeContainer {
+    width: 100%;
+    margin: auto;
+    text-align: center;
 }
