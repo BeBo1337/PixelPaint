@@ -62,7 +62,7 @@ const GridLayout: FC<GridLayoutProps> = ({
                             const isHighlighted = canvas[index]?.highlighted
                             return (
                                 <div
-                                    className={`${styles.tile}`}
+                                    className={`${picture ? '' : styles.tile}`}
                                     key={`${i}-${j}`}
                                     style={{
                                         backgroundColor: isHighlighted
