@@ -46,6 +46,14 @@ const GridLayout: FC<GridLayoutProps> = ({
         }
     }
 
+    const clearHighlightedTiles = () => {
+        const newCanvas = cloneDeep(canvas)
+        for (const tile of newCanvas) {
+            tile.highlighted = false
+        }
+        setCanvas(newCanvas)
+    }
+
     return (
         <div
             className={`container-fluid ${styles.gridContainer}`}
@@ -71,8 +79,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '40px' : '100px', //was width: random ? "2vw" : "4vw"
-                                        height: picture ? '40px' : '100px', //was height: random ? "2vw" : "4vw"
+                                        width: picture ? '1.5em' : '4em', //was width: random ? "2vw" : "4vw"
+                                        height: picture ? '1.5em' : '4em', //was height: random ? "2vw" : "4vw"
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
@@ -84,6 +92,18 @@ const GridLayout: FC<GridLayoutProps> = ({
                     </div>
                 )
             })}
+            <div>
+                {!picture && (
+                    <div className={`${styles.gameBtns}`}>
+                        <button
+                            className="clear-btn"
+                            onClick={clearHighlightedTiles}
+                        >
+                            <h1>CLEAR</h1>
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
