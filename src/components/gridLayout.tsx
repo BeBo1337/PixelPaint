@@ -38,7 +38,7 @@ const GridLayout: FC<GridLayoutProps> = ({
         setCanvas(newCanvas)
     }, [puzzle])
 
-    const onClick = (index: number) => {
+    const handleMouseUp = (index: number) => {
         if (clickableCanvas) {
             canvas[index].highlighted = !canvas[index].highlighted
             if (onTileClicked) {
@@ -47,7 +47,11 @@ const GridLayout: FC<GridLayoutProps> = ({
             setCanvas(cloneDeep(canvas))
         }
     }
-
+    const handleMouseDown = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        event.preventDefault()
+    }
     const clearHighlightedTiles = () => {
         const newCanvas = cloneDeep(canvas)
         for (const tile of newCanvas) {
@@ -90,7 +94,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                             ? 'visible'
                                             : 'hidden'
                                     }}
-                                    onClick={() => onClick(index)}
+                                    onMouseDown={handleMouseDown}
+                                    onMouseUp={() => handleMouseUp(index)}
                                 ></div>
                             )
                         })}
