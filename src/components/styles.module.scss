@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
 // app header
+
 .appStyle {
     background-color: #555555;
     height: 200vh;
@@ -32,6 +33,7 @@
             opacity: 0.5;
         }
     }
+    color: red;
     transition: color 0.25s ease;
     animation: blink 1s linear infinite;
 }

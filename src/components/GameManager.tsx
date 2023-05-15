@@ -9,20 +9,19 @@ import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
 interface GameManagerProps {
     gameOver?: boolean
-    gameMode?: number
+    gameMode: number
 }
 
 const GameManager: FC<GameManagerProps> = ({
     gameOver,
     gameMode
 }: GameManagerProps) => {
-    console.log(`gamemode: ${gameMode}`)
     const [rows, setRows] = useState(Constants.START_DIMENSIONS)
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
     const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)
     const [score, setScore] = useState<number>(0)
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
-        generateTiles(rows, columns, tilesToGen, score)
+        generateTiles(rows, columns, tilesToGen, score, gameMode)
     )
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
@@ -34,7 +33,9 @@ const GameManager: FC<GameManagerProps> = ({
 
     const onTileClicked = (tileIndex: number, highlighted: boolean) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
-
+        /* 
+            TODO: fix this bs, split into functions depending on gamemode and make PAINT mode work
+        */
         if (objectiveTile) {
             if (highlighted) {
                 setColoredObjectiveTiles(coloredObjectiveTiles + 1)
@@ -46,14 +47,16 @@ const GameManager: FC<GameManagerProps> = ({
                 setCurrentColored(coloredRegularTiles + 1)
             } else setCurrentColored(coloredRegularTiles - 1)
         }
-        //for other game mode, maybe this wont be here
-        //if(coloredObjectiveTiles + coloredRegularTiles === 2)
-        //setShowPic(false);
+        if (gameMode === Modes.MEMORY) {
+            if (coloredObjectiveTiles + coloredRegularTiles === 2)
+                setShowPic(false)
+        }
     }
 
     const onClearClicked = () => {
         setColoredObjectiveTiles(0)
         setCurrentColored(0)
+        setShowPic(true)
     }
 
     useEffect(() => {
@@ -71,7 +74,9 @@ const GameManager: FC<GameManagerProps> = ({
 
     useEffect(() => {
         if (score !== 0)
-            setPayload(generateTiles(rows, columns, tilesToGen, score))
+            setPayload(
+                generateTiles(rows, columns, tilesToGen, score, gameMode)
+            )
     }, [score])
 
     useEffect(() => {
@@ -104,6 +109,7 @@ const GameManager: FC<GameManagerProps> = ({
                 showPicture={true}
                 clickableCanvas={clickable}
                 puzzle={puzzle}
+                gameMode={gameMode}
                 onTileClicked={onTileClicked}
                 onClearClicked={onClearClicked}
             />
