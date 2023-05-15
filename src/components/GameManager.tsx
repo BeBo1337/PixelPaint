@@ -4,14 +4,19 @@ import GridLayout from './gridLayout'
 import { generateTiles } from '../utils/GameFuncs'
 import { max } from 'lodash'
 import { Tile } from '../models'
-import Constants from '../utils/GameConstants'
+import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
 interface GameManagerProps {
     gameOver?: boolean
+    gameMode?: number
 }
 
-const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
+const GameManager: FC<GameManagerProps> = ({
+    gameOver,
+    gameMode
+}: GameManagerProps) => {
+    console.log(`gamemode: ${gameMode}`)
     const [rows, setRows] = useState(Constants.START_DIMENSIONS)
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
     const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)

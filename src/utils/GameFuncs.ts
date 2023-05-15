@@ -5,7 +5,7 @@ import { Coordinate } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import { GetNextPreset } from '../models/PresetTable'
 import { GetNumberInRange } from '../utils/GenericFuncs'
-import Constants from '../utils/GameConstants'
+import { Constants } from '../utils/GameConstants'
 
 let presetsAvailable = presets.length
 

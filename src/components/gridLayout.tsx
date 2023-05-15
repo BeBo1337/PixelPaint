@@ -47,11 +47,13 @@ const GridLayout: FC<GridLayoutProps> = ({
             setCanvas(cloneDeep(canvas))
         }
     }
+
     const handleMouseDown = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
         event.preventDefault()
     }
+
     const clearHighlightedTiles = () => {
         const newCanvas = cloneDeep(canvas)
         for (const tile of newCanvas) {
