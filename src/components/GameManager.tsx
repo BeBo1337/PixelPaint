@@ -46,6 +46,11 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
         //setShowPic(false);
     }
 
+    const onClearClicked = () => {
+        setColoredObjectiveTiles(0)
+        setCurrentColored(0)
+    }
+
     useEffect(() => {
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
             setScore((score) => score + 1)
@@ -95,6 +100,7 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
                 clickableCanvas={clickable}
                 puzzle={puzzle}
                 onTileClicked={onTileClicked}
+                onClearClicked={onClearClicked}
             />
         </div>
     )

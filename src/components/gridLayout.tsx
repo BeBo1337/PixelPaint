@@ -12,6 +12,7 @@ interface GridLayoutProps {
     clickableCanvas?: boolean
     puzzle: Tile[]
     onTileClicked?: Function
+    onClearClicked?: Function
 }
 
 const GridLayout: FC<GridLayoutProps> = ({
@@ -22,7 +23,8 @@ const GridLayout: FC<GridLayoutProps> = ({
     score,
     clickableCanvas,
     puzzle,
-    onTileClicked
+    onTileClicked,
+    onClearClicked
 }: GridLayoutProps) => {
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
 
@@ -52,6 +54,9 @@ const GridLayout: FC<GridLayoutProps> = ({
             tile.highlighted = false
         }
         setCanvas(newCanvas)
+        if (onClearClicked) {
+            onClearClicked()
+        }
     }
 
     return (
