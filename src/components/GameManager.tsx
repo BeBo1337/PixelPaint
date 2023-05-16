@@ -7,6 +7,8 @@ import { Tile } from '../models'
 import Constants from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
+import { insertToCollectionAsync } from '../db/connection/ConnectionService'
+
 interface GameManagerProps {
     gameOver?: boolean
 }
@@ -80,6 +82,15 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
     const handleTimeOver = () => {
         gameOver = true
         alert('gameover')
+
+        /* This is how you insert a new score to the db. */
+
+        // insertToCollectionAsync('ScoreMemory', {
+        //     name: 'Tomer',
+        //     score: score,
+        //     date: new Date()
+        // })
+
         setClickable(!clickable)
     }
 

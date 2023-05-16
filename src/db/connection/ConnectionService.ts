@@ -1,19 +1,13 @@
-import firebase from 'firebase/app'
 import { FirebaseApp, initializeApp } from 'firebase/app'
 import {
     collection,
     getFirestore,
     setDoc,
     doc,
-    Query,
     limit,
     orderBy,
-    startAfter,
-    endBefore,
     query,
-    getDocs,
-    QuerySnapshot,
-    DocumentData
+    getDocs
 } from 'firebase/firestore'
 import firebaseConfig from './Config'
 import IScoreModel from '../models/ScoreModel'
@@ -39,6 +33,7 @@ export const getCollectionByNameAsync = async (
                 : orderBy('')
         )
     )
+
     return snapshot
 }
 
