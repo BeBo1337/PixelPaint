@@ -121,7 +121,6 @@ const GameManager: FC<GameManagerProps> = ({
 
     const handleTimeOver = () => {
         gameOver = true
-        alert('gameover')
 
         /* This is how you insert a new score to the db. */
 
