@@ -1,4 +1,4 @@
-const Constants = {
+export const Constants = {
     SHOULD_GENERATE_RANDOM: 1,
     SCORE_CHECKPOINT: 10,
     START_DIMENSIONS: 7,
@@ -7,4 +7,10 @@ const Constants = {
     CHECKPOINT_9X9: 50
 }
 
-export default Constants
+export const Modes = {
+    CLASSIC: 1,
+    MEMORY: 2,
+    PAINT: 3,
+    CO_OP: 4,
+    ONE_VS_ONE: 5
+}
