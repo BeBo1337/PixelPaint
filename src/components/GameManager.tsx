@@ -37,7 +37,7 @@ const GameManager: FC<GameManagerProps> = ({
         color: string
     ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
-        if ((gameMode = Modes.PAINT))
+        if (gameMode === Modes.PAINT)
             onTileClickedPaint(tileIndex, highlighted, color)
         else {
             if (objectiveTile) {
