@@ -1,25 +1,29 @@
 import { useEffect, useState, FC } from 'react'
 import TopBar from './TopBar'
 import GridLayout from './gridLayout'
-import { generateTiles } from '../utils/GameFuncs'
+import { generateTiles, isCorrectTile } from '../utils/GameFuncs'
 import { max } from 'lodash'
 import { Tile } from '../models'
-import Constants from '../utils/GameConstants'
+import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 
 import { insertToCollectionAsync } from '../db/connection/ConnectionService'
 
 interface GameManagerProps {
     gameOver?: boolean
+    gameMode: number
 }
 
-const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
+const GameManager: FC<GameManagerProps> = ({
+    gameOver,
+    gameMode
+}: GameManagerProps) => {
     const [rows, setRows] = useState(Constants.START_DIMENSIONS)
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
     const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)
     const [score, setScore] = useState<number>(0)
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
-        generateTiles(rows, columns, tilesToGen, score)
+        generateTiles(rows, columns, tilesToGen, score, gameMode)
     )
     const [coloredObjectiveTiles, setColoredObjectiveTiles] =
         useState<number>(0)
@@ -29,28 +33,62 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
     const [showPic, setShowPic] = useState<boolean>(true)
 
-    const onTileClicked = (tileIndex: number, highlighted: boolean) => {
+    const onTileClicked = (
+        tileIndex: number,
+        highlighted: boolean,
+        color: string,
+        prevColor: string
+    ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
-
-        if (objectiveTile) {
-            if (highlighted) {
-                setColoredObjectiveTiles(coloredObjectiveTiles + 1)
+        if (gameMode === Modes.PAINT)
+            onTileClickedPaint(tileIndex, highlighted, color, prevColor)
+        else {
+            if (objectiveTile) {
+                if (highlighted) {
+                    setColoredObjectiveTiles(coloredObjectiveTiles + 1)
+                } else {
+                    setColoredObjectiveTiles(coloredObjectiveTiles - 1)
+                }
             } else {
-                setColoredObjectiveTiles(coloredObjectiveTiles - 1)
+                if (highlighted) {
+                    setCurrentColored(coloredRegularTiles + 1)
+                } else setCurrentColored(coloredRegularTiles - 1)
             }
+            if (gameMode === Modes.MEMORY) {
+                if (coloredObjectiveTiles + coloredRegularTiles === 2)
+                    setShowPic(false)
+            }
+        }
+    }
+
+    const onTileClickedPaint = (
+        tileIndex: number,
+        highlighted: boolean,
+        color: string,
+        prevColor: string
+    ) => {
+        const objectiveTile: boolean = puzzle[tileIndex].highlighted
+        if (objectiveTile) {
+            setColoredObjectiveTiles(
+                coloredObjectiveTiles +
+                    isCorrectTile(
+                        puzzle[tileIndex],
+                        highlighted,
+                        color,
+                        prevColor
+                    )
+            )
         } else {
             if (highlighted) {
-                setCurrentColored(coloredRegularTiles + 1)
+                if (prevColor === '') setCurrentColored(coloredRegularTiles + 1)
             } else setCurrentColored(coloredRegularTiles - 1)
         }
-        //for other game mode, maybe this wont be here
-        //if(coloredObjectiveTiles + coloredRegularTiles === 2)
-        //setShowPic(false);
     }
 
     const onClearClicked = () => {
         setColoredObjectiveTiles(0)
         setCurrentColored(0)
+        setShowPic(true)
     }
 
     useEffect(() => {
@@ -68,7 +106,9 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
 
     useEffect(() => {
         if (score !== 0)
-            setPayload(generateTiles(rows, columns, tilesToGen, score))
+            setPayload(
+                generateTiles(rows, columns, tilesToGen, score, gameMode)
+            )
     }, [score])
 
     useEffect(() => {
@@ -110,6 +150,7 @@ const GameManager: FC<GameManagerProps> = ({ gameOver }: GameManagerProps) => {
                 showPicture={true}
                 clickableCanvas={clickable}
                 puzzle={puzzle}
+                gameMode={gameMode}
                 onTileClicked={onTileClicked}
                 onClearClicked={onClearClicked}
             />

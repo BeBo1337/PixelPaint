@@ -3,9 +3,9 @@ import { Preset } from '../models'
 import { presets } from '../models/presets'
 import { Coordinate } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
-import { GetNextPreset } from '../models/PresetTable'
-import { GetNumberInRange } from '../utils/GenericFuncs'
-import Constants from '../utils/GameConstants'
+import { getNextPreset } from '../models/PresetTable'
+import { getNumberInRange } from '../utils/GenericFuncs'
+import { Constants } from '../utils/GameConstants'
 
 let presetsAvailable = presets.length
 
@@ -13,26 +13,43 @@ export const generateTiles = (
     rows: number,
     columns: number,
     maxCount: number,
-    score: number
+    score: number,
+    gameMode: number
 ): PuzzlePayload => {
     let n: number = Constants.SHOULD_GENERATE_RANDOM
 
     if (score >= Constants.SCORE_CHECKPOINT) {
-        n = GetNumberInRange(1, 3)
+        n = getNumberInRange(1, 3)
     }
 
     if (presetsAvailable > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
-        return generatePresetTiles(rows)
+        return generatePresetTiles(rows, gameMode)
     }
 
     return generateRandomTiles(rows, columns, maxCount)
 }
 
-const generatePresetTiles = (size: number): PuzzlePayload => {
-    console.log(GetNumberInRange(4, 5))
+//Relevant in PAINT mode, updates coloredObjectiveTiles amount correctly according to the state
+export const isCorrectTile = (
+    tile: Tile,
+    highlighted: boolean,
+    color?: string,
+    prevColor?: string
+): number => {
+    if (highlighted && tile.color === color) return 1
+    if (highlighted && tile.color !== color && prevColor === tile.color)
+        return -1
+    if (!highlighted && tile.color === color) return -1
+    if (highlighted && tile.color !== color) return 0
+    else return 0
+}
+
+const generatePresetTiles = (size: number, gameMode: number): PuzzlePayload => {
     let randomPreset = {} as Preset
-    if (size === 7) randomPreset = GetNextPreset(GetNumberInRange(1, 3))
-    if (size === 8) randomPreset = GetNextPreset(GetNumberInRange(4, 5))
+    if (size === 7)
+        randomPreset = getNextPreset(getNumberInRange(1, 3), gameMode)
+    if (size === 8)
+        randomPreset = getNextPreset(getNumberInRange(4, 5), gameMode)
 
     return {
         tiles: randomPreset.picture,
@@ -55,8 +72,8 @@ const generateRandomTiles = (
         toColor.find((e) => e.i === c.i && e.j === c.j)
 
     while (toColor.length < maxCount) {
-        const i = GetNumberInRange(0, rows - 1)
-        const j = GetNumberInRange(0, columns - 1)
+        const i = getNumberInRange(0, rows - 1)
+        const j = getNumberInRange(0, columns - 1)
 
         if (!findColored({ i, j })) {
             toColor.push({ i, j })
