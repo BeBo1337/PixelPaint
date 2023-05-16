@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-native-component": "^0.1.9",
     "react-router-dom": "^6.11.1",
+    "rsuite": "^5.33.1",
     "styled-components": "^5.3.10"
   },
   "devDependencies": {

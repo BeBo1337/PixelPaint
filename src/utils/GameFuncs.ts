@@ -29,12 +29,16 @@ export const generateTiles = (
     return generateRandomTiles(rows, columns, maxCount)
 }
 
+//Relevant in PAINT mode, updates coloredObjectiveTiles amount correctly according to the state
 export const isCorrectTile = (
     tile: Tile,
     highlighted: boolean,
-    color?: string
+    color?: string,
+    prevColor?: string
 ): number => {
     if (highlighted && tile.color === color) return 1
+    if (highlighted && tile.color !== color && prevColor === tile.color)
+        return -1
     if (!highlighted && tile.color === color) return -1
     if (highlighted && tile.color !== color) return 0
     else return 0

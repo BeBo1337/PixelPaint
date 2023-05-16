@@ -4,6 +4,8 @@ import styles from './styles.module.scss'
 import { clone, cloneDeep } from 'lodash'
 import { Modes } from '../utils/GameConstants'
 import { Colors } from '../utils/ColorsConstants'
+import ColorPicker from './ColorPicker'
+import { Button } from '@mui/material'
 
 interface GridLayoutProps {
     rows: number
@@ -30,6 +32,7 @@ const GridLayout: FC<GridLayoutProps> = ({
     onClearClicked,
     gameMode
 }: GridLayoutProps) => {
+    var prevColor = ''
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
     const [color, setColor] = useState('blue')
 
@@ -45,10 +48,30 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     const handleMouseUp = (index: number) => {
         if (clickableCanvas) {
-            canvas[index].highlighted = !canvas[index].highlighted
-            if (gameMode === Modes.PAINT) canvas[index].color = color
+            if (gameMode === Modes.PAINT) {
+                if (!canvas[index].highlighted) {
+                    canvas[index].highlighted = true
+                    canvas[index].color = ''
+                } else if (
+                    canvas[index].highlighted &&
+                    canvas[index].color === color
+                ) {
+                    canvas[index].highlighted = false
+                    canvas[index].color = ''
+                } else {
+                    if (canvas[index].color !== color)
+                        canvas[index].highlighted = true
+                }
+                prevColor = canvas[index].color || ''
+                canvas[index].color = color
+            } else canvas[index].highlighted = !canvas[index].highlighted
             if (onTileClicked) {
-                onTileClicked(index, canvas[index].highlighted, color)
+                onTileClicked(
+                    index,
+                    canvas[index].highlighted,
+                    color,
+                    prevColor
+                )
             }
             setCanvas(cloneDeep(canvas))
         }
@@ -69,6 +92,10 @@ const GridLayout: FC<GridLayoutProps> = ({
         if (onClearClicked) {
             onClearClicked()
         }
+    }
+
+    const changeColor = (color: string) => {
+        setColor(color)
     }
 
     return (
@@ -123,6 +150,11 @@ const GridLayout: FC<GridLayoutProps> = ({
                             <h1>CLEAR</h1>
                         </button>
                     </div>
+                )}
+            </div>
+            <div>
+                {!picture && gameMode === Modes.PAINT && (
+                    <ColorPicker changeColor={changeColor} />
                 )}
             </div>
         </div>

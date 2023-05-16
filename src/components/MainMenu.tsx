@@ -1,5 +1,5 @@
 import { useState, useEffect, FC, ChangeEvent } from 'react'
-import { Button } from '@mui/material'
+import { Button } from 'rsuite'
 import { Modes } from '../utils/GameConstants'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
@@ -43,8 +43,8 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
                 <option value="Paint">Paint</option>
             </select>
 
-            <Button variant="contained" onClick={handleClick}>
-                Text
+            <Button color="yellow" appearance="ghost" onClick={handleClick}>
+                START!
             </Button>
         </>
     )

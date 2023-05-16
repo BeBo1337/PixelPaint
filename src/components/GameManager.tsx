@@ -34,11 +34,12 @@ const GameManager: FC<GameManagerProps> = ({
     const onTileClicked = (
         tileIndex: number,
         highlighted: boolean,
-        color: string
+        color: string,
+        prevColor: string
     ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
         if (gameMode === Modes.PAINT)
-            onTileClickedPaint(tileIndex, highlighted, color)
+            onTileClickedPaint(tileIndex, highlighted, color, prevColor)
         else {
             if (objectiveTile) {
                 if (highlighted) {
@@ -61,22 +62,25 @@ const GameManager: FC<GameManagerProps> = ({
     const onTileClickedPaint = (
         tileIndex: number,
         highlighted: boolean,
-        color: string
+        color: string,
+        prevColor: string
     ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
         if (objectiveTile) {
             setColoredObjectiveTiles(
                 coloredObjectiveTiles +
-                    isCorrectTile(puzzle[tileIndex], highlighted, color)
+                    isCorrectTile(
+                        puzzle[tileIndex],
+                        highlighted,
+                        color,
+                        prevColor
+                    )
             )
         } else {
             if (highlighted) {
-                setCurrentColored(coloredRegularTiles + 1)
+                if (prevColor === '') setCurrentColored(coloredRegularTiles + 1)
             } else setCurrentColored(coloredRegularTiles - 1)
         }
-        console.log(
-            `reg tiles ${coloredRegularTiles} , obj tiles ${coloredObjectiveTiles}`
-        )
     }
 
     const onClearClicked = () => {
