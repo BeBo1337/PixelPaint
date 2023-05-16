@@ -1,7 +1,7 @@
 import { useEffect, useState, FC } from 'react'
 import TopBar from './TopBar'
 import GridLayout from './gridLayout'
-import { generateTiles } from '../utils/GameFuncs'
+import { generateTiles, isCorrectTile } from '../utils/GameFuncs'
 import { max } from 'lodash'
 import { Tile } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
@@ -31,26 +31,52 @@ const GameManager: FC<GameManagerProps> = ({
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
     const [showPic, setShowPic] = useState<boolean>(true)
 
-    const onTileClicked = (tileIndex: number, highlighted: boolean) => {
+    const onTileClicked = (
+        tileIndex: number,
+        highlighted: boolean,
+        color: string
+    ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
-        /* 
-            TODO: fix this bs, split into functions depending on gamemode and make PAINT mode work
-        */
-        if (objectiveTile) {
-            if (highlighted) {
-                setColoredObjectiveTiles(coloredObjectiveTiles + 1)
+        if ((gameMode = Modes.PAINT))
+            onTileClickedPaint(tileIndex, highlighted, color)
+        else {
+            if (objectiveTile) {
+                if (highlighted) {
+                    setColoredObjectiveTiles(coloredObjectiveTiles + 1)
+                } else {
+                    setColoredObjectiveTiles(coloredObjectiveTiles - 1)
+                }
             } else {
-                setColoredObjectiveTiles(coloredObjectiveTiles - 1)
+                if (highlighted) {
+                    setCurrentColored(coloredRegularTiles + 1)
+                } else setCurrentColored(coloredRegularTiles - 1)
             }
+            if (gameMode === Modes.MEMORY) {
+                if (coloredObjectiveTiles + coloredRegularTiles === 2)
+                    setShowPic(false)
+            }
+        }
+    }
+
+    const onTileClickedPaint = (
+        tileIndex: number,
+        highlighted: boolean,
+        color: string
+    ) => {
+        const objectiveTile: boolean = puzzle[tileIndex].highlighted
+        if (objectiveTile) {
+            setColoredObjectiveTiles(
+                coloredObjectiveTiles +
+                    isCorrectTile(puzzle[tileIndex], highlighted, color)
+            )
         } else {
             if (highlighted) {
                 setCurrentColored(coloredRegularTiles + 1)
             } else setCurrentColored(coloredRegularTiles - 1)
         }
-        if (gameMode === Modes.MEMORY) {
-            if (coloredObjectiveTiles + coloredRegularTiles === 2)
-                setShowPic(false)
-        }
+        console.log(
+            `reg tiles ${coloredRegularTiles} , obj tiles ${coloredObjectiveTiles}`
+        )
     }
 
     const onClearClicked = () => {

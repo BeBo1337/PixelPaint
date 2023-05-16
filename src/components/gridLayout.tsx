@@ -48,7 +48,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             canvas[index].highlighted = !canvas[index].highlighted
             if (gameMode === Modes.PAINT) canvas[index].color = color
             if (onTileClicked) {
-                onTileClicked(index, canvas[index].highlighted)
+                onTileClicked(index, canvas[index].highlighted, color)
             }
             setCanvas(cloneDeep(canvas))
         }
@@ -99,8 +99,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '1.5em' : '4em',
-                                        height: picture ? '1.5em' : '4em',
+                                        width: picture ? '1.5em' : '4.7em',
+                                        height: picture ? '1.5em' : '4.7em',
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'

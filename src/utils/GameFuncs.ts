@@ -29,6 +29,17 @@ export const generateTiles = (
     return generateRandomTiles(rows, columns, maxCount)
 }
 
+export const isCorrectTile = (
+    tile: Tile,
+    highlighted: boolean,
+    color?: string
+): number => {
+    if (highlighted && tile.color === color) return 1
+    if (!highlighted && tile.color === color) return -1
+    if (highlighted && tile.color !== color) return 0
+    else return 0
+}
+
 const generatePresetTiles = (size: number, gameMode: number): PuzzlePayload => {
     let randomPreset = {} as Preset
     if (size === 7)
