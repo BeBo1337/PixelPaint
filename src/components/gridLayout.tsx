@@ -34,7 +34,7 @@ const GridLayout: FC<GridLayoutProps> = ({
 }: GridLayoutProps) => {
     var prevColor = ''
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
-    const [color, setColor] = useState('blue')
+    const [color, setColor] = useState(Colors.TILE_COLOR_A)
 
     useEffect(() => {
         const newCanvas = cloneDeep(puzzle)

@@ -14,6 +14,7 @@
         "@emotion/styled": "^11.10.5",
         "@fontsource/roboto": "^4.5.8",
         "@mui/material": "^5.10.13",
+        "all": "^0.0.0",
         "bootstrap": "^5.2.3",
         "create-react-class": "^15.7.0",
         "firebase": "^9.22.0",
@@ -21,7 +22,10 @@
         "lodash": "^4.17.21",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-hotkeys": "^2.0.0",
         "react-native-component": "^0.1.9",
+        "react-router-dom": "^6.11.2",
+        "rsuite": "^5.34.0",
         "styled-components": "^5.3.10",
         "uuid": "^9.0.0"
     },

@@ -5,9 +5,19 @@ import { Coordinate } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import { getNextPreset } from '../models/PresetTable'
 import { getNumberInRange } from '../utils/GenericFuncs'
-import { Constants } from '../utils/GameConstants'
+import { Constants, Modes } from '../utils/GameConstants'
+import { Colors } from './ColorsConstants'
 
-let presetsAvailable = presets.length
+var colors: string[] = [
+    Colors.TILE_COLOR_A,
+    Colors.TILE_COLOR_B,
+    Colors.TILE_COLOR_C,
+    Colors.TILE_COLOR_D,
+    Colors.TILE_COLOR_E,
+    Colors.TILE_COLOR_F
+]
+
+var presetsAvailable = presets.length
 
 export const generateTiles = (
     rows: number,
@@ -23,33 +33,22 @@ export const generateTiles = (
     }
 
     if (presetsAvailable > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
-        return generatePresetTiles(rows, gameMode)
+        return generatePresetTiles(rows, score, gameMode)
     }
 
-    return generateRandomTiles(rows, columns, maxCount)
+    return generateRandomTiles(rows, columns, maxCount, score, gameMode)
 }
 
-//Relevant in PAINT mode, updates coloredObjectiveTiles amount correctly according to the state
-export const isCorrectTile = (
-    tile: Tile,
-    highlighted: boolean,
-    color?: string,
-    prevColor?: string
-): number => {
-    if (highlighted && tile.color === color) return 1
-    if (highlighted && tile.color !== color && prevColor === tile.color)
-        return -1
-    if (!highlighted && tile.color === color) return -1
-    if (highlighted && tile.color !== color) return 0
-    else return 0
-}
-
-const generatePresetTiles = (size: number, gameMode: number): PuzzlePayload => {
+const generatePresetTiles = (
+    size: number,
+    score: number,
+    gameMode: number
+): PuzzlePayload => {
     let randomPreset = {} as Preset
     if (size === 7)
-        randomPreset = getNextPreset(getNumberInRange(1, 3), gameMode)
+        randomPreset = getNextPreset(getNumberInRange(1, 3), gameMode, score)
     if (size === 8)
-        randomPreset = getNextPreset(getNumberInRange(4, 5), gameMode)
+        randomPreset = getNextPreset(getNumberInRange(4, 5), gameMode, score)
 
     return {
         tiles: randomPreset.picture,
@@ -62,9 +61,17 @@ const generatePresetTiles = (size: number, gameMode: number): PuzzlePayload => {
 const generateRandomTiles = (
     rows: number,
     columns: number,
-    maxCount: number
+    maxCount: number,
+    score: number,
+    gameMode: number
 ): PuzzlePayload => {
-    const tiles: Tile[] = []
+    const randomTilesPreset: Preset = {
+        picture: [],
+        name: 'random',
+        amount: maxCount,
+        difficulty: 1,
+        size: columns * rows
+    }
     const toColor: Coordinate[] = []
 
     //Checks if tile coordinates are already in the puzzle
@@ -82,12 +89,48 @@ const generateRandomTiles = (
 
     for (let i = 0; i < rows; ++i) {
         for (let j = 0; j < columns; ++j) {
-            tiles.push({
+            randomTilesPreset.picture.push({
                 i,
                 j,
                 highlighted: !!findColored({ i, j })
             })
         }
     }
-    return { tiles: tiles, amount: maxCount, difficulty: 1 }
+    if (gameMode == Modes.PAINT) colorizePreset(randomTilesPreset, score)
+
+    return { tiles: randomTilesPreset.picture, amount: maxCount, difficulty: 1 }
+}
+
+//Relevant in PAINT mode
+
+export const colorizePreset = (p: Preset, score: number) => {
+    p.picture.forEach((tile: Tile) => {
+        if (tile.highlighted) {
+            tile.color = colors[getColorIndex(score)]
+        }
+    })
+}
+
+const getColorIndex = (score: number): number => {
+    var n: number
+    if (score >= 0 && score < 3) n = getNumberInRange(0, 2)
+    else if (score >= 3 && score < 10) n = getNumberInRange(0, 3)
+    else if (score >= 10 && score < 20) n = getNumberInRange(0, 4)
+    else n = getNumberInRange(0, 5)
+    return n
+}
+
+//Relevant in PAINT mode, updates coloredObjectiveTiles amount correctly according to the state
+export const isCorrectTile = (
+    tile: Tile,
+    highlighted: boolean,
+    color?: string,
+    prevColor?: string
+): number => {
+    if (highlighted && tile.color === color) return 1
+    if (highlighted && tile.color !== color && prevColor === tile.color)
+        return -1
+    if (!highlighted && tile.color === color) return -1
+    if (highlighted && tile.color !== color) return 0
+    else return 0
 }
