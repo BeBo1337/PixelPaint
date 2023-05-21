@@ -73,8 +73,14 @@ const GridLayout: FC<GridLayoutProps> = ({
                     prevColor
                 )
             }
+            console.log('bruh1 ' + score)
             setCanvas(cloneDeep(canvas))
         }
+    }
+
+    const changeColor = (color: string) => {
+        console.log('bruh2 ' + score)
+        setColor(color)
     }
 
     const handleMouseDown = (
@@ -92,10 +98,6 @@ const GridLayout: FC<GridLayoutProps> = ({
         if (onClearClicked) {
             onClearClicked()
         }
-    }
-
-    const changeColor = (color: string) => {
-        setColor(color)
     }
 
     return (
@@ -154,7 +156,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             </div>
             <div>
                 {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker changeColor={changeColor} />
+                    <ColorPicker changeColor={changeColor} score={score} />
                 )}
             </div>
         </div>

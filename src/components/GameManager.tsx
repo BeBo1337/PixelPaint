@@ -146,6 +146,7 @@ const GameManager: FC<GameManagerProps> = ({
                 rows={rows}
                 columns={columns}
                 showPicture={true}
+                score={score}
                 clickableCanvas={clickable}
                 puzzle={puzzle}
                 gameMode={gameMode}

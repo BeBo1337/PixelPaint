@@ -7,6 +7,7 @@ import { Colors } from '../utils/ColorsConstants'
 interface ColorPickerProps {
     color?: string
     gameMode?: number
+    score?: number
     changeColor: Function
 }
 
@@ -22,6 +23,7 @@ const keyMap = {
 const ColorPicker: FC<ColorPickerProps> = ({
     color,
     gameMode,
+    score,
     changeColor
 }: ColorPickerProps) => {
     const handleColorChange = (colorToChange: string) => {
