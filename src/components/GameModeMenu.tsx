@@ -6,7 +6,7 @@ interface DropdownProps {
 
 const DropdownMenu: FC<DropdownProps> = ({ onSelectOption }: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedOption, setSelectedOption] = useState('')
+    const [selectedOption, setSelectedOption] = useState('Select Game Mode')
 
     const handleToggle = () => {
         setIsOpen(!isOpen)
@@ -20,18 +20,15 @@ const DropdownMenu: FC<DropdownProps> = ({ onSelectOption }: DropdownProps) => {
 
     return (
         <section className={`${styles.dropdown}`}>
+
             <p className={`${styles.dropdownToggle}`} onClick={handleToggle}>
-                {selectedOption || 'Select Game Mode'}
+                {selectedOption}
             </p>
-            {isOpen && (
-                <ul className={`${styles.dropdownMenu}`}>
-                    <li onClick={() => handleOptionSelect('Classic')}>
-                        Classic
-                    </li>
-                    <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
-                    <li onClick={() => handleOptionSelect('Paint')}>Paint</li>
-                </ul>
-            )}
+            <ul className={`${styles.dropdownMenu} ${isOpen && styles.fadeIn}`}>
+                <li onClick={() => handleOptionSelect('Classic')}>Classic</li>
+                <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
+                <li onClick={() => handleOptionSelect('Paint')}>Paint</li>
+            </ul>
         </section>
     )
 }

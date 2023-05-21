@@ -42,6 +42,13 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
                 <h1>
                     Welcome to <span>Pixel</span>Paint
                 </h1>
+                <form>
+                    <input
+                        name="players-name"
+                        type="text"
+                        placeholder="Enter painter's name"
+                    ></input>
+                </form>
                 <button onClick={handleClick}>Start Game</button>
                 <DropdownMenu onSelectOption={handleChange} />
             </section>
