@@ -1,3 +1,4 @@
+import './components/styles.module.scss'
 import { useState, useEffect, FC } from 'react'
 import { Routes, Route, useOutletContext } from 'react-router-dom'
 import NotFound from './components/NotFound'

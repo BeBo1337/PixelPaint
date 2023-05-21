@@ -2,10 +2,6 @@ import { useState, useEffect, FC } from 'react'
 import { Tile } from '../models'
 import styles from './styles.module.scss'
 import { clone, cloneDeep } from 'lodash'
-import { Modes } from '../utils/GameConstants'
-import { Colors } from '../utils/ColorsConstants'
-import ColorPicker from './ColorPicker'
-import { Button } from '@mui/material'
 
 interface GridLayoutProps {
     rows: number
@@ -15,7 +11,6 @@ interface GridLayoutProps {
     score?: number
     clickableCanvas?: boolean
     puzzle: Tile[]
-    gameMode?: number
     onTileClicked?: Function
     onClearClicked?: Function
 }
@@ -29,12 +24,9 @@ const GridLayout: FC<GridLayoutProps> = ({
     clickableCanvas,
     puzzle,
     onTileClicked,
-    onClearClicked,
-    gameMode
+    onClearClicked
 }: GridLayoutProps) => {
-    var prevColor = ''
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
-    const [color, setColor] = useState(Colors.TILE_COLOR_A)
 
     useEffect(() => {
         const newCanvas = cloneDeep(puzzle)
@@ -48,39 +40,12 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     const handleMouseUp = (index: number) => {
         if (clickableCanvas) {
-            if (gameMode === Modes.PAINT) {
-                if (!canvas[index].highlighted) {
-                    canvas[index].highlighted = true
-                    canvas[index].color = ''
-                } else if (
-                    canvas[index].highlighted &&
-                    canvas[index].color === color
-                ) {
-                    canvas[index].highlighted = false
-                    canvas[index].color = ''
-                } else {
-                    if (canvas[index].color !== color)
-                        canvas[index].highlighted = true
-                }
-                prevColor = canvas[index].color || ''
-                canvas[index].color = color
-            } else canvas[index].highlighted = !canvas[index].highlighted
+            canvas[index].highlighted = !canvas[index].highlighted
             if (onTileClicked) {
-                onTileClicked(
-                    index,
-                    canvas[index].highlighted,
-                    color,
-                    prevColor
-                )
+                onTileClicked(index, canvas[index].highlighted)
             }
-            console.log('bruh1 ' + score)
             setCanvas(cloneDeep(canvas))
         }
-    }
-
-    const changeColor = (color: string) => {
-        console.log('bruh2 ' + score)
-        setColor(color)
     }
 
     const handleMouseDown = (
@@ -88,7 +53,6 @@ const GridLayout: FC<GridLayoutProps> = ({
     ) => {
         event.preventDefault()
     }
-
     const clearHighlightedTiles = () => {
         const newCanvas = cloneDeep(canvas)
         for (const tile of newCanvas) {
@@ -113,23 +77,20 @@ const GridLayout: FC<GridLayoutProps> = ({
                     >
                         {Array.from({ length: columns }, (_, j) => {
                             const index = i * columns + j
-                            const currTile = canvas[index]
-                            const isHighlighted = currTile?.highlighted
+                            const isHighlighted = canvas[index]?.highlighted
                             return (
                                 <div
                                     className={`${picture ? '' : styles.tile}`}
                                     key={`${i}-${j}`}
                                     style={{
                                         backgroundColor: isHighlighted
-                                            ? currTile.color
-                                                ? currTile.color
-                                                : Colors.TILE_COLOR_HIGHLIGHTED
-                                            : Colors.TILE_COLOR_DEFAULT,
+                                            ? 'red'
+                                            : 'black',
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '1.5em' : '4.7em',
-                                        height: picture ? '1.5em' : '4.7em',
+                                        width: picture ? '1.5em' : '4em', //was width: random ? "2vw" : "4vw"
+                                        height: picture ? '1.5em' : '4em', //was height: random ? "2vw" : "4vw"
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
@@ -152,11 +113,6 @@ const GridLayout: FC<GridLayoutProps> = ({
                             <h1>CLEAR</h1>
                         </button>
                     </div>
-                )}
-            </div>
-            <div>
-                {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker changeColor={changeColor} score={score} />
                 )}
             </div>
         </div>

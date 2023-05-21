@@ -1,7 +1,9 @@
-import { useState, useEffect, FC, ChangeEvent } from 'react'
+import { useState, FC, ChangeEvent } from 'react'
 import { Button } from 'rsuite'
 import { Modes } from '../utils/GameConstants'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
+import styles from './styles.module.scss'
+import DropdownMenu from './GameModeMenu'
 
 interface MainMenuProps {
     chooseGameMode: Function
@@ -11,9 +13,9 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
     const [mode, setMode] = useState(1)
     const navigate = useNavigate()
 
-    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        console.log(e.target.value)
-        switch (e.target.value) {
+    const handleChange = (selectedOption: string) => {
+        console.log(selectedOption)
+        switch (selectedOption) {
             case 'Classic':
                 setMode(Modes.CLASSIC)
                 break
@@ -28,6 +30,7 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
 
     const handleClick = () => {
         chooseGameMode(mode)
+        console.log(mode)
         setTimeout(() => {
             navigate('/game')
         }, 1000)
@@ -35,17 +38,13 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
 
     return (
         <>
-            <select id="mode" onChange={handleChange}>
-                <option value="Classic">Classic</option>
-
-                <option value="Memory">Memory</option>
-
-                <option value="Paint">Paint</option>
-            </select>
-
-            <Button color="yellow" appearance="ghost" onClick={handleClick}>
-                START!
-            </Button>
+            <section className={`${styles.mainMenuContainer}`}>
+                <h1>
+                    Welcome to <span>Pixel</span>Paint
+                </h1>
+                <button onClick={handleClick}>Start Game</button>
+                <DropdownMenu onSelectOption={handleChange} />
+            </section>
         </>
     )
 }
