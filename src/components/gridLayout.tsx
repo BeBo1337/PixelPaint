@@ -27,6 +27,7 @@ const GridLayout: FC<GridLayoutProps> = ({
     onClearClicked
 }: GridLayoutProps) => {
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
+    const [tileSize, setTileSize] = useState(getTileSize())
 
     useEffect(() => {
         const newCanvas = cloneDeep(puzzle)
@@ -37,6 +38,18 @@ const GridLayout: FC<GridLayoutProps> = ({
         }
         setCanvas(newCanvas)
     }, [puzzle])
+
+    useEffect(() => {
+        function handleResize() {
+            setTileSize(getTileSize())
+        }
+
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
 
     const handleMouseUp = (index: number) => {
         if (clickableCanvas) {
@@ -53,6 +66,7 @@ const GridLayout: FC<GridLayoutProps> = ({
     ) => {
         event.preventDefault()
     }
+
     const clearHighlightedTiles = () => {
         const newCanvas = cloneDeep(canvas)
         for (const tile of newCanvas) {
@@ -64,11 +78,17 @@ const GridLayout: FC<GridLayoutProps> = ({
         }
     }
 
+    function getTileSize() {
+        const screenWidth = window.innerWidth
+        if (screenWidth < 768) {
+            return '2.8em'
+        } else {
+            return '4em'
+        }
+    }
+
     return (
-        <div
-            className={`container-fluid ${styles.gridContainer}`}
-            style={{ paddingTop: '10px' }}
-        >
+        <div className={`container-fluid`} style={{ paddingTop: '10px' }}>
             {Array.from({ length: rows }, (_, i) => {
                 return (
                     <div
@@ -89,8 +109,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '1.5em' : '4em', //was width: random ? "2vw" : "4vw"
-                                        height: picture ? '1.5em' : '4em', //was height: random ? "2vw" : "4vw"
+                                        width: picture ? '20px' : tileSize,
+                                        height: picture ? '20px' : tileSize,
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
