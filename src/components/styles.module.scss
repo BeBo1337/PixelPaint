@@ -127,7 +127,7 @@ $color: #4c8ff4;
         border-radius: 20px;
         border: none;
         &:hover {
-            background-color: lightseagreen;
+            background: linear-gradient(lightseagreen,lightgreen);
             color: white;
         }
     }
@@ -184,7 +184,7 @@ $color: #4c8ff4;
 }
 
 .dropdownMenu li:hover {
-    background-color: lightseagreen;
+    background: linear-gradient(lightcoral,pink);
     color: white;
 }
 
