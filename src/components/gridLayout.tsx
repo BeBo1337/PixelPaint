@@ -47,6 +47,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             setCanvas(cloneDeep(canvas))
         }
     }
+
     const handleMouseDown = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
