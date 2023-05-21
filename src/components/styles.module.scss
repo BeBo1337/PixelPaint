@@ -150,6 +150,9 @@ $color: #4c8ff4;
 }
 
 .dropdownMenu {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s; 
     font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: absolute;
     top: 100%;
@@ -162,6 +165,11 @@ $color: #4c8ff4;
     flex-direction: column;
     align-items: center;
     gap: 5px;
+}
+
+.fadeIn {
+    opacity: 1;
+    visibility:visible;
 }
 .dropdownMenu li {
     border-radius: 10px;
@@ -182,11 +190,11 @@ $color: #4c8ff4;
 
 @media (max-width: 768px) {
     .mainMenuContainer {
-        h1{
+        h1 {
             font-size: 35px;
         }
         transform: translate(-50%, -90%);
-        p{
+        p {
             font-size: 30px;
             width: 90vw;
         }
