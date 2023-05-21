@@ -76,7 +76,7 @@ $color: #4c8ff4;
         background-color: rgb(255, 255, 255);
         border-radius: 20px;
         border: 3px solid black;
-        h1 {
+        h1{
             font-weight: 900;
         }
         &:hover {
@@ -143,7 +143,7 @@ $color: #4c8ff4;
     }
     p {
         border-radius: 5px;
-        max-width: 500px;
+        width: 30vw;
         &:hover {
             filter: brightness(90%);
         }
@@ -157,7 +157,7 @@ $color: #4c8ff4;
         flex-direction: column;
         gap: 10px;
         input {
-            width: 500px;
+            width: 30vw;
             text-align: center;
         }
         div {
@@ -297,7 +297,7 @@ $color: #4c8ff4;
         }
         form {
             input {
-                width: fit-content;
+                width: 90vw;
                 padding: 10px;
                 font-size: 20px;
             }

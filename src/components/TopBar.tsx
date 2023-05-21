@@ -12,7 +12,7 @@ const TopBar: FC<TopBarProps> = ({ timeOverFunction, score }: TopBarProps) => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate('/') // Replace '/new-route' with the desired route
+        navigate('/')
     }
 
     return (
