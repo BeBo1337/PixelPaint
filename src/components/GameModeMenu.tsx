@@ -20,10 +20,10 @@ const DropdownMenu: FC<DropdownProps> = ({ onSelectOption }: DropdownProps) => {
 
     return (
         <section className={`${styles.dropdown}`}>
+
             <p className={`${styles.dropdownToggle}`} onClick={handleToggle}>
                 {selectedOption}
             </p>
-
             <ul className={`${styles.dropdownMenu} ${isOpen && styles.fadeIn}`}>
                 <li onClick={() => handleOptionSelect('Classic')}>Classic</li>
                 <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
