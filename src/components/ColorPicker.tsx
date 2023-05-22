@@ -1,8 +1,8 @@
 import { useState, useEffect, FC, useMemo } from 'react'
-import { Button } from 'rsuite'
-import { Modes } from '../utils/GameConstants'
+import { Constants, Modes } from '../utils/GameConstants'
 import { GlobalHotKeys } from 'react-hotkeys'
 import { Colors } from '../utils/ColorsConstants'
+import styles from './styles.module.scss'
 
 interface ColorPickerProps {
     color?: string
@@ -26,77 +26,61 @@ const ColorPicker: FC<ColorPickerProps> = ({
     score,
     changeColor
 }: ColorPickerProps) => {
+    const colorOptions = [
+        { color: Colors.TILE_COLOR_A, label: 'blue' },
+        { color: Colors.TILE_COLOR_B, label: 'green' },
+        { color: Colors.TILE_COLOR_C, label: 'red' },
+        { color: Colors.TILE_COLOR_D, label: 'yellow' },
+        { color: Colors.TILE_COLOR_E, label: 'white' },
+        { color: Colors.TILE_COLOR_F, label: 'pink' }
+    ];
+
+    const [selectedColor, setSelectedColor] = useState<string>(
+        color || colorOptions[0].color
+    )
+
     const handleColorChange = (colorToChange: string) => {
+        setSelectedColor(colorToChange)
         changeColor(colorToChange)
     }
 
-    const handlers = {
+    const handlers = useMemo(() => ({
         ONE: () => {
-            handleColorChange(Colors.TILE_COLOR_A)
+            handleColorChange(colorOptions[0].color)
         },
         TWO: () => {
-            handleColorChange(Colors.TILE_COLOR_B)
+            handleColorChange(colorOptions[1].color)
         },
         THREE: () => {
-            handleColorChange(Colors.TILE_COLOR_C)
+            handleColorChange(colorOptions[2].color)
         },
         FOUR: () => {
-            handleColorChange(Colors.TILE_COLOR_D)
+            handleColorChange(colorOptions[3].color)
         },
         FIVE: () => {
-            handleColorChange(Colors.TILE_COLOR_E)
+            handleColorChange(colorOptions[4].color)
         },
         SIX: () => {
-            handleColorChange(Colors.TILE_COLOR_F)
+            handleColorChange(colorOptions[5].color)
         }
-    }
+    }), [colorOptions]);
 
     return (
         <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
-            <div>
-                <Button
-                    appearance="primary"
-                    color="blue"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_A)}
-                >
-                    BLUE
-                </Button>
-                <Button
-                    appearance="primary"
-                    color="green"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_B)}
-                >
-                    GREEN
-                </Button>
-                <Button
-                    appearance="primary"
-                    color="red"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_C)}
-                >
-                    RED
-                </Button>
-                <Button
-                    appearance="primary"
-                    color="yellow"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_D)}
-                >
-                    YELLOW
-                </Button>
-                <Button
-                    appearance="primary"
-                    color="yellow"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_E)}
-                >
-                    PINK
-                </Button>
-                <Button
-                    appearance="primary"
-                    color="yellow"
-                    onClick={() => handleColorChange(Colors.TILE_COLOR_F)}
-                >
-                    WHITE
-                </Button>
-            </div>
+            <section className={`${styles.colorPickerContainer}`}>
+                {colorOptions.map(option => (
+                    <div
+                        key={option.color}
+                        className={`${styles.colorItem} ${
+                            selectedColor === option.color
+                                ? styles.selected
+                                : ''
+                        }`}
+                        style={{ backgroundColor: option.color }}
+                        onClick={() => handleColorChange(option.color)}
+                    ></div>
+                ))}
+            </section>
         </GlobalHotKeys>
     )
 }

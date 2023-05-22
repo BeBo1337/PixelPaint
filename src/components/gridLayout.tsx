@@ -150,8 +150,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '20px' : tileSize,
-                                        height: picture ? '20px' : tileSize,
+                                        width: picture ? '25px' : tileSize,
+                                        height: picture ? '25px' : tileSize,
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
