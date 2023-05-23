@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from 'react'
+import { useState, useEffect, FC, useRef } from 'react'
 import { Tile } from '../models'
 import styles from './styles.module.scss'
 import { clone, cloneDeep } from 'lodash'
@@ -6,6 +6,8 @@ import { Modes } from '../utils/GameConstants'
 import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
 import { Button } from '@mui/material'
+import { v4 } from 'uuid'
+import { Col } from 'rsuite'
 
 interface GridLayoutProps {
     rows: number
@@ -34,6 +36,7 @@ const GridLayout: FC<GridLayoutProps> = ({
 }: GridLayoutProps) => {
     var prevColor = ''
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
+    const [tempColor, setTempColor] = useState(Colors.TILE_COLOR_A)
     const [color, setColor] = useState(Colors.TILE_COLOR_A)
     const [tileSize, setTileSize] = useState(getTileSize())
 
@@ -52,10 +55,16 @@ const GridLayout: FC<GridLayoutProps> = ({
             setTileSize(getTileSize())
         }
 
+        const handleColorChange = ({ detail: color }: any) => {
+            changeColor(color)
+        }
+
         window.addEventListener('resize', handleResize)
+        window.addEventListener('color-change' as any, handleColorChange)
 
         return () => {
             window.removeEventListener('resize', handleResize)
+            window.removeEventListener('color-change' as any, handleColorChange)
         }
     }, [])
 
@@ -95,15 +104,39 @@ const GridLayout: FC<GridLayoutProps> = ({
                     prevColor
                 )
             }
-            console.log('bruh1 ' + score)
             setCanvas(cloneDeep(canvas))
         }
     }
 
     const changeColor = (color: string) => {
-        console.log('bruh2 ' + score)
-        setColor(color)
+        if (clickableCanvas) {
+            setTempColor(color)
+        }
     }
+    useEffect(() => {
+        if (
+            score !== undefined &&
+            score < 3 &&
+            (tempColor === Colors.TILE_COLOR_D ||
+                tempColor === Colors.TILE_COLOR_E ||
+                tempColor === Colors.TILE_COLOR_F)
+        )
+            return
+        if (
+            score !== undefined &&
+            score < 10 &&
+            (tempColor === Colors.TILE_COLOR_E ||
+                tempColor === Colors.TILE_COLOR_F)
+        )
+            return
+        if (
+            score !== undefined &&
+            score < 20 &&
+            tempColor === Colors.TILE_COLOR_F
+        )
+            return
+        setColor(tempColor)
+    }, [tempColor])
 
     const handleMouseDown = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -178,7 +211,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             </div>
             <div>
                 {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker changeColor={changeColor} score={score} />
+                    <ColorPicker color={color} />
                 )}
             </div>
         </div>

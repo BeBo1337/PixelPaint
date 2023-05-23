@@ -21,6 +21,8 @@ const GameManager: FC<GameManagerProps> = ({
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
     const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)
     const [score, setScore] = useState<number>(0)
+    // @ts-ignore
+    window.setScore = setScore
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
         generateTiles(rows, columns, tilesToGen, score, gameMode)
     )
@@ -124,7 +126,7 @@ const GameManager: FC<GameManagerProps> = ({
         /* This is how you insert a new score to the db. */
 
         // insertToCollectionAsync('ScoreMemory', {
-        //     name: 'Tomer',
+        //     name: 'BEBO',
         //     score: score,
         //     date: new Date()
         // })
