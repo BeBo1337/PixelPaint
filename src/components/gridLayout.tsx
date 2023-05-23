@@ -113,6 +113,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             setTempColor(color)
         }
     }
+
     useEffect(() => {
         if (
             score !== undefined &&

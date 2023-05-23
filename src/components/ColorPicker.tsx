@@ -12,7 +12,8 @@ interface ColorPickerProps {
 }
 
 const ColorPicker: FC<ColorPickerProps & any> = ({
-    color
+    color,
+    score
 }: ColorPickerProps) => {
     const colorOptions = [
         { color: Colors.TILE_COLOR_A, label: 'blue' },
@@ -54,6 +55,26 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
         return () => window.removeEventListener('keypress', handleKeyPress)
     }, [])
 
+    const visibleHandler = (color: string): Boolean => {
+        if (
+            score !== undefined &&
+            score < 3 &&
+            (color === Colors.TILE_COLOR_D ||
+                color === Colors.TILE_COLOR_E ||
+                color === Colors.TILE_COLOR_F)
+        )
+            return false
+        if (
+            score !== undefined &&
+            score < 10 &&
+            (color === Colors.TILE_COLOR_E || color === Colors.TILE_COLOR_F)
+        )
+            return false
+        if (score !== undefined && score < 20 && color === Colors.TILE_COLOR_F)
+            return false
+        return true
+    }
+
     return (
         <section className={`${styles.colorPickerContainer}`}>
             {colorOptions.map((option) => (
@@ -62,7 +83,12 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
                     className={`${styles.colorItem} ${
                         color === option.color ? styles.selected : ''
                     }`}
-                    style={{ backgroundColor: option.color }}
+                    style={{
+                        backgroundColor: option.color,
+                        visibility: visibleHandler(option.color)
+                            ? 'visible'
+                            : 'hidden'
+                    }}
                     onClick={() => dispatchColorEvent(option.color)}
                 ></div>
             ))}
