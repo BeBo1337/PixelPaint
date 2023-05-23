@@ -46,7 +46,7 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
                     <input
                         name="players-name"
                         type="text"
-                        placeholder="Enter painter's name"
+                        placeholder="Enter Name"
                     ></input>
                 </form>
                 <button onClick={handleClick}>Start Game</button>

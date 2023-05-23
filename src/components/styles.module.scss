@@ -94,7 +94,7 @@ $color: #4c8ff4;
 }
 
 .backBtn {
-    background-color: lightcoral;
+    background-color: #e0b0b0;
     position: absolute;
     top: 0;
     left: 0;
@@ -138,7 +138,7 @@ $color: #4c8ff4;
         text-shadow: 3px 3px rgb(0, 0, 0);
         font-weight: 900;
         span {
-            color: lightcoral;
+            color: #e0b0b0;
         }
     }
     p {
@@ -176,7 +176,7 @@ $color: #4c8ff4;
         border-radius: 20px;
         border: none;
         &:hover {
-            background: linear-gradient(lightseagreen, lightgreen);
+            background: linear-gradient(#e0b0b0, #e37e7e);
             color: white;
         }
     }
@@ -232,7 +232,7 @@ $color: #4c8ff4;
 }
 
 .dropdownMenu li:hover {
-    background: linear-gradient(lightcoral, pink);
+    background: linear-gradient(#e0b0b0, #e37e7e);
     color: white;
 }
 
