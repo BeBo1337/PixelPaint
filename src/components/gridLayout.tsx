@@ -211,7 +211,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             </div>
             <div>
                 {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker color={color} />
+                    <ColorPicker color={color} score={score} />
                 )}
             </div>
         </div>
