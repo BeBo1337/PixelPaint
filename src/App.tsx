@@ -6,7 +6,7 @@ import GameManager from './components/GameManager'
 import MainMenu from './components/MainMenu'
 
 const App: FC<{}> = () => {
-    const [gameMode, setGameMode] = useState(3)
+    const [gameMode, setGameMode] = useState(1)
 
     const setMode = (mode: number) => {
         setGameMode(mode)

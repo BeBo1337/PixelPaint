@@ -14,7 +14,6 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
     const navigate = useNavigate()
 
     const handleChange = (selectedOption: string) => {
-        console.log(selectedOption)
         switch (selectedOption) {
             case 'Classic':
                 setMode(Modes.CLASSIC)
@@ -30,7 +29,6 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
 
     const handleClick = () => {
         chooseGameMode(mode)
-        console.log(mode)
         setTimeout(() => {
             navigate('/game')
         }, 1000)
