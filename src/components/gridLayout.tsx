@@ -124,9 +124,14 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     return (
         <div
-            className={`container-fluid ${styles.gridContainer}`}
-            style={{ paddingTop: '10px' }}
+        className={`container-fluid ${styles.gridContainer}`}
+        style={{ paddingTop: '10px' }}
         >
+            <div className={`${styles.colorPickerLayout}`}>
+                {!picture && gameMode === Modes.PAINT && (
+                    <ColorPicker changeColor={changeColor} score={score} />
+                )}
+            </div>
             {Array.from({ length: rows }, (_, i) => {
                 return (
                     <div
@@ -174,11 +179,6 @@ const GridLayout: FC<GridLayoutProps> = ({
                             <h1>CLEAR</h1>
                         </button>
                     </div>
-                )}
-            </div>
-            <div>
-                {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker changeColor={changeColor} score={score} />
                 )}
             </div>
         </div>

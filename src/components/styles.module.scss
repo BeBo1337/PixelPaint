@@ -237,6 +237,11 @@ $color: #4c8ff4;
 }
 
 // color-picker
+.colorPickerLayout {
+    position: absolute;
+    right: 0;
+    margin-right: 50px;
+}
 .colorPickerContainer {
     display: flex;
     width: 190px;
@@ -358,5 +363,12 @@ $color: #4c8ff4;
         font-size: 20px;
         margin-left: 10px;
         margin-top: 30px;
+    }
+
+    .colorPickerLayout {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: -100px 150px;
     }
 }
