@@ -6,9 +6,14 @@ import TimerCountdown from './TimerCountdown'
 interface TopBarProps {
     timeOverFunction: Function
     score: number
+    timeToAdd: number
 }
 
-const TopBar: FC<TopBarProps> = ({ timeOverFunction, score }: TopBarProps) => {
+const TopBar: FC<TopBarProps> = ({
+    timeOverFunction,
+    score,
+    timeToAdd
+}: TopBarProps) => {
     const navigate = useNavigate()
 
     const handleClick = () => {
@@ -28,6 +33,7 @@ const TopBar: FC<TopBarProps> = ({ timeOverFunction, score }: TopBarProps) => {
                 isWarning={false}
                 score={score}
                 onTimeOver={timeOverFunction}
+                timeToAdd={timeToAdd}
             />
             <h1>SCORE: {score}</h1>
         </section>

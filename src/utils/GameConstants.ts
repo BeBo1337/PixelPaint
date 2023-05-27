@@ -3,8 +3,7 @@ export const Constants = {
     SCORE_CHECKPOINT: 10,
     START_DIMENSIONS: 7,
     START_RANDOM_TILES: 15,
-    CHECKPOINT_8X8: 20,
-    CHECKPOINT_9X9: 50
+    CHECKPOINT_8X8: 20
 }
 
 export const Modes = {

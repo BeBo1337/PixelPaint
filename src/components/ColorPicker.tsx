@@ -11,20 +11,9 @@ interface ColorPickerProps {
     changeColor: Function
 }
 
-const keyMap = {
-    ONE: '1',
-    TWO: '2',
-    THREE: '3',
-    FOUR: '4',
-    FIVE: '5',
-    SIX: '6'
-}
-
-const ColorPicker: FC<ColorPickerProps> = ({
+const ColorPicker: FC<ColorPickerProps & any> = ({
     color,
-    gameMode,
-    score,
-    changeColor
+    score
 }: ColorPickerProps) => {
     const colorOptions = [
         { color: Colors.TILE_COLOR_A, label: 'blue' },
@@ -33,55 +22,77 @@ const ColorPicker: FC<ColorPickerProps> = ({
         { color: Colors.TILE_COLOR_D, label: 'yellow' },
         { color: Colors.TILE_COLOR_E, label: 'white' },
         { color: Colors.TILE_COLOR_F, label: 'pink' }
-    ];
+    ]
 
-    const [selectedColor, setSelectedColor] = useState<string>(
-        color || colorOptions[0].color
-    )
-
-    const handleColorChange = (colorToChange: string) => {
-        setSelectedColor(colorToChange)
-        changeColor(colorToChange)
+    const handleKeyPress = (e: KeyboardEvent) => {
+        if (!e) {
+            return
+        }
+        switch (e.key) {
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                const index = parseInt(e.key) - 1
+                dispatchColorEvent(colorOptions[index].color)
+                break
+        }
     }
 
-    const handlers = useMemo(() => ({
-        ONE: () => {
-            handleColorChange(colorOptions[0].color)
-        },
-        TWO: () => {
-            handleColorChange(colorOptions[1].color)
-        },
-        THREE: () => {
-            handleColorChange(colorOptions[2].color)
-        },
-        FOUR: () => {
-            handleColorChange(colorOptions[3].color)
-        },
-        FIVE: () => {
-            handleColorChange(colorOptions[4].color)
-        },
-        SIX: () => {
-            handleColorChange(colorOptions[5].color)
-        }
-    }), [colorOptions]);
+    const dispatchColorEvent = (color: string) => {
+        window.dispatchEvent(
+            new CustomEvent('color-change', {
+                bubbles: true,
+                detail: color
+            })
+        )
+    }
+
+    useEffect(() => {
+        window.addEventListener('keypress', handleKeyPress)
+        return () => window.removeEventListener('keypress', handleKeyPress)
+    }, [])
+
+    const visibleHandler = (color: string): Boolean => {
+        if (
+            score !== undefined &&
+            score < 3 &&
+            (color === Colors.TILE_COLOR_D ||
+                color === Colors.TILE_COLOR_E ||
+                color === Colors.TILE_COLOR_F)
+        )
+            return false
+        if (
+            score !== undefined &&
+            score < 10 &&
+            (color === Colors.TILE_COLOR_E || color === Colors.TILE_COLOR_F)
+        )
+            return false
+        if (score !== undefined && score < 20 && color === Colors.TILE_COLOR_F)
+            return false
+        return true
+    }
 
     return (
-        <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
-            <section className={`${styles.colorPickerContainer}`}>
-                {colorOptions.map(option => (
-                    <div
-                        key={option.color}
-                        className={`${styles.colorItem} ${
-                            selectedColor === option.color
-                                ? styles.selected
-                                : ''
-                        }`}
-                        style={{ backgroundColor: option.color }}
-                        onClick={() => handleColorChange(option.color)}
-                    ></div>
-                ))}
-            </section>
-        </GlobalHotKeys>
+        <section className={`${styles.colorPickerContainer}`}>
+            {colorOptions.map((option) => (
+                <div
+                    key={option.color}
+                    className={`${styles.colorItem} ${
+                        color === option.color ? styles.selected : ''
+                    }`}
+                    style={{
+                        backgroundColor: option.color,
+                        visibility: visibleHandler(option.color)
+                            ? 'visible'
+                            : 'hidden'
+                    }}
+                    onClick={() => dispatchColorEvent(option.color)}
+                ></div>
+            ))}
+        </section>
     )
 }
 
