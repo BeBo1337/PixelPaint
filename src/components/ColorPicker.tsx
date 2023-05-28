@@ -2,8 +2,7 @@ import { useState, useEffect, FC, useMemo } from 'react'
 import { Constants, Modes } from '../utils/GameConstants'
 import { GlobalHotKeys } from 'react-hotkeys'
 import { Colors } from '../utils/ColorsConstants'
-import styles from './styles.module.scss'
-
+import '../assets/ColorPicker.scss'
 interface ColorPickerProps {
     color?: string
     gameMode?: number
@@ -76,18 +75,18 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
     }
 
     return (
-        <section className={`${styles.colorPickerContainer}`}>
+        <section className="colorPickerContainer">
             {colorOptions.map((option) => (
                 <div
                     key={option.color}
-                    className={`${styles.colorItem} ${
-                        color === option.color ? styles.selected : ''
+                    className={`colorItem ${
+                        color === option.color ? 'selected' : ''
                     }`}
                     style={{
                         backgroundColor: option.color,
-                        visibility: visibleHandler(option.color)
+                        display: visibleHandler(option.color)
                             ? 'visible'
-                            : 'hidden'
+                            : 'none'
                     }}
                     onClick={() => dispatchColorEvent(option.color)}
                 ></div>

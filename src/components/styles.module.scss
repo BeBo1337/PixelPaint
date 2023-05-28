@@ -2,9 +2,17 @@
 
 // app header
 $color: #4c8ff4;
+
+body {
+    overflow-y: hidden;
+    overflow-x: hidden; 
+}
+
+html {
+    background-color: #555555;
+}
 .appStyle {
     background-color: #555555;
-    height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -15,11 +23,17 @@ $color: #4c8ff4;
     color: rgb(216, 216, 216);
     text-align: center;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
-    font-size: 2.5em;
+    font-size: 2em;
     font-weight: bold;
     box-shadow: 0px 0px 5px 2px rgb(0, 0, 0);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    height: 10vh;
+    h1 {
+        font-size: 1em;
+    }
 }
 
 .timeContainerBlink {
@@ -72,6 +86,12 @@ $color: #4c8ff4;
     justify-content: center;
 
     button {
+        padding-top: 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin-inline-end: 5px;
+        margin-block-start: 15px;
         font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana;
         background-color: rgb(255, 255, 255);
         border-radius: 20px;
@@ -94,13 +114,14 @@ $color: #4c8ff4;
 }
 
 .backBtn {
+    font-size: 40px;
+    font-weight: 900;
     background-color: #e0b0b0;
     position: absolute;
     top: 0;
     left: 0;
-    margin-top: 30px;
-    margin-left: 20px;
-    color: white;
+    margin-block-start: 20px;
+    margin-inline-start: 5px;
     padding: 0px 10px;
     width: fit-content;
     border-radius: 20px;
@@ -236,48 +257,56 @@ $color: #4c8ff4;
     color: white;
 }
 
-// color-picker
-.colorPickerLayout {
-    position: absolute;
-    right: 0;
-    margin-right: 50px;
-}
-.colorPickerContainer {
-    display: flex;
-    width: 190px;
-    flex-wrap: wrap;
-    grid-template-columns: repeat(3, 30px);
-    gap: 20px;
-    .colorItem {
-        border-radius: 5px;
-        box-shadow: 0px 2px 1px 1px rgb(0, 0, 0);
-        transition: transform 0.1s ease-in-out;
-
-        &:hover {
-            cursor: pointer;
-            opacity: 0.9;
-        }
-        padding: 20px;
-        background-color: lavender;
-        width: 50px;
-        height: auto;
-    }
-    .selected {
-        outline: rgb(0, 0, 0) 3px solid;
-        transform: scale(1.2);
-    }
-}
-
-@media (max-width: 1550px) {
-    .appStyle {
-        height: 200vh;
-    }
-}
-
 // media queries
+
+@media (max-width: 1600px) {
+    .topBarContainer {
+        height: 12vh;
+        width: 100%;
+    }
+    .tile {
+        width: 10px;
+    }
+
+    .backBtn {
+        font-weight: 900;
+        font-size: 30px;
+        margin: 15px 5px;
+    }
+    .gameBtns {
+        button {
+            padding-top: 10px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin-inline-end: 5px;
+            margin-block-start: 15px;
+
+            h1 {
+                font-size: 25px;
+                font-weight: 900;
+            }
+        }
+    }
+}
+
 @media (max-width: 768px) {
-    .appStyle {
-        height: 120vh;
+    .topBarContainer {
+        font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana,
+            sans-serif;
+        h1 {
+            font-size: 20px;
+        }
+        text-shadow: 5px 5px 5px black;
+        background: #333;
+        color: rgb(216, 216, 216);
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        font-size: 2em;
+        font-weight: bold;
+        box-shadow: 0px 0px 5px 2px rgb(0, 0, 0);
     }
 
     .canvasesContainer {
@@ -308,17 +337,16 @@ $color: #4c8ff4;
     }
 
     .gameBtns {
-        margin: 20px 0px;
-
         button {
             padding-top: 10px;
             position: absolute;
             right: 0;
             top: 0;
-            margin-top: 30px;
-            margin-right: 10px;
+            margin-inline-end: 5px;
+            margin-block-start: 15px;
+
             h1 {
-                font-size: 20px;
+                font-size: 19px;
                 font-weight: 900;
             }
         }
@@ -361,14 +389,5 @@ $color: #4c8ff4;
         width: 100px;
         height: 50px;
         font-size: 20px;
-        margin-left: 10px;
-        margin-top: 30px;
-    }
-
-    .colorPickerLayout {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        margin: -100px 150px;
     }
 }

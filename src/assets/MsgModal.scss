@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+
+.modalOverlay {
+    font-family: 'Bruno Ace';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.832);
+    z-index: 9999;
+}
+
+.modalContent {
+    padding: 10px;
+    background-color: rgb(61, 61, 61);
+    color: rgb(255, 255, 255);
+    p {
+        font-size: 2em;
+    }
+
+    text-align: center;
+    width: 50vw;
+    height: fit-content;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+    .modalHeader {
+        button {
+            border: none;
+            border-radius: 50%;
+            scale: 1.4;
+            outline: 1px solid black;
+            margin-inline-end: 5px;
+            &:hover {
+                background-color: lightcoral;
+                color: white;
+                box-sizing: border-box;
+                outline: 1px solid white;
+            }
+        }
+        h2 {
+            margin: 0;
+            color: lightcoral;
+            font-weight: 700;
+        }
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .modalBody {
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .closeButton {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #ccc;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .closeButton:hover {
+        background-color: #999;
+    }
+}

@@ -39,6 +39,7 @@ const GridLayout: FC<GridLayoutProps> = ({
     const [tempColor, setTempColor] = useState(Colors.TILE_COLOR_A)
     const [color, setColor] = useState(Colors.TILE_COLOR_A)
     const [tileSize, setTileSize] = useState(getTileSize())
+    const [picTileSize, setPicTileSize] = useState(getPicTileSize())
 
     useEffect(() => {
         const newCanvas = cloneDeep(puzzle)
@@ -53,6 +54,8 @@ const GridLayout: FC<GridLayoutProps> = ({
     useEffect(() => {
         function handleResize() {
             setTileSize(getTileSize())
+            setPicTileSize(getPicTileSize())
+
         }
 
         const handleColorChange = ({ detail: color }: any) => {
@@ -70,10 +73,23 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     function getTileSize() {
         const screenWidth = window.innerWidth
-        if (screenWidth < 768) {
-            return '2.8em'
+        if (screenWidth <= 768) {
+            return '3em'
+        } else if (screenWidth <= 1600) {
+            return '3.5em'
         } else {
             return '4em'
+        }
+    }
+
+    function getPicTileSize() {
+        const screenWidth = window.innerWidth
+        if (screenWidth <= 768) {
+            return '25px'
+        } else if (screenWidth <= 1600) {
+            return '20px'
+        } else {
+            return '25px'
         }
     }
 
@@ -157,13 +173,10 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     return (
-        <div
-        className={`container-fluid ${styles.gridContainer}`}
-        style={{ paddingTop: '10px' }}
-        >
-            <div className={`${styles.colorPickerLayout}`}>
+        <div className={`container-fluid`} style={{ paddingTop: '10px' }}>
+            <div>
                 {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker changeColor={changeColor} score={score} />
+                    <ColorPicker color={color} score={score} />
                 )}
             </div>
             {Array.from({ length: rows }, (_, i) => {
@@ -189,8 +202,8 @@ const GridLayout: FC<GridLayoutProps> = ({
                                         margin: picture
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
-                                        width: picture ? '25px' : tileSize,
-                                        height: picture ? '25px' : tileSize,
+                                        width: picture ? picTileSize : tileSize,
+                                        height: picture ? picTileSize : tileSize,
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
@@ -213,11 +226,6 @@ const GridLayout: FC<GridLayoutProps> = ({
                             <h1>CLEAR</h1>
                         </button>
                     </div>
-                )}
-            </div>
-            <div>
-                {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker color={color} score={score} />
                 )}
             </div>
         </div>
