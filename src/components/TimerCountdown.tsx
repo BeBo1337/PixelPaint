@@ -5,7 +5,6 @@ import { getNumberInRange } from '../utils/GenericFuncs'
 
 interface TimerCountdownProps {
     time: number
-    isWarning: boolean
     score: number
     onTimeOver: Function
     timeToAdd: number
@@ -13,14 +12,13 @@ interface TimerCountdownProps {
 
 const TimerCountdown: FC<TimerCountdownProps> = ({
     time,
-    isWarning,
     score,
     onTimeOver,
     timeToAdd
 }: TimerCountdownProps) => {
     const [extraTime, setExtraTime] = useState(0)
     const [timeLeft, setTime] = useState(time)
-    const [warning, setWarning] = useState(isWarning)
+    const [warning, setWarning] = useState(false)
     const [prevScore, setPrevScore] = useState(score)
 
     useEffect(() => {
@@ -28,6 +26,7 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
             if (timeLeft === 0) onTimeOver()
             else setTime(timeLeft - 1)
             if (timeLeft <= 10) setWarning(true)
+            else setWarning(false)
         }, 1000)
         if (prevScore < score) {
             console.log(extraTime)
