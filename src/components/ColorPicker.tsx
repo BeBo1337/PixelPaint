@@ -4,16 +4,15 @@ import { GlobalHotKeys } from 'react-hotkeys'
 import { Colors } from '../utils/ColorsConstants'
 import '../assets/ColorPicker.scss'
 interface ColorPickerProps {
-    color?: string
     gameMode?: number
     score?: number
-    changeColor: Function
 }
 
 const ColorPicker: FC<ColorPickerProps & any> = ({
-    color,
     score
 }: ColorPickerProps) => {
+    const [color, setColor] = useState(Colors.TILE_COLOR_A)
+
     const colorOptions = [
         { color: Colors.TILE_COLOR_A, label: 'blue' },
         { color: Colors.TILE_COLOR_B, label: 'green' },
@@ -22,6 +21,8 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
         { color: Colors.TILE_COLOR_E, label: 'white' },
         { color: Colors.TILE_COLOR_F, label: 'pink' }
     ]
+
+
 
     const handleKeyPress = (e: KeyboardEvent) => {
         if (!e) {
@@ -41,6 +42,7 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
     }
 
     const dispatchColorEvent = (color: string) => {
+        setColor(color)
         window.dispatchEvent(
             new CustomEvent('color-change', {
                 bubbles: true,

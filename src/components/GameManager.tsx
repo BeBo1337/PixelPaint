@@ -144,6 +144,8 @@ const GameManager: FC<GameManagerProps> = ({
                 picture={true}
                 showPicture={showPic}
                 puzzle={puzzle}
+                gameMode={gameMode}
+                score={score}
             />
             <GridLayout
                 rows={rows}

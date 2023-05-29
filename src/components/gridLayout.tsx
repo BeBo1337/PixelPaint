@@ -55,7 +55,6 @@ const GridLayout: FC<GridLayoutProps> = ({
         function handleResize() {
             setTileSize(getTileSize())
             setPicTileSize(getPicTileSize())
-
         }
 
         const handleColorChange = ({ detail: color }: any) => {
@@ -174,11 +173,9 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     return (
         <div className={`container-fluid`} style={{ paddingTop: '10px' }}>
-            <div>
-                {!picture && gameMode === Modes.PAINT && (
-                    <ColorPicker color={color} score={score} />
-                )}
-            </div>
+            {picture && gameMode === Modes.PAINT && (
+                <ColorPicker score={score} />
+            )}
             {Array.from({ length: rows }, (_, i) => {
                 return (
                     <div
@@ -203,7 +200,9 @@ const GridLayout: FC<GridLayoutProps> = ({
                                             ? '-2.5px 2.5px'
                                             : '0px 5px',
                                         width: picture ? picTileSize : tileSize,
-                                        height: picture ? picTileSize : tileSize,
+                                        height: picture
+                                            ? picTileSize
+                                            : tileSize,
                                         visibility: showPicture
                                             ? 'visible'
                                             : 'hidden'
