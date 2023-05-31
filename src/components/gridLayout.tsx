@@ -172,61 +172,69 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     return (
-        <div className={`container-fluid`} style={{ paddingTop: '10px' }}>
+        <div
+            className={
+                picture ? `${styles.pictureContainer} ` : 'container-fluid'
+            }
+        >
             {picture && gameMode === Modes.PAINT && (
                 <ColorPicker score={score} />
             )}
-            {Array.from({ length: rows }, (_, i) => {
-                return (
-                    <div
-                        className={`row justify-content-center ${styles.tileRow}`}
-                        key={i}
-                    >
-                        {Array.from({ length: columns }, (_, j) => {
-                            const index = i * columns + j
-                            const currTile = canvas[index]
-                            const isHighlighted = currTile?.highlighted
-                            return (
-                                <div
-                                    className={`${picture ? '' : styles.tile}`}
-                                    key={`${i}-${j}`}
-                                    style={{
-                                        backgroundColor: isHighlighted
-                                            ? currTile.color
-                                                ? currTile.color
-                                                : Colors.TILE_COLOR_HIGHLIGHTED
-                                            : Colors.TILE_COLOR_DEFAULT,
-                                        margin: picture
-                                            ? '-2.5px 2.5px'
-                                            : '0px 5px',
-                                        width: picture ? picTileSize : tileSize,
-                                        height: picture
-                                            ? picTileSize
-                                            : tileSize,
-                                        visibility: showPicture
-                                            ? 'visible'
-                                            : 'hidden'
-                                    }}
-                                    onMouseDown={handleMouseDown}
-                                    onMouseUp={() => handleMouseUp(index)}
-                                ></div>
-                            )
-                        })}
-                    </div>
-                )
-            })}
-            <div>
-                {!picture && (
-                    <div className={`${styles.gameBtns}`}>
-                        <button
-                            className="clear-btn"
-                            onClick={clearHighlightedTiles}
+            <div className={`${styles.rowsContainer}`}>
+                {Array.from({ length: rows }, (_, i) => {
+                    return (
+                        <div
+                            className={`row justify-content-center ${styles.tileRow}`}
+                            key={i}
                         >
-                            <h1>CLEAR</h1>
-                        </button>
-                    </div>
-                )}
+                            {Array.from({ length: columns }, (_, j) => {
+                                const index = i * columns + j
+                                const currTile = canvas[index]
+                                const isHighlighted = currTile?.highlighted
+                                return (
+                                    <div
+                                        className={`${
+                                            picture ? '' : styles.tile
+                                        }`}
+                                        key={`${i}-${j}`}
+                                        style={{
+                                            backgroundColor: isHighlighted
+                                                ? currTile.color
+                                                    ? currTile.color
+                                                    : Colors.TILE_COLOR_HIGHLIGHTED
+                                                : Colors.TILE_COLOR_DEFAULT,
+                                            margin: picture
+                                                ? '-2.5px 2.5px'
+                                                : '0px 5px',
+                                            width: picture
+                                                ? picTileSize
+                                                : tileSize,
+                                            height: picture
+                                                ? picTileSize
+                                                : tileSize,
+                                            visibility: showPicture
+                                                ? 'visible'
+                                                : 'hidden'
+                                        }}
+                                        onMouseDown={handleMouseDown}
+                                        onMouseUp={() => handleMouseUp(index)}
+                                    ></div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
             </div>
+            {!picture && (
+                <div className={`${styles.gameBtns}`}>
+                    <button
+                        className="clear-btn"
+                        onClick={clearHighlightedTiles}
+                    >
+                        <h1>CLEAR</h1>
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

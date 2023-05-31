@@ -5,7 +5,7 @@ $color: #4c8ff4;
 
 body {
     overflow-y: hidden;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 }
 
 html {
@@ -90,6 +90,7 @@ html {
         position: absolute;
         right: 0;
         top: 0;
+
         margin-inline-end: 5px;
         margin-block-start: 15px;
         font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana;
@@ -261,8 +262,14 @@ html {
 
 @media (max-width: 1600px) {
     .topBarContainer {
-        height: 12vh;
+        height: 11vh;
         width: 100%;
+        div {
+            font-size: 35px;
+        }
+        h1 {
+            font-size: 20px;
+        }
     }
     .tile {
         width: 10px;
@@ -273,6 +280,7 @@ html {
         font-size: 30px;
         margin: 15px 5px;
     }
+
     .gameBtns {
         button {
             padding-top: 10px;
@@ -281,7 +289,6 @@ html {
             top: 0;
             margin-inline-end: 5px;
             margin-block-start: 15px;
-
             h1 {
                 font-size: 25px;
                 font-weight: 900;
@@ -290,13 +297,34 @@ html {
     }
 }
 
+.pictureContainer {
+    margin: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.gameContainer {
+    display: grid;
+}
+
 @media (max-width: 768px) {
+
+    .gameContainer {
+
+        .pictureContainer {
+            margin: 0px;
+            justify-content: center;
+            margin-left: 15px;
+            margin-right: 5px;
+            margin-top: 5px;
+            gap: 44px;
+            padding: 5px;
+            flex-direction: row-reverse;
+        }
+    }
     .topBarContainer {
         font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana,
             sans-serif;
-        h1 {
-            font-size: 20px;
-        }
         text-shadow: 5px 5px 5px black;
         background: #333;
         color: rgb(216, 216, 216);
@@ -314,10 +342,6 @@ html {
         background-color: #222;
         justify-content: center;
         align-items: center;
-    }
-
-    .tileRow {
-        margin: 10px 10px;
     }
 
     .tile {
@@ -342,9 +366,9 @@ html {
             position: absolute;
             right: 0;
             top: 0;
-            margin-inline-end: 5px;
-            margin-block-start: 15px;
-
+            margin: 10px 5px;
+            width: 100px;
+            height: 60px;
             h1 {
                 font-size: 19px;
                 font-weight: 900;
@@ -387,7 +411,11 @@ html {
     .backBtn {
         font-weight: 900;
         width: 100px;
-        height: 50px;
+        height: 60px;
         font-size: 20px;
+        margin: 10px 5px;
     }
+}
+
+.rowsContainer {
 }
