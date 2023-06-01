@@ -90,7 +90,6 @@ html {
         position: absolute;
         right: 0;
         top: 0;
-
         margin-inline-end: 5px;
         margin-block-start: 15px;
         font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana;
@@ -105,7 +104,6 @@ html {
             box-shadow: 2px 2px 2px rgb(0, 0, 0);
             background-color: #d7d7d7;
             transform: translateY(-1px);
-            visibility: hidden;
         }
 
         &:active {

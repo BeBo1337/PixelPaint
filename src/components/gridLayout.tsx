@@ -226,7 +226,6 @@ const GridLayout: FC<GridLayoutProps> = ({
             {!picture && (
                 <div className={`${styles.gameBtns}`}>
                     <button
-                        className="clear-btn"
                         onClick={clearHighlightedTiles}
                     >
                         <h1>CLEAR</h1>
