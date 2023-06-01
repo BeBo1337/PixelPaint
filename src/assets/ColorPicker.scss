@@ -14,9 +14,9 @@
         align-items: center;
         h3 {
             font-size: 30px;
-            font-family: "Bruno Ace";
+            font-family: 'Bruno Ace';
             color: rgb(0, 0, 0);
-            font-weight: bold;
+            font-weight: 500;
             margin: 0;
         }
         &:hover {
@@ -31,6 +31,12 @@
     .selected {
         outline: rgb(0, 0, 0) 3px solid;
         transform: scale(1.2);
+        h3 {
+            font-weight: 900;
+        }
+    }
+
+    .displayTile {
     }
 }
 
@@ -38,9 +44,27 @@
     .colorPickerContainer {
         margin-top: 0px;
         display: grid;
+        .colorItem2 {
+            grid-row: 2;
+        }
+        .colorItem3 {
+            grid-row: 3;
+        }
+        .colorItem4 {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .colorItem5 {
+            grid-column: 2;
+            grid-row: 2;
+        }
+        .colorItem6 {
+            grid-column: 2;
+            grid-row: 3;
+        }
         grid-template-columns: 1fr 65px;
         gap: 22px;
-        h3{
+        h3 {
             visibility: hidden;
         }
         .colorItem {

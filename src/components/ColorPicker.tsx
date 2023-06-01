@@ -54,10 +54,15 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
         return () => window.removeEventListener('keypress', handleKeyPress)
     }, [])
 
+    useEffect(() => {
+        window.addEventListener('resize', () => {})
+        return () => window.removeEventListener('resize', () => {})
+    }, [])
+
     const visibleHandler = (color: string): Boolean => {
         if (
             score !== undefined &&
-            score < 3 &&
+            score < 1 &&
             (color === Colors.TILE_COLOR_D ||
                 color === Colors.TILE_COLOR_E ||
                 color === Colors.TILE_COLOR_F)
@@ -76,24 +81,33 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
 
     return (
         <div className="colorPickerContainer">
-            {colorOptions.map((option) => (
-                <div
-                    key={option.color}
-                    className={`colorItem ${
-                        color === option.color ? 'selected' : ''
-                    }`}
-                    style={{
-                        backgroundColor: option.color,
-                        display: visibleHandler(option.color)
-                            ? 'hidden'
-                            : 'visible'
-                    }}
-                    onClick={() => dispatchColorEvent(option.color)}
-                    
-                >
-                    <h3>{option.label}</h3>
-                </div>
-            ))}
+            {colorOptions.map((option) => {
+                const isBelow768px = window.innerWidth >= 768
+                const displayOrVisibility = isBelow768px
+                    ? 'display'
+                    : 'visibility'
+                const displayOptions = isBelow768px
+                    ? ['flex', 'none']
+                    : ['visible', 'hidden']
+
+                return (
+                    <div
+                        key={option.color}
+                        className={`colorItem colorItem${option.label} ${
+                            color === option.color ? 'selected' : ''
+                        } `}
+                        style={{
+                            backgroundColor: option.color,
+                            [displayOrVisibility]: visibleHandler(option.color)
+                                ? displayOptions[0]
+                                : displayOptions[1]
+                        }}
+                        onClick={() => dispatchColorEvent(option.color)}
+                    >
+                        <h3>{option.label}</h3>
+                    </div>
+                )
+            })}
         </div>
     )
 }

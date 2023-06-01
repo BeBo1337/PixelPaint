@@ -72,10 +72,8 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     function getTileSize() {
         const screenWidth = window.innerWidth
-        if (screenWidth <= 768) {
+        if (screenWidth <= 1600) {
             return '3em'
-        } else if (screenWidth <= 1600) {
-            return '3.5em'
         } else {
             return '4em'
         }
