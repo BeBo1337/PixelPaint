@@ -2,26 +2,24 @@ import { useState, useEffect, FC, useMemo } from 'react'
 import { Constants, Modes } from '../utils/GameConstants'
 import { GlobalHotKeys } from 'react-hotkeys'
 import { Colors } from '../utils/ColorsConstants'
-import styles from './styles.module.scss'
-
+import '../assets/ColorPicker.scss'
 interface ColorPickerProps {
-    color?: string
     gameMode?: number
     score?: number
-    changeColor: Function
 }
 
 const ColorPicker: FC<ColorPickerProps & any> = ({
-    color,
     score
 }: ColorPickerProps) => {
+    const [color, setColor] = useState(Colors.TILE_COLOR_A)
+
     const colorOptions = [
-        { color: Colors.TILE_COLOR_A, label: 'blue' },
-        { color: Colors.TILE_COLOR_B, label: 'green' },
-        { color: Colors.TILE_COLOR_C, label: 'red' },
-        { color: Colors.TILE_COLOR_D, label: 'yellow' },
-        { color: Colors.TILE_COLOR_E, label: 'white' },
-        { color: Colors.TILE_COLOR_F, label: 'pink' }
+        { color: Colors.TILE_COLOR_A, label: '1' },
+        { color: Colors.TILE_COLOR_B, label: '2' },
+        { color: Colors.TILE_COLOR_C, label: '3' },
+        { color: Colors.TILE_COLOR_D, label: '4' },
+        { color: Colors.TILE_COLOR_E, label: '5' },
+        { color: Colors.TILE_COLOR_F, label: '6' }
     ]
 
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -42,6 +40,7 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
     }
 
     const dispatchColorEvent = (color: string) => {
+        setColor(color)
         window.dispatchEvent(
             new CustomEvent('color-change', {
                 bubbles: true,
@@ -55,10 +54,15 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
         return () => window.removeEventListener('keypress', handleKeyPress)
     }, [])
 
+    useEffect(() => {
+        window.addEventListener('resize', () => {})
+        return () => window.removeEventListener('resize', () => {})
+    }, [])
+
     const visibleHandler = (color: string): Boolean => {
         if (
             score !== undefined &&
-            score < 3 &&
+            score < 1 &&
             (color === Colors.TILE_COLOR_D ||
                 color === Colors.TILE_COLOR_E ||
                 color === Colors.TILE_COLOR_F)
@@ -76,23 +80,35 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
     }
 
     return (
-        <section className={`${styles.colorPickerContainer}`}>
-            {colorOptions.map((option) => (
-                <div
-                    key={option.color}
-                    className={`${styles.colorItem} ${
-                        color === option.color ? styles.selected : ''
-                    }`}
-                    style={{
-                        backgroundColor: option.color,
-                        visibility: visibleHandler(option.color)
-                            ? 'visible'
-                            : 'hidden'
-                    }}
-                    onClick={() => dispatchColorEvent(option.color)}
-                ></div>
-            ))}
-        </section>
+        <div className="colorPickerContainer">
+            {colorOptions.map((option) => {
+                const isBelow768px = window.innerWidth >= 768
+                const displayOrVisibility = isBelow768px
+                    ? 'display'
+                    : 'visibility'
+                const displayOptions = isBelow768px
+                    ? ['flex', 'none']
+                    : ['visible', 'hidden']
+
+                return (
+                    <div
+                        key={option.color}
+                        className={`colorItem colorItem${option.label} ${
+                            color === option.color ? 'selected' : ''
+                        } `}
+                        style={{
+                            backgroundColor: option.color,
+                            [displayOrVisibility]: visibleHandler(option.color)
+                                ? displayOptions[0]
+                                : displayOptions[1]
+                        }}
+                        onClick={() => dispatchColorEvent(option.color)}
+                    >
+                        <h3>{option.label}</h3>
+                    </div>
+                )
+            })}
+        </div>
     )
 }
 

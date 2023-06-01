@@ -7,6 +7,7 @@ import { Tile } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import { insertToCollectionAsync } from '../db/connection/ConnectionService'
+import styles from './styles.module.scss'
 
 interface GameManagerProps {
     gameOver?: boolean
@@ -138,24 +139,28 @@ const GameManager: FC<GameManagerProps> = ({
                 score={score}
                 timeToAdd={puzzlePayload.difficulty}
             />
-            <GridLayout
-                rows={rows}
-                columns={columns}
-                picture={true}
-                showPicture={showPic}
-                puzzle={puzzle}
-            />
-            <GridLayout
-                rows={rows}
-                columns={columns}
-                showPicture={true}
-                score={score}
-                clickableCanvas={clickable}
-                puzzle={puzzle}
-                gameMode={gameMode}
-                onTileClicked={onTileClicked}
-                onClearClicked={onClearClicked}
-            />
+            <div className={`${styles.gameContainer}`}>
+                <GridLayout
+                    rows={rows}
+                    columns={columns}
+                    picture={true}
+                    showPicture={showPic}
+                    puzzle={puzzle}
+                    gameMode={gameMode}
+                    score={score}
+                />
+                <GridLayout
+                    rows={rows}
+                    columns={columns}
+                    showPicture={true}
+                    score={score}
+                    clickableCanvas={clickable}
+                    puzzle={puzzle}
+                    gameMode={gameMode}
+                    onTileClicked={onTileClicked}
+                    onClearClicked={onClearClicked}
+                />
+            </div>
         </div>
     )
 }

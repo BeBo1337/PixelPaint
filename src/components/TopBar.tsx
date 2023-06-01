@@ -22,19 +22,19 @@ const TopBar: FC<TopBarProps> = ({
 
     return (
         <section className={`${styles.topBarContainer}`}>
-            <button
-                className={`${styles.clearBtn} ${styles.backBtn}`}
-                onClick={handleClick}
-            >
-                BACK
-            </button>
-            <TimerCountdown
-                time={300}
-                score={score}
-                onTimeOver={timeOverFunction}
-                timeToAdd={timeToAdd}
-            />
-            <h1>SCORE: {score}</h1>
+            <div className={`${styles.topBarContent}`}>
+                <button className={`${styles.backBtn}`} onClick={handleClick}>
+                    BACK
+                </button>
+                <TimerCountdown
+                    time={600}
+                    isWarning={false}
+                    score={score}
+                    onTimeOver={timeOverFunction}
+                    timeToAdd={timeToAdd}
+                />
+                <h1>SCORE: {score}</h1>
+            </div>
         </section>
     )
 }
