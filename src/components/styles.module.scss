@@ -4,8 +4,8 @@
 $color: #4c8ff4;
 
 body {
-overflow-x: hidden;
-overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 html {
@@ -141,6 +141,11 @@ html {
 }
 
 .mainMenuContainer {
+    .logoContainer {
+        img{
+            width: 250px;
+        }
+    }
     font-family: 'Bruno Ace', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
@@ -150,7 +155,7 @@ html {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -90%);
+    transform: translate(-50%, -70%);
     padding: 20px;
     border-radius: 10px;
     // box-shadow: 0px 2px 3px 2px black;
@@ -307,9 +312,7 @@ html {
 }
 
 @media (max-width: 768px) {
-
     .gameContainer {
-
         .pictureContainer {
             margin: 0px;
             justify-content: center;
@@ -376,12 +379,17 @@ html {
     }
 
     .mainMenuContainer {
+        .logoContainer{
+            img{
+                width: 40vw;
+            }
+        }
         h1 {
             font-size: 35px;
         }
-        transform: translate(-50%, -90%);
+        transform: translate(-50%, -65%);
         p {
-            font-size: 30px;
+            font-size: 28px;
             width: 90vw;
         }
         form {
