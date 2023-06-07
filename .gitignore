@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,windows,visualstudiocode
 
 ### App configs - (do not expose !) ###
-/PixelPaint/pixel-paint-backend/src/database/config.ts
+./pixel-paint-backend/src/database/config.ts
 
 ### react ###
 .DS_*
