@@ -1,9 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/react,windows,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,windows,visualstudiocode
 
-### App configs - (do not expose !) ###
-./pixel-paint-backend/src/database/config.ts
-
 ### react ###
 .DS_*
 *.log
@@ -69,3 +66,5 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/react,windows,visualstudiocode
 
+### App configs - (do not expose !) ###
+pixel-paint-backend/src/database/config.ts
