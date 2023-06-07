@@ -14,11 +14,14 @@ const GetPlayersFromDb = async (
 ): Promise<ScoreResult[]> => {
     try {
         const response = await axios.get(
-            `http://localhost:3000/scores?limit=100&name=${collectionName}`
+            `http://localhost:3000/score?limit=100&name=${collectionName}`
         )
         return response.data
     } catch (error) {
-        console.log(error)
+        if (axios.isAxiosError(error)) {
+            const { response } = error
+            console.log(response?.data)
+        }
         return []
     }
 }
@@ -27,21 +30,24 @@ const GetPlayerFromDbFormatted = async (collectionName: string) => {
     const result = await GetPlayersFromDb(collectionName)
 
     return result.map((elem, index) => (
-        <div className="player-stats">
+        <div className="player-stats" key={index}>
             <h1>
-                <span>{index}</span> <span>{elem.name}</span>
+                <span>{index}</span>
+                <span>
+                    {elem.name} - {elem.score}
+                </span>
             </h1>
         </div>
     ))
 }
 
-const Scoreboard: React.FC = () => {
+const Scoreboard = () => {
     const navigate = useNavigate()
     const handleBackToMenuClick = () => {
         navigate('/')
     }
 
-    const [playerStats, setPlayerStats] = useState<JSX.Element[]>([])
+    const [stats, setPlayerStats] = useState<JSX.Element[]>([])
 
     useEffect(() => {
         const fetchPlayerStats = async () => {
@@ -63,7 +69,7 @@ const Scoreboard: React.FC = () => {
                     <div className="paint">Paint</div>
                     <div className="co-op">CO-OP</div>
                 </div>
-                <div className="players-stats-container">{playerStats}</div>
+                <div className="players-stats-container">{stats}</div>
                 <button className="menu-btn" onClick={handleBackToMenuClick}>
                     BACK TO MENU
                 </button>
