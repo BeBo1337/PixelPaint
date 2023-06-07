@@ -9,9 +9,13 @@ import svgLogo from '../../public/PixelPaintLogo.png'
 
 interface MainMenuProps {
     chooseGameMode: Function
+    setPlayersName: Function
 }
 
-const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
+const MainMenu: FC<MainMenuProps> = ({
+    chooseGameMode,
+    setPlayersName
+}: MainMenuProps) => {
     const [mode, setMode] = useState(0)
     const [name, setName] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -42,6 +46,7 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
             setErrorMessage('Please choose a game mode.')
         } else {
             chooseGameMode(mode)
+            setPlayersName(name)
             setTimeout(() => {
                 navigate('/game')
             }, 1000)
@@ -62,9 +67,9 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
     return (
         <>
             <section className={`${styles.mainMenuContainer}`}>
-              <div className={`${styles.logoContainer}`}>
-                <img src={svgLogo} alt="Logo" className={styles.logo} />
-              </div>
+                <div className={`${styles.logoContainer}`}>
+                    <img src={svgLogo} alt="Logo" className={styles.logo} />
+                </div>
 
                 <h1>
                     Welcome to <span>Pixel</span>Paint
@@ -75,6 +80,8 @@ const MainMenu: FC<MainMenuProps> = ({ chooseGameMode }: MainMenuProps) => {
                         type="text"
                         placeholder="Enter your name..."
                         value={name}
+                        maxLength={16}
+                        minLength={3}
                         onChange={handleNameChange}
                     ></input>
                 </form>

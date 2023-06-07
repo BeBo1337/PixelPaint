@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.scss'
 import TimerCountdown from './TimerCountdown'
@@ -20,6 +20,10 @@ const TopBar: FC<TopBarProps> = ({
         navigate('/')
     }
 
+    const handleTimeOver = () => {
+        timeOverFunction()
+    }
+
     return (
         <section className={`${styles.topBarContainer}`}>
             <div className={`${styles.topBarContent}`}>
@@ -27,10 +31,9 @@ const TopBar: FC<TopBarProps> = ({
                     BACK
                 </button>
                 <TimerCountdown
-                    time={600}
-                    isWarning={false}
+                    time={30}
                     score={score}
-                    onTimeOver={timeOverFunction}
+                    onTimeOver={handleTimeOver}
                     timeToAdd={timeToAdd}
                 />
                 <h1>SCORE: {score}</h1>

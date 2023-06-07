@@ -1,0 +1,72 @@
+$logoColor: #e0b0b0;
+
+.scoreboard-container {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Bruno Ace';
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    height: 70vh;
+    .gamemodes-container {
+        width: 100%;
+        background-color: $logoColor;
+        display: flex;
+        font-size: 1.7em;
+        color: white;
+        text-shadow: 1px 1px 1px black;
+        justify-content: stretch;
+        div {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid black;
+            &:hover {
+                cursor: pointer;
+                background-color: lightcoral;
+            }
+        }
+    }
+    button {
+        border-radius: 10px;
+        border: none;
+        &:hover {
+            scale: 1.05;
+            box-shadow: 0px 0px 0px black;
+        }
+        margin-top: 50px;
+    }
+    .players-stats-container {
+        background-color: #6e6e6e;
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 10px;
+        .player-stats {
+            padding-left: 20px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            justify-content: space-evenly;
+            h1 {
+                width: 100%;
+                display: flex;
+                gap: 50px;
+                font-size: 1.5em;
+            }
+        }
+    }
+}
+
+.menu-btn {
+    background-color: $logoColor;
+    width: fit-content;
+    font-size: 25px;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    border-radius: 30px;
+}

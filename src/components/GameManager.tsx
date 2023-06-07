@@ -10,20 +10,23 @@ import { insertToCollectionAsync } from '../db/connection/ConnectionService'
 import styles from './styles.module.scss'
 
 interface GameManagerProps {
-    gameOver?: boolean
     gameMode: number
+    handleGameOver: Function
+    score: number
+    setScore: Function
 }
 
 const GameManager: FC<GameManagerProps> = ({
-    gameOver,
-    gameMode
+    gameMode,
+    handleGameOver,
+    score,
+    setScore
 }: GameManagerProps) => {
+    const [gameOver, setGameOver] = useState<boolean>(false)
     const [rows, setRows] = useState(Constants.START_DIMENSIONS)
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
     const [tilesToGen, setTilesToGeN] = useState(Constants.START_RANDOM_TILES)
-    const [score, setScore] = useState<number>(0)
-    // @ts-ignore
-    window.setScore = setScore
+    // const [score, setScore] = useState<number>(0)
     const [puzzlePayload, setPayload] = useState<PuzzlePayload>(() =>
         generateTiles(rows, columns, tilesToGen, score, gameMode)
     )
@@ -95,7 +98,7 @@ const GameManager: FC<GameManagerProps> = ({
 
     useEffect(() => {
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
-            setScore((score) => score + 1)
+            setScore(score + 1)
             if (score === Constants.CHECKPOINT_8X8) {
                 setRows((rows) => rows + 1)
                 setColums((columns) => columns + 1)
@@ -119,17 +122,11 @@ const GameManager: FC<GameManagerProps> = ({
     }, [puzzlePayload])
 
     const handleTimeOver = () => {
-        gameOver = true
-
-        /* This is how you insert a new score to the db. */
-
-        // insertToCollectionAsync('ScoreMemory', {
-        //     name: 'BEBO',
-        //     score: score,
-        //     date: new Date()
-        // })
-
+        setGameOver(true)
         setClickable(!clickable)
+        setTimeout(() => {
+            handleGameOver(score, 'ori')
+        }, 1500)
     }
 
     return (
