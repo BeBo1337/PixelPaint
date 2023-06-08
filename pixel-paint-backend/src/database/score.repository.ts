@@ -35,8 +35,9 @@ export default class ScoreRepository implements IScoreRepository {
         const collectionName = scoreData.collectionName
 
         try {
-            await setDoc(doc(this.db, collectionName, uuidv4()), score)
+            await setDoc(doc(this.db, collectionName, uuidv4()), { ...score })
         } catch (error) {
+            console.log(error)
             throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR)
         }
 
