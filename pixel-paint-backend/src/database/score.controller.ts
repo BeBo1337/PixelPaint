@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Get,
+    Header,
+    Logger,
+    Post,
+    Query
+} from '@nestjs/common'
 import { ScoreService } from './score.service'
 import CreateScoreDto from './dto/createScore.dto'
 import ScoreQueryDto from './dto/scoreQuery.dto'
@@ -20,6 +28,7 @@ export class ScoreController {
      * @returns A sorted array of ScoreDto objects with a size specified by 'limit', from the collection specified by 'name'.
      */
     @Get()
+    @Header('Cache-Control', 'max-age=3600')
     public async getScore(@Query() { limit, name }: ScoreQueryDto) {
         Logger.log(`limit=${limit}, name=${name}`)
         return this.scoreService.getScore(name, Number(limit))
