@@ -1,6 +1,17 @@
-$logoColor: #e0b0b0;
-
+$logoColor: rgb(244, 162, 162);
 .scoreboard-container {
+    transform: translateY(10%);
+    .leaderboards-header {
+        margin: 30px 0px;
+        color: rgb(255, 255, 255);
+        text-shadow: 1px 1px 1px rgb(0, 0, 0);
+        font-weight: 900;
+        margin-bottom: 20px;
+        min-width: fit-content;
+        background-color: $logoColor;
+        padding: 10px;
+        border-radius: 10px;
+    }
     width: 50vw;
     display: flex;
     flex-direction: column;
@@ -8,20 +19,23 @@ $logoColor: #e0b0b0;
     align-items: center;
     justify-content: center;
     margin: auto;
-    height: 70vh;
+    height: 80vh;
     .gamemodes-container {
         width: 100%;
-        background-color: $logoColor;
         display: flex;
         font-size: 1.7em;
         color: white;
+        background-color: #6e6e6e;
         text-shadow: 1px 1px 1px black;
         justify-content: stretch;
         div {
+            background-color: $logoColor;
+            min-width: 50px;
             width: 100%;
             text-align: center;
             padding: 10px;
-            border: 1px solid black;
+            box-shadow: 0px 0px 1px 1px black;
+            border-bottom: 2px solid black;
             &:hover {
                 cursor: pointer;
                 background-color: lightcoral;
@@ -31,6 +45,7 @@ $logoColor: #e0b0b0;
     button {
         border-radius: 10px;
         border: none;
+        background-color: #333;
         &:hover {
             scale: 1.05;
             box-shadow: 0px 0px 0px black;
@@ -38,28 +53,90 @@ $logoColor: #e0b0b0;
         margin-top: 50px;
     }
     .players-stats-container {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: transparent;
+        }
+
+        &:hover::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+        width: 400px;
+        overflow: auto;
         background-color: #6e6e6e;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(auto-fit, 1fr);
         width: 100%;
-        flex-direction: column;
-        gap: 20px;
-        padding-top: 10px;
+        margin: 0px;
         .player-stats {
-            padding-left: 20px;
+            position: static;
             display: flex;
+            box-shadow: 2px 2px 0px black;
             align-items: center;
             width: 100%;
             color: white;
             text-shadow: 1px 1px 1px black;
-            justify-content: space-evenly;
+            padding: 10px;
+            .left-content {
+                display: flex;
+                align-items: center;
+            }
             h1 {
                 width: 100%;
+                margin: 0;
                 display: flex;
-                gap: 50px;
-                font-size: 1.5em;
+                gap: 20px;
+                font-size: 1.7em;
+                font-weight: 600;
+                align-items: center;
+                justify-content: space-between;
+                span:nth-child(1) {
+                    padding: 5px 20px;
+                    width: 50px;
+                    display: flex;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background-color: #333;
+                }
+                span:nth-child(2) {
+                    padding-left: 20px;
+                    font-weight: 500;
+                }
+                p {
+                    margin: 0;
+                    color: $logoColor;
+                }
             }
         }
     }
+}
+
+.gold {
+    outline: 3px solid gold;
+    color: gold;
+}
+
+.silver {
+    outline: 3px solid silver;
+    color: silver;
+}
+
+.bronze {
+    outline: 3px solid #cd7f32;
+    color: #cd7f32;
+}
+
+.white {
+    outline: 1px solid rgb(255, 255, 255);
 }
 
 .menu-btn {
@@ -69,4 +146,75 @@ $logoColor: #e0b0b0;
     color: white;
     text-shadow: 1px 1px 1px black;
     border-radius: 30px;
+}
+
+@media (max-width: 768px) {
+    .scoreboard-container {
+        width: 95vw;
+        .leaderboards-header {
+            font-size: 30px;
+            width: 90vw;
+            text-align: center;
+            word-break: break-all;
+            min-width: fit-content;
+        }
+        .gamemodes-container {
+            width: 100%;
+            display: flex;
+            font-size: 1em;
+            color: white;
+            background-color: #6e6e6e;
+            text-shadow: 1px 1px 1px black;
+            justify-content: stretch;
+            div {
+                background-color: $logoColor;
+                min-width: 50px;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                box-shadow: 0px 0px 1px 1px black;
+                border-bottom: 2px solid black;
+                &:hover {
+                    cursor: pointer;
+                    background-color: lightcoral;
+                }
+            }
+        }
+        .players-stats-container {
+            width: 400px;
+            overflow: auto;
+            background-color: #6e6e6e;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(auto-fit, 1fr);
+            width: 100%;
+            margin: 0px;
+            .player-stats {
+                position: static;
+                outline: 1px solid black;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                color: white;
+                text-shadow: 1px 1px 1px black;
+                padding: 10px;
+                .left-content {
+                    display: flex;
+                    align-items: center;
+                }
+                h1 {
+                    font-size: 1.2em;
+                    span:nth-child(1) {
+                        padding: 5px 20px;
+                        width: 20px;
+                    }
+
+                    p {
+                        margin: 0;
+                        color: $logoColor;
+                    }
+                }
+            }
+        }
+    }
 }
