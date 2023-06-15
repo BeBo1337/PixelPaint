@@ -21,7 +21,7 @@ export default function Scoreboard() {
     const navigate = useNavigate()
 
     const handleBackToMenuClick = () => {
-        navigate('/')
+        navigate('/gameover')
     }
 
     const getPlayerColor = (idx: number) => {
@@ -42,7 +42,7 @@ export default function Scoreboard() {
     return (
         <>
             <section className="scoreboard-container">
-                <h1 className="leaderboards-header">Leader-boards</h1>
+                <h1 className="leaderboards-header">Leaderboards</h1>
                 <div className="gamemodes-container">
                     <div className="classic">Classic</div>
                     <div className="memory">Memory</div>
@@ -69,6 +69,7 @@ export default function Scoreboard() {
                 <button className="menu-btn" onClick={handleBackToMenuClick}>
                     BACK TO MENU
                 </button>
+
             </section>
         </>
     )
