@@ -14,14 +14,14 @@ const playersData = [
     { name: 'Ethan Wilson', score: 75 },
     { name: 'Olivia Davis', score: 120 },
     { name: 'Omer Zevel', score: 20 },
-    { name: 'Omer Zevel', score: 20 },
+    { name: 'Omer Zevel', score: 20 }
 ]
 
 export default function Scoreboard() {
     const navigate = useNavigate()
 
     const handleBackToMenuClick = () => {
-        navigate('/gameover')
+        navigate('/')
     }
 
     const getPlayerColor = (idx: number) => {
@@ -69,7 +69,6 @@ export default function Scoreboard() {
                 <button className="menu-btn" onClick={handleBackToMenuClick}>
                     BACK TO MENU
                 </button>
-
             </section>
         </>
     )
