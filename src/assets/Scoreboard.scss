@@ -1,6 +1,5 @@
 $logoColor: rgb(244, 162, 162);
 .scoreboard-container {
-    
     transform: translateY(10%);
     .leaderboards-header {
         outline: 2px solid black;
@@ -52,7 +51,6 @@ $logoColor: rgb(244, 162, 162);
         background-color: #333;
         &:hover {
             scale: 1.05;
-            box-shadow: 0px 0px 0px black;
         }
         margin-top: 50px;
     }
@@ -61,7 +59,7 @@ $logoColor: rgb(244, 162, 162);
         scrollbar-color: transparent transparent;
 
         &::-webkit-scrollbar {
-            width: 6px;
+            width: 0px;
             background-color: transparent;
         }
 
@@ -84,8 +82,9 @@ $logoColor: rgb(244, 162, 162);
         .player-stats {
             position: static;
             display: flex;
-            box-shadow: 2px 2px 0px black;
             align-items: center;
+            box-sizing: border-box;
+            border-bottom: 1px solid black;
             width: 100%;
             color: white;
             text-shadow: 1px 1px 1px black;
@@ -195,7 +194,6 @@ $logoColor: rgb(244, 162, 162);
             margin: 0px;
             .player-stats {
                 position: static;
-                outline: 1px solid black;
                 display: flex;
                 align-items: center;
                 width: 100%;
