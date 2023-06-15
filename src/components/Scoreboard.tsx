@@ -12,7 +12,9 @@ const playersData = [
     { name: 'Alex Thompson', score: 50 },
     { name: 'Sophia Lee', score: 80 },
     { name: 'Ethan Wilson', score: 75 },
-    { name: 'Olivia Davis', score: 120 }
+    { name: 'Olivia Davis', score: 120 },
+    { name: 'Omer Zevel', score: 20 },
+    { name: 'Omer Zevel', score: 20 },
 ]
 
 export default function Scoreboard() {

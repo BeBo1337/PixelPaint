@@ -1,7 +1,9 @@
 $logoColor: rgb(244, 162, 162);
 .scoreboard-container {
+    
     transform: translateY(10%);
     .leaderboards-header {
+        outline: 2px solid black;
         margin: 30px 0px;
         color: rgb(255, 255, 255);
         text-shadow: 1px 1px 1px rgb(0, 0, 0);
@@ -13,6 +15,7 @@ $logoColor: rgb(244, 162, 162);
         border-radius: 10px;
     }
     width: 50vw;
+
     display: flex;
     flex-direction: column;
     font-family: 'Bruno Ace';
@@ -23,7 +26,7 @@ $logoColor: rgb(244, 162, 162);
     .gamemodes-container {
         width: 100%;
         display: flex;
-        font-size: 1.7em;
+        font-size: 1em;
         color: white;
         background-color: #6e6e6e;
         text-shadow: 1px 1px 1px black;
@@ -33,7 +36,8 @@ $logoColor: rgb(244, 162, 162);
             min-width: 50px;
             width: 100%;
             text-align: center;
-            padding: 10px;
+            font-size: 1.2em;
+            padding: 10px 0px;
             box-shadow: 0px 0px 1px 1px black;
             border-bottom: 2px solid black;
             &:hover {
@@ -95,13 +99,13 @@ $logoColor: rgb(244, 162, 162);
                 margin: 0;
                 display: flex;
                 gap: 20px;
-                font-size: 1.7em;
+                font-size: 1.25em;
                 font-weight: 600;
                 align-items: center;
                 justify-content: space-between;
                 span:nth-child(1) {
-                    padding: 5px 20px;
-                    width: 50px;
+                    padding: 5px 0px;
+                    width: 40px;
                     display: flex;
                     justify-content: center;
                     border-radius: 50%;
