@@ -33,7 +33,7 @@ export default function Scoreboard() {
             case 2:
                 return 'bronze'
             default:
-                return 'white'
+                return "white"
         }
     }
 
