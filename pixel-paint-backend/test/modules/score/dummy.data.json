@@ -1,0 +1,26 @@
+{
+  "ScoreClassic": [
+    { "name": "Hop Dillon", "score": 8 },
+    { "name": "Buffy Downs", "score": 6 },
+    { "name": "Geoffrey Hopper", "score": 4 },
+    { "name": "Yuli Mullins", "score": 8 },
+    { "name": "Abraham Warren", "score": 3 },
+    { "name": "Duncan Kane", "score": 6 },
+    { "name": "Kristen Sparks", "score": 2 },
+    { "name": "Irma Velazquez", "score": 0 },
+    { "name": "Lani Ware", "score": 2 },
+    { "name": "Emi Dodson", "score": 7 },
+    { "name": "Xyla Oneal", "score": 8 },
+    { "name": "Neil House", "score": 3 },
+    { "name": "Inez Delaney", "score": 1 },
+    { "name": "Gretchen Schwartz", "score": 1 },
+    { "name": "Nigel Harrison", "score": 10 },
+    { "name": "Ulysses Gallegos", "score": 3 },
+    { "name": "Jane Smith", "score": 100 }
+  ],
+  "ScorePaint": [
+    { "name": "Jane Smith", "score": 100 },
+    { "name": "Jane Smith", "score": 100 },
+    { "name": "Jane Smith", "score": 100 }
+  ]
+}

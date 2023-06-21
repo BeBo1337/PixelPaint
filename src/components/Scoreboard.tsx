@@ -1,28 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import '../assets/Scoreboard.scss'
 import '../assets/GameOverPage.scss'
 
-const playersData = [
-    { name: 'Koko Gamba', score: 200 },
-    { name: 'Kushi Nigga', score: 300 },
-    { name: 'Temani Gazoor', score: 100 },
-    { name: 'Quit Gg', score: 100 },
-    { name: 'Mia Johnson', score: 150 },
-    { name: 'Alex Thompson', score: 50 },
-    { name: 'Sophia Lee', score: 80 },
-    { name: 'Ethan Wilson', score: 75 },
-    { name: 'Olivia Davis', score: 120 },
-    { name: 'Omer Zevel', score: 20 },
-    { name: 'Omer Zevel', score: 20 }
-]
+
 
 export default function Scoreboard() {
+interface ScoreResult {
+    name: string
+    score: number
+}
+
+const GetPlayersFromDb = async (
+    collectionName: string
+): Promise<ScoreResult[]> => {
+    try {
+        const response = await axios.get(
+            `http://localhost:3000/score?limit=100&name=${collectionName}`
+        )
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const { response } = error
+            console.log(response?.data)
+        }
+        return []
+    }
+}
+
+const GetPlayerFromDbFormatted = async (collectionName: string) => {
+    const result = await GetPlayersFromDb(collectionName)
+
+    return result.map((elem, index) => (
+        <div className="player-stats" key={index}>
+            <h1>
+                <span>{index}</span>
+                <span>
+                    {elem.name} - {elem.score}
+                </span>
+            </h1>
+        </div>
+    ))
+}
+
+const Scoreboard = () => {
     const navigate = useNavigate()
 
     const handleBackToMenuClick = () => {
         navigate('/')
     }
+
 
     const getPlayerColor = (idx: number) => {
         switch (idx) {
@@ -37,7 +65,18 @@ export default function Scoreboard() {
         }
     }
 
-    const sortedPlayersData = playersData.sort((a, b) => b.score - a.score)
+    const [stats, setPlayerStats] = useState<JSX.Element[]>([])
+
+    useEffect(() => {
+        const fetchPlayerStats = async () => {
+            const formattedPlayerStats = await GetPlayerFromDbFormatted(
+                'ScoreClassic'
+            )
+            setPlayerStats(formattedPlayerStats)
+        }
+
+        fetchPlayerStats()
+    }, [])
 
     return (
         <>
@@ -49,6 +88,7 @@ export default function Scoreboard() {
                     <div className="paint">Paint</div>
                     <div className="co-op">CO-OP</div>
                 </div>
+
                 <div className="players-stats-container">
                     {sortedPlayersData.map((player, idx) => (
                         <>
@@ -66,6 +106,9 @@ export default function Scoreboard() {
                         </>
                     ))}
                 </div>
+
+                <div className="players-stats-container">{stats}</div>
+
                 <button className="menu-btn" onClick={handleBackToMenuClick}>
                     BACK TO MENU
                 </button>
@@ -73,3 +116,5 @@ export default function Scoreboard() {
         </>
     )
 }
+
+export default Scoreboard
