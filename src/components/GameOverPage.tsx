@@ -6,15 +6,16 @@ import '../assets/GameOverPage.scss'
 
 interface GameOverPageProps {
     score?: number
-    playerNamesArr?: string[]
-    resetScore: Function
+    playerNamesArr: string[]
+    resetGame: Function
 }
 
 const GameOverPage: FC<GameOverPageProps> = ({
     score,
     playerNamesArr,
-    resetScore
+    resetGame
 }: GameOverPageProps) => {
+    const [displayNames, setDisplayNames] = useState<string[]>(playerNamesArr)
     const [displayScore, setDisplayScore] = useState(score)
     const [showScoreboard, setShowScoreboard] = useState(false)
     const navigate = useNavigate()
@@ -28,7 +29,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
     }
 
     useEffect(() => {
-        resetScore()
+        resetGame()
     }, [])
 
     if (showScoreboard) {
@@ -43,7 +44,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
             <div className="player-cred-container">
                 <h2>
                     {/* just single player currently */}
-                    Players : <span>{playerNamesArr?.toString()}</span>
+                    Players : <span>{displayNames?.toString()}</span>
                 </h2>
                 <h2>
                     Score : <span className="score">{displayScore}</span>

@@ -62,7 +62,7 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
     const visibleHandler = (color: string): Boolean => {
         if (
             score !== undefined &&
-            score < 1 &&
+            score < 3 &&
             (color === Colors.TILE_COLOR_D ||
                 color === Colors.TILE_COLOR_E ||
                 color === Colors.TILE_COLOR_F)

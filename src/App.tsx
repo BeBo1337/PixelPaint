@@ -25,15 +25,23 @@ const App: FC<{}> = () => {
         setplayerNamesArr((playerNamesArr) => [...playerNamesArr, playerName])
     }
 
-    const resetScore = () => {
+    const resetGame = () => {
         setScore(0)
-
+        setplayerNamesArr([])
         setFlag(false)
     }
 
     return (
         <Routes>
-            <Route path="/" element={<MainMenu chooseGameMode={setMode} setPlayersName={setPlayers}/>} />
+            <Route
+                path="/"
+                element={
+                    <MainMenu
+                        chooseGameMode={setMode}
+                        setPlayersName={setPlayers}
+                    />
+                }
+            />
             <Route
                 path="/game"
                 element={
@@ -51,7 +59,7 @@ const App: FC<{}> = () => {
                 element={
                     <GameOverPage
                         score={score}
-                        resetScore={resetScore}
+                        resetGame={resetGame}
                         playerNamesArr={playerNamesArr}
                     />
                 }

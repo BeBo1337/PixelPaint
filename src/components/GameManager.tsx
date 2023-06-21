@@ -6,7 +6,6 @@ import { max } from 'lodash'
 import { Tile } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
-import { insertToCollectionAsync } from '../db/connection/ConnectionService'
 import styles from './styles.module.scss'
 
 interface GameManagerProps {

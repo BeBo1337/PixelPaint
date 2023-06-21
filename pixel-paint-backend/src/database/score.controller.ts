@@ -28,7 +28,7 @@ export class ScoreController {
      * @returns A sorted array of ScoreDto objects with a size specified by 'limit', from the collection specified by 'name'.
      */
     @Get()
-    @Header('Cache-Control', 'max-age=3600')
+    @Header('Cache-Control', 'max-age=10')
     public async getScore(@Query() { limit, name }: ScoreQueryDto) {
         Logger.log(`limit=${limit}, name=${name}`)
         return this.scoreService.getScore(name, Number(limit))
