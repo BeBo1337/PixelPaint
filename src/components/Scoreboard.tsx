@@ -4,6 +4,9 @@ import axios from 'axios'
 import '../assets/Scoreboard.scss'
 import '../assets/GameOverPage.scss'
 
+
+
+export default function Scoreboard() {
 interface ScoreResult {
     name: string
     score: number
@@ -43,8 +46,23 @@ const GetPlayerFromDbFormatted = async (collectionName: string) => {
 
 const Scoreboard = () => {
     const navigate = useNavigate()
+
     const handleBackToMenuClick = () => {
         navigate('/')
+    }
+
+
+    const getPlayerColor = (idx: number) => {
+        switch (idx) {
+            case 0:
+                return 'gold'
+            case 1:
+                return 'silver'
+            case 2:
+                return 'bronze'
+            default:
+                return "white"
+        }
     }
 
     const [stats, setPlayerStats] = useState<JSX.Element[]>([])
@@ -63,13 +81,34 @@ const Scoreboard = () => {
     return (
         <>
             <section className="scoreboard-container">
+                <h1 className="leaderboards-header">Leaderboards</h1>
                 <div className="gamemodes-container">
                     <div className="classic">Classic</div>
                     <div className="memory">Memory</div>
                     <div className="paint">Paint</div>
                     <div className="co-op">CO-OP</div>
                 </div>
+
+                <div className="players-stats-container">
+                    {sortedPlayersData.map((player, idx) => (
+                        <>
+                            <div className={`player-stats`} key={idx}>
+                                <h1>
+                                    <div className="left-content">
+                                        <span className={getPlayerColor(idx)}>
+                                            {idx + 1}
+                                        </span>
+                                        <span>{`${player.name}`}</span>
+                                    </div>
+                                    <p>{`${player.score} pts`}</p>
+                                </h1>
+                            </div>
+                        </>
+                    ))}
+                </div>
+
                 <div className="players-stats-container">{stats}</div>
+
                 <button className="menu-btn" onClick={handleBackToMenuClick}>
                     BACK TO MENU
                 </button>
