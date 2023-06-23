@@ -29,7 +29,6 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
             else setWarning(false)
         }, 1000)
         if (prevScore < score) {
-            console.log(extraTime)
             if (extraTime >= 3) setTime(timeLeft + 3 + 1)
             else setTime(timeLeft + extraTime + 1)
             setPrevScore(score)

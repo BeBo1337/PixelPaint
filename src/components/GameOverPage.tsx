@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Scoreboard from './Scoreboard'
+import { Modes } from '../utils/GameConstants'
+import axios from 'axios'
 
 import '../assets/GameOverPage.scss'
 
@@ -8,12 +10,14 @@ interface GameOverPageProps {
     score?: number
     playerNamesArr: string[]
     resetGame: Function
+    gameMode: number
 }
 
 const GameOverPage: FC<GameOverPageProps> = ({
     score,
     playerNamesArr,
-    resetGame
+    resetGame,
+    gameMode
 }: GameOverPageProps) => {
     const [displayNames, setDisplayNames] = useState<string[]>(playerNamesArr)
     const [displayScore, setDisplayScore] = useState(score)
@@ -30,7 +34,34 @@ const GameOverPage: FC<GameOverPageProps> = ({
 
     useEffect(() => {
         resetGame()
+        axios
+            .post('http://localhost:3000/score', result())
+            .catch((error) => console.log(error))
     }, [])
+
+    const result = () => {
+        let collection: String
+        switch (gameMode) {
+            case Modes.CLASSIC:
+                collection = 'ScoreClassic'
+                break
+            case Modes.MEMORY:
+                collection = 'ScoreMemory'
+                break
+            case Modes.PAINT:
+                collection = 'ScorePaint'
+                break
+            default:
+                collection = 'NA'
+        }
+        return {
+            collectionName: collection,
+            score: {
+                name: displayNames.toString(),
+                score: displayScore
+            }
+        }
+    }
 
     if (showScoreboard) {
         return <Scoreboard />
