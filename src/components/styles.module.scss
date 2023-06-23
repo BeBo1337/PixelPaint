@@ -11,7 +11,9 @@ body {
 html {
     background-color: #555555;
 }
+
 .appStyle {
+    width: 100vw;
     background-color: #555555;
     display: flex;
     flex-direction: column;
@@ -142,7 +144,7 @@ html {
 
 .mainMenuContainer {
     .logoContainer {
-        img{
+        img {
             width: 250px;
         }
     }
@@ -380,8 +382,8 @@ html {
     }
 
     .mainMenuContainer {
-        .logoContainer{
-            img{
+        .logoContainer {
+            img {
                 width: 40vw;
             }
         }
@@ -426,4 +428,7 @@ html {
 }
 
 .rowsContainer {
+    div {
+        flex-wrap: nowrap;
+    }
 }
