@@ -18,8 +18,9 @@ const MainMenu: FC<MainMenuProps> = ({
 }: MainMenuProps) => {
     const [mode, setMode] = useState(0)
     const [name, setName] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
-    const [showMsgModal, setShowMsgModal] = useState(false)
+
+    const [isNameError, setIsNameError] = useState(false)
+    const [isModeError, setIsModeError] = useState(false)
 
     const navigate = useNavigate()
 
@@ -27,6 +28,7 @@ const MainMenu: FC<MainMenuProps> = ({
         switch (selectedOption) {
             case 'Classic':
                 setMode(Modes.CLASSIC)
+
                 break
             case 'Memory':
                 setMode(Modes.MEMORY)
@@ -35,15 +37,22 @@ const MainMenu: FC<MainMenuProps> = ({
                 setMode(Modes.PAINT)
                 break
         }
+        setIsModeError(false)
+        setTimeout(() => {
+            setIsModeError(false)
+        }, 2000)
     }
 
     const handleClick = () => {
         if (!name && !mode) {
-            setErrorMessage('Please enter your name and choose a game mode.')
+            setIsNameError(true)
+            setIsModeError(true)
         } else if (!name) {
-            setErrorMessage('Please enter your name.')
+            setIsNameError(true)
+            setIsModeError(false)
         } else if (!mode) {
-            setErrorMessage('Please choose a game mode.')
+            setIsNameError(false)
+            setIsModeError(true)
         } else {
             chooseGameMode(mode)
             setPlayersName(name)
@@ -52,16 +61,15 @@ const MainMenu: FC<MainMenuProps> = ({
             }, 1000)
             return
         }
-
-        setShowMsgModal(true)
+        setTimeout(() => {
+            setIsNameError(false)
+            setIsModeError(false)
+        }, 1000)
     }
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-    }
-
-    const handleCloseMsgModal = () => {
-        setShowMsgModal(false)
+        setIsNameError(false)
     }
 
     return (
@@ -76,6 +84,7 @@ const MainMenu: FC<MainMenuProps> = ({
                 </h1>
                 <form>
                     <input
+                        className={isNameError ? styles.inputError : ''}
                         name="players-name"
                         type="text"
                         placeholder="Enter your name..."
@@ -86,13 +95,11 @@ const MainMenu: FC<MainMenuProps> = ({
                     ></input>
                 </form>
                 <button onClick={handleClick}>Start Game</button>
-                <DropdownMenu onSelectOption={handleChange} />
+                <DropdownMenu
+                    onSelectOption={handleChange}
+                    isModeSelected={isModeError}
+                />
             </section>
-            {showMsgModal && (
-                <MsgModal msg={errorMessage} onClose={handleCloseMsgModal}>
-                    <p>{errorMessage}</p>
-                </MsgModal>
-            )}
         </>
     )
 }
