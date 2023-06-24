@@ -17,6 +17,7 @@
         "@emotion/styled": "^11.10.5",
         "@fontsource/roboto": "^4.5.8",
         "@mui/material": "^5.10.13",
+        "@nestjs/config": "^3.0.0",
         "all": "^0.0.0",
         "axios": "^1.4.0",
         "bootstrap": "^5.2.3",
