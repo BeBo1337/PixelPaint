@@ -1,10 +1,15 @@
 import React, { useState, FC, MouseEvent } from 'react'
 import styles from './styles.module.scss'
+
 interface DropdownProps {
     onSelectOption: (option: string) => void
+    isModeSelected: boolean
 }
 
-const DropdownMenu: FC<DropdownProps> = ({ onSelectOption }: DropdownProps) => {
+const DropdownMenu: FC<DropdownProps> = ({
+    onSelectOption,
+    isModeSelected
+}: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOption, setSelectedOption] = useState('Select Game Mode')
 
@@ -19,9 +24,13 @@ const DropdownMenu: FC<DropdownProps> = ({ onSelectOption }: DropdownProps) => {
     }
 
     return (
-        <section className={`${styles.dropdown}`}>
-
-            <p className={`${styles.dropdownToggle}`} onClick={handleToggle}>
+        <section className={`${styles.dropdown} `}>
+            <p
+                className={`${styles.dropdownToggle} ${
+                    isModeSelected ? styles.modeError : ''
+                }`}
+                onClick={handleToggle}
+            >
                 {selectedOption}
             </p>
             <ul className={`${styles.dropdownMenu} ${isOpen && styles.fadeIn}`}>

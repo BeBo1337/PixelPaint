@@ -5,9 +5,7 @@ import { clone, cloneDeep } from 'lodash'
 import { Modes } from '../utils/GameConstants'
 import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
-import { Button } from '@mui/material'
-import { v4 } from 'uuid'
-import { Col } from 'rsuite'
+
 
 interface GridLayoutProps {
     rows: number
