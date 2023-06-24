@@ -68,4 +68,6 @@ $RECYCLE.BIN/
 
 ### App configs - (do not expose !) ###
 pixel-paint-backend/src/database/config.ts
+.env.production
+.env.development
 

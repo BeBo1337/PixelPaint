@@ -16,7 +16,7 @@ function Scoreboard() {
     ): Promise<ScoreResult[]> => {
         try {
             const response = await axios.get(
-                `http://localhost:3000/score?limit=100&name=${collectionName}`
+                `${process.env.API_URL}/score?limit=100&name=${collectionName}`
             )
             return response.data
         } catch (error) {
