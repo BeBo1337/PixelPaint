@@ -60,6 +60,7 @@ const App: FC<{}> = () => {
                     <GameOverPage
                         score={score}
                         resetGame={resetGame}
+                        gameMode={gameMode}
                         playerNamesArr={playerNamesArr}
                     />
                 }
