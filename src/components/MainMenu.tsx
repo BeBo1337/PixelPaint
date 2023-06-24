@@ -19,7 +19,7 @@ const MainMenu: FC<MainMenuProps> = ({
     const [mode, setMode] = useState(0)
     const [name, setName] = useState('')
 
-    const [isNameError, setIsisNameError] = useState(false)
+    const [isNameError, setIsNameError] = useState(false)
     const [isModeError, setIsModeError] = useState(false)
 
     const navigate = useNavigate()
@@ -28,6 +28,7 @@ const MainMenu: FC<MainMenuProps> = ({
         switch (selectedOption) {
             case 'Classic':
                 setMode(Modes.CLASSIC)
+
                 break
             case 'Memory':
                 setMode(Modes.MEMORY)
@@ -38,19 +39,19 @@ const MainMenu: FC<MainMenuProps> = ({
         }
         setIsModeError(false)
         setTimeout(() => {
-            setIsModeError(true)
+            setIsModeError(false)
         }, 2000)
     }
 
     const handleClick = () => {
         if (!name && !mode) {
-            setIsisNameError(true)
+            setIsNameError(true)
             setIsModeError(true)
         } else if (!name) {
-            setIsisNameError(true)
+            setIsNameError(true)
             setIsModeError(false)
         } else if (!mode) {
-            setIsisNameError(false)
+            setIsNameError(false)
             setIsModeError(true)
         } else {
             chooseGameMode(mode)
@@ -61,14 +62,14 @@ const MainMenu: FC<MainMenuProps> = ({
             return
         }
         setTimeout(() => {
-            setIsisNameError(false)
+            setIsNameError(false)
             setIsModeError(false)
         }, 1000)
     }
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-        setIsisNameError(false)
+        setIsNameError(false)
     }
 
     return (

@@ -191,6 +191,10 @@ html {
             text-align: center;
             border: none;
             border-radius: 5px;
+            &:focus{
+                border: none;
+              outline: 4px solid $logoColor;  
+            }
         }
         div {
             display: flex;
@@ -400,6 +404,7 @@ html {
         }
         form {
             input {
+                min-width: 0px;
                 width: 90vw;
                 padding: 10px;
                 font-size: 20px;
