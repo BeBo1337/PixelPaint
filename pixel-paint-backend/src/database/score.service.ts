@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import CreateScoreDto from './dto/createScore.dto'
-import IScoreRepository from './scoreRepository.interface'
+import IScoreRepository from './interfaces/scoreRepository.interface'
 
 @Injectable()
 export class ScoreService {

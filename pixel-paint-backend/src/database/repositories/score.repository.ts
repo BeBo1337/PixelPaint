@@ -11,29 +11,26 @@ import {
     DocumentData,
     Firestore
 } from 'firebase/firestore'
-import ScoreDto from './dto/score.dto'
+import ScoreDto from '../dto/score.dto'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import CreateScoreDto from './dto/createScore.dto'
-import IScoreRepository from './scoreRepository.interface'
-import CollectionNotFound from './exceptions/collectionNotFound.exception'
+import CreateScoreDto from '../dto/createScore.dto'
+import IScoreRepository from '../interfaces/scoreRepository.interface'
+import CollectionNotFound from '../exceptions/collectionNotFound.exception'
 import { ConfigService } from '@nestjs/config'
 import {
     SORT_FASHION,
     SORT_PARAM,
     GET_NAME,
     GET_SCORE
-} from './constants/constants'
+} from '../constants/constants'
 
 @Injectable()
 export default class ScoreRepository implements IScoreRepository {
-    private app: FirebaseApp
-    private db: Firestore
-
-    constructor(private readonly configService: ConfigService) {
-        this.app = initializeApp(this.getConfigObject())
-        this.db = getFirestore(this.app)
-    }
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly db: Firestore
+    ) {}
 
     public async createScore(scoreData: CreateScoreDto): Promise<ScoreDto> {
         const score = scoreData.score
@@ -47,20 +44,6 @@ export default class ScoreRepository implements IScoreRepository {
         }
 
         return score
-    }
-
-    private getConfigObject() {
-        return {
-            apiKey: this.configService.get('FIREBASE_API_KEY'),
-            authDomain: this.configService.get('FIREBASE_AUTH_DOMAIN'),
-            projectId: this.configService.get('FIREBASE_PROJECT_ID'),
-            storageBucket: this.configService.get('FIREBASE_STORAGE_BUCKET'),
-            messagingSenderId: this.configService.get(
-                'FIREBASE_MESSAGING_SENDER_ID'
-            ),
-            appId: this.configService.get('FIREBASE_APP_ID'),
-            measurementId: this.configService.get('FIREBASE_MEASURMENT_ID')
-        }
     }
 
     public async getScore(
