@@ -8,7 +8,7 @@ import * as Joi from 'joi'
     imports: [
         ScoreModule,
         ConfigModule.forRoot({
-            envFilePath: 'dev.env',
+            envFilePath: `.env.${process.env.ENVIRONMENT || 'development'}`,
             validationSchema: Joi.object({
                 FIREBASE_API_KEY: Joi.string().required(),
                 FIREBASE_AUTH_DOMAIN: Joi.string().required(),
@@ -21,6 +21,7 @@ import * as Joi from 'joi'
             })
         })
     ],
+
     controllers: [ScoreController],
     providers: []
 })

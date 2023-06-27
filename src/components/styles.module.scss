@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+$logoColor: #e0b0b0;
 
 // app header
 $color: #4c8ff4;
@@ -11,7 +12,9 @@ body {
 html {
     background-color: #555555;
 }
+
 .appStyle {
+    width: 100vw;
     background-color: #555555;
     display: flex;
     flex-direction: column;
@@ -142,7 +145,7 @@ html {
 
 .mainMenuContainer {
     .logoContainer {
-        img{
+        img {
             width: 250px;
         }
     }
@@ -186,6 +189,12 @@ html {
             width: 30vw;
             min-width: 400px;
             text-align: center;
+            border: none;
+            border-radius: 5px;
+            &:focus{
+                border: none;
+              outline: 4px solid $logoColor;  
+            }
         }
         div {
             display: flex;
@@ -380,8 +389,8 @@ html {
     }
 
     .mainMenuContainer {
-        .logoContainer{
-            img{
+        .logoContainer {
+            img {
                 width: 40vw;
             }
         }
@@ -395,6 +404,7 @@ html {
         }
         form {
             input {
+                min-width: 0px;
                 width: 90vw;
                 padding: 10px;
                 font-size: 20px;
@@ -426,4 +436,12 @@ html {
 }
 
 .rowsContainer {
+    div {
+        flex-wrap: nowrap;
+    }
+}
+
+.modeError,
+.inputError {
+    outline: 5px solid lightcoral;
 }
