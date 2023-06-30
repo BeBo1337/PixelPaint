@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common'
 import PerformanceInterceptor from './interceptors/performace.interceptor'
 import { ConfigService } from '@nestjs/config'
 
-
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
     const configService = app.get(ConfigService)
@@ -21,6 +20,8 @@ async function bootstrap() {
     )
     app.useGlobalInterceptors(new PerformanceInterceptor())
     app.enableCors()
+
+    console.log(port)
 
     await app.listen(port)
 }
