@@ -10,11 +10,18 @@ async function bootstrap() {
     const port = configService.get<number>('PORT')
     app.useGlobalPipes(
         new ValidationPipe({
-            transform: true
+            transform: true,
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transformOptions: {
+                enableImplicitConversion: true
+            }
         })
     )
     app.useGlobalInterceptors(new PerformanceInterceptor())
     app.enableCors()
+
+    console.log(port)
 
     await app.listen(port)
     console.log(`listening to port ${port}`)

@@ -1,5 +1,5 @@
-import CreateScoreDto from './dto/createScore.dto'
-import ScoreDto from './dto/score.dto'
+import CreateScoreDto from '../dto/createScore.dto'
+import ScoreDto from '../dto/score.dto'
 
 export default interface IScoreRepository {
     createScore(scoreData: CreateScoreDto): Promise<ScoreDto>
