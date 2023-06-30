@@ -8,7 +8,9 @@ import * as Joi from 'joi'
     imports: [
         ScoreModule,
         ConfigModule.forRoot({
-            envFilePath: `./.env.${process.env.ENVIRONMENT || 'development'}`,
+            envFilePath: `./src/envs/.env.${
+                process.env.ENVIRONMENT || 'development'
+            }`,
             validationSchema: Joi.object({
                 FIREBASE_API_KEY: Joi.string().required(),
                 FIREBASE_AUTH_DOMAIN: Joi.string().required(),
