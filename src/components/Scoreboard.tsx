@@ -16,7 +16,9 @@ function Scoreboard() {
     ): Promise<ScoreResult[]> => {
         try {
             const response = await axios.get(
-                `${process.env.API_URL}/score?limit=100&name=${collectionName}`
+                `${
+                    import.meta.env.VITE_API_URL
+                }/score?limit=100&name=${collectionName}`
             )
             return response.data
         } catch (error) {

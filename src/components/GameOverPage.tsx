@@ -35,7 +35,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
     useEffect(() => {
         resetGame()
         axios
-            .post(`${process.env.API_URL}/score`, result())
+            .post(`${import.meta.env.VITE_API_URL}/score`, result())
             .catch((error) => console.log(error))
     }, [])
 
