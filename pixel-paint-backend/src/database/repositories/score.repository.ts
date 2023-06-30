@@ -8,27 +8,29 @@ import {
     orderBy,
     query,
     getDocs,
-    DocumentData
+    DocumentData,
+    Firestore
 } from 'firebase/firestore'
-import ScoreDto from './dto/score.dto'
-import firebaseConfig from './config'
-import { HttpException, HttpStatus } from '@nestjs/common'
+import ScoreDto from '../dto/score.dto'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import CreateScoreDto from './dto/createScore.dto'
-import IScoreRepository from './scoreRepository.interface'
-import CollectionNotFound from './exceptions/collectionNotFound.exception'
+import CreateScoreDto from '../dto/createScore.dto'
+import IScoreRepository from '../interfaces/scoreRepository.interface'
+import CollectionNotFound from '../exceptions/collectionNotFound.exception'
+import { ConfigService } from '@nestjs/config'
+import {
+    SORT_FASHION,
+    SORT_PARAM,
+    GET_NAME,
+    GET_SCORE
+} from '../constants/constants'
 
-const SORT_FASHION = 'desc'
-const SORT_PARAM = 'score'
-
+@Injectable()
 export default class ScoreRepository implements IScoreRepository {
-    private app: FirebaseApp
-    private db
-
-    constructor() {
-        this.app = initializeApp(firebaseConfig)
-        this.db = getFirestore(this.app)
-    }
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly db: Firestore
+    ) {}
 
     public async createScore(scoreData: CreateScoreDto): Promise<ScoreDto> {
         const score = scoreData.score
@@ -63,7 +65,10 @@ export default class ScoreRepository implements IScoreRepository {
             const data = []
 
             docs.forEach((doc: DocumentData) =>
-                data.push({ name: doc.get('name'), score: doc.get('score') })
+                data.push({
+                    name: doc.get(GET_NAME),
+                    score: doc.get(GET_SCORE)
+                })
             )
 
             return data
