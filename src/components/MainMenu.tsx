@@ -28,7 +28,6 @@ const MainMenu: FC<MainMenuProps> = ({
         switch (selectedOption) {
             case 'Classic':
                 setMode(Modes.CLASSIC)
-
                 break
             case 'Memory':
                 setMode(Modes.MEMORY)
@@ -47,13 +46,13 @@ const MainMenu: FC<MainMenuProps> = ({
         if (!name && !mode) {
             setIsNameError(true)
             setIsModeError(true)
-        } else if (!name) {
+        } else if (name.length < 3) {
             setIsNameError(true)
             setIsModeError(false)
         } else if (!mode) {
             setIsNameError(false)
             setIsModeError(true)
-        } else {
+        } else if (!isModeError && !isNameError) {
             chooseGameMode(mode)
             setPlayersName(name)
             setTimeout(() => {
@@ -69,7 +68,6 @@ const MainMenu: FC<MainMenuProps> = ({
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-        setIsNameError(false)
     }
 
     return (
@@ -89,7 +87,7 @@ const MainMenu: FC<MainMenuProps> = ({
                         type="text"
                         placeholder="Enter your name..."
                         value={name}
-                        maxLength={16}
+                        maxLength={8}
                         minLength={3}
                         onChange={handleNameChange}
                     ></input>
