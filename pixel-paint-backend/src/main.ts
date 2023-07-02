@@ -24,11 +24,7 @@ async function bootstrap() {
         new TimeoutInterceptor()
     )
     app.enableCors()
-
-    console.log(port)
-
     await app.listen(port)
-    console.log(`listening to port ${port}`)
 }
 
 bootstrap()
