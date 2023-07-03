@@ -124,7 +124,7 @@ const GameManager: FC<GameManagerProps> = ({
         setGameOver(true)
         setClickable(!clickable)
         setTimeout(() => {
-            handleGameOver(score, 'ori')
+            handleGameOver()
         }, 1500)
     }
 

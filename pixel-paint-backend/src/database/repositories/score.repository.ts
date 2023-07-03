@@ -35,7 +35,10 @@ export default class ScoreRepository implements IScoreRepository {
 
     public async createScore(scoreData: CreateScoreDto): Promise<ScoreDto> {
         try {
-            const scores = await this.getScore(scoreData.collectionName, 10)
+            const scores = await this.getScore(
+                scoreData.collectionName,
+                ALL_SCORES
+            )
             await this.insertScoreToDb(scores, scoreData)
         } catch (error) {
             console.log(error)
@@ -60,10 +63,14 @@ export default class ScoreRepository implements IScoreRepository {
                 doc(this.db, scoreData.collectionName, scoreToInsert.uuid),
                 scoreToInsert
             )
-
-            await deleteDoc(
-                doc(this.db, scoreData.collectionName, scores[rank].uuid)
-            )
+            if (scores.length >= 100)
+                await deleteDoc(
+                    doc(
+                        this.db,
+                        scoreData.collectionName,
+                        scores[scores.length - 1].uuid
+                    )
+                )
         }
     }
 
