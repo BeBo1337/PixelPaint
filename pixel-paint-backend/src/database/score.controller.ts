@@ -44,7 +44,7 @@ export class ScoreController {
      * {
      *   "collectionName": 'ScorePaint',
      *   "score": {
-     *     "name": 'WeAreEsports',
+     *     "name": 'BeBo',
      *     "score": 25
      *   }
      * }
