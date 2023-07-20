@@ -10,7 +10,6 @@ import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import styles from './styles.module.scss'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
-import SocketManager from '../services/SocketManager'
 import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
 
 interface GameManagerProps {
@@ -215,34 +214,41 @@ const GameManager: FC<GameManagerProps> = ({
 
     return (
         <div className="App">
-            <TopBar
-                timeOverFunction={handleTimeOver}
-                score={score}
-                timeToAdd={puzzlePayload.difficulty}
-                handleBack={handleBackClick}
-            />
-            <div className={`${styles.gameContainer}`}>
-                <GridLayout
-                    rows={rows}
-                    columns={columns}
-                    picture={true}
-                    showPicture={showPic}
-                    puzzle={puzzle}
-                    gameMode={gameMode}
-                    score={score}
-                />
-                <GridLayout
-                    rows={rows}
-                    columns={columns}
-                    showPicture={true}
-                    score={score}
-                    clickableCanvas={clickable}
-                    puzzle={puzzle}
-                    gameMode={gameMode}
-                    onTileClicked={onTileClicked}
-                    onClearClicked={onClearClicked}
-                />
-            </div>
+            {gameMode === Modes.CO_OP ? (
+                <div>{/* Add your specific HTML code here */}</div>
+            ) : (
+                <div>
+                    <TopBar
+                        timeOverFunction={handleTimeOver}
+                        score={score}
+                        timeToAdd={puzzlePayload.difficulty}
+                        handleBack={handleBackClick}
+                    />
+                    <div className={`${styles.gameContainer}`}>
+                        <GridLayout
+                            rows={rows}
+                            columns={columns}
+                            picture={true}
+                            showPicture={showPic}
+                            puzzle={puzzle}
+                            gameMode={gameMode}
+                            score={score}
+                        />
+                        <GridLayout
+                            rows={rows}
+                            columns={columns}
+                            showPicture={true}
+                            picture={false}
+                            score={score}
+                            clickableCanvas={clickable}
+                            puzzle={puzzle}
+                            gameMode={gameMode}
+                            onTileClicked={onTileClicked}
+                            onClearClicked={onClearClicked}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -5,11 +5,13 @@ import { clone, cloneDeep } from 'lodash'
 import { Modes } from '../utils/GameConstants'
 import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
+import EventsManager from '../services/EventsManager'
+import { SocketEvents } from '../services/SocketEvents.model'
 
 interface GridLayoutProps {
     rows: number
     columns: number
-    picture?: boolean
+    picture: boolean
     showPicture?: boolean
     score?: number
     clickableCanvas?: boolean
@@ -156,15 +158,44 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     const clearHighlightedTiles = () => {
-        const newCanvas = cloneDeep(canvas)
-        for (const tile of newCanvas) {
-            tile.highlighted = false
-        }
-        setCanvas(newCanvas)
-        if (onClearClicked) {
-            onClearClicked()
+        if (!picture) {
+            const newCanvas = cloneDeep(canvas)
+            for (const tile of newCanvas) {
+                tile.highlighted = false
+            }
+            setCanvas(newCanvas)
+            if (onClearClicked) {
+                onClearClicked()
+            }
         }
     }
+
+    const handleClearClicked = () => {
+        if (!picture)
+            EventsManager.instance.trigger(SocketEvents.ON_CLEAR_CLICK, {
+                picture
+            })
+    }
+    // onMount
+    useEffect(() => {
+        if (!picture)
+            EventsManager.instance.on(
+                SocketEvents.CLEAR_CLICKED,
+                'gridLayout',
+                clearHighlightedTiles
+            )
+    }, [])
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            if (!picture)
+                EventsManager.instance.off(
+                    SocketEvents.CLEAR_CLICKED,
+                    'gridLayout'
+                )
+        },
+        []
+    )
 
     return (
         <div
@@ -222,7 +253,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             </div>
             {!picture && (
                 <div className={`${styles.gameBtns}`}>
-                    <button onClick={clearHighlightedTiles}>
+                    <button onClick={handleClearClicked}>
                         <h1>CLEAR</h1>
                     </button>
                 </div>

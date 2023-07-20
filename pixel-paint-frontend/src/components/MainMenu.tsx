@@ -1,5 +1,4 @@
 import { useState, useEffect, FC, ChangeEvent } from 'react'
-import { Button } from 'rsuite'
 import { Modes } from '../utils/GameConstants'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import styles from './styles.module.scss'
@@ -58,7 +57,7 @@ const MainMenu: FC<MainMenuProps> = ({
             setIsModeError(true)
         } else if (!isModeError && !isNameError) {
             EventsManager.instance.trigger(SocketEvents.CREATE_ROOM, {
-                player: name,
+                playerId: name,
                 gameMode: mode
             })
         }

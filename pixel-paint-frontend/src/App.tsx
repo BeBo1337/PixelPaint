@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import SocketManager from './services/SocketManager'
 import EventsManager from './services/EventsManager'
 import { SocketEvents } from './services/SocketEvents.model'
+import JoinGameScreen from './components/JoinGameScreen'
 
 const App: FC<{}> = () => {
     const [gameMode, setGameMode] = useState(3)
@@ -51,6 +52,10 @@ const App: FC<{}> = () => {
 
     return (
         <Routes>
+            <Route
+                path="/join/*"
+                element={<JoinGameScreen setPlayersNames={setPlayers} />}
+            />
             <Route
                 path="/"
                 element={

@@ -5,6 +5,7 @@ import { MapData } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
 import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
+import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
 const endpoint = 'localhost:3001'
 
 export interface SocketError {
@@ -43,7 +44,6 @@ export default class SocketManager {
             [SocketEvents.GENERATE_FIRST_PRESET]:
                 this._generateFirstPreset.bind(this),
             [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
-            [SocketEvents.CHANGE_COLOR]: this._changeColor.bind(this),
             [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this)
         }
 
@@ -58,7 +58,6 @@ export default class SocketManager {
                 this._firstPresetGenerated.bind(this),
             [SocketEvents.PRESET_GENERATED]: this._presetGenerated.bind(this),
             [SocketEvents.TILE_SELECTED]: this._tileSeleceted.bind(this),
-            [SocketEvents.COLOR_CHANGED]: this._colorChanged.bind(this),
             [SocketEvents.CLEAR_CLICKED]: this._clearClicked.bind(this)
         }
 
@@ -86,13 +85,14 @@ export default class SocketManager {
     }
 
     private _createRoom(data: any) {
-        const { player, gameMode } = data
-        this._playerId = player
-        this._socket.emit(SocketEvents.CREATE_ROOM, player, gameMode)
+        const { playerId, gameMode } = data
+        this._playerId = playerId
+        this._socket.emit(SocketEvents.CREATE_ROOM, playerId, gameMode)
     }
 
-    private _joinRoom() {
-        this._socket.emit(SocketEvents.JOIN_ROOM, {})
+    private _joinRoom(data: any) {
+        const { roomId, playerId } = data
+        this._socket.emit(SocketEvents.JOIN_ROOM, roomId, playerId)
     }
 
     private _onDisconnect() {
@@ -126,12 +126,14 @@ export default class SocketManager {
         )
     }
 
-    private _changeColor() {
-        this._socket.emit(SocketEvents.CHANGE_COLOR, {})
-    }
-
-    private _onClear() {
-        this._socket.emit(SocketEvents.ON_CLEAR_CLICK, {})
+    private _onClear(data: any) {
+        const { picture } = data
+        if (picture === false)
+            this._socket.emit(
+                SocketEvents.ON_CLEAR_CLICK,
+                this._roomId,
+                picture
+            )
     }
     //#endregion
 
@@ -144,13 +146,14 @@ export default class SocketManager {
         console.error(`[${where ?? 'Server Error'}] ${message};`, error)
     }
 
-    private _roomCreated(room: CreateRoomPayload) {
-        this._roomId = room.roomId
-        this._eventsManager.trigger(SocketEvents.ROOM_CREATED, room)
+    private _roomCreated(p: CreateRoomPayload) {
+        this._roomId = p.roomId
+        this._eventsManager.trigger(SocketEvents.ROOM_CREATED, p)
     }
 
-    private _roomJoined() {
-        this._eventsManager.trigger(SocketEvents.ROOM_JOINED, {})
+    private _roomJoined(p: JoinRoomPayload) {
+        this._roomId = p.roomId
+        this._eventsManager.trigger(SocketEvents.ROOM_JOINED, p)
     }
 
     private _playerDisconnected() {
@@ -167,10 +170,6 @@ export default class SocketManager {
 
     private _tileSeleceted(tilePayload: TileSelectedPayload) {
         this._eventsManager.trigger(SocketEvents.TILE_SELECTED, tilePayload)
-    }
-
-    private _colorChanged() {
-        this._eventsManager.trigger(SocketEvents.COLOR_CHANGED, {})
     }
 
     private _clearClicked() {

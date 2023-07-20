@@ -9,6 +9,7 @@ import {
   CreateRoomPayload,
   PuzzlePayload,
   TileSelectedPayload,
+  JoinRoomPayload,
 } from "../models";
 import { GameSession } from "../models/GameSession.model";
 
@@ -36,6 +37,7 @@ export class SocketManager {
       [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
       [SocketEvents.GENERATE_FIRST_PRESET]:
         this._generateFirstPreset.bind(this),
+      [SocketEvents.ON_CLEAR_CLICK]: this._onClearClick.bind(this),
     };
 
     Object.entries(onHandlers).forEach(([key, value]) =>
@@ -86,8 +88,14 @@ export class SocketManager {
     }
 
     this._socket.join(roomId);
-
-    this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, playerId);
+    const session = SocketManager._activeGames[roomId];
+    session.addPlayer(playerId);
+    const payload: JoinRoomPayload = {
+      roomId: session.roomId,
+      players: session.players,
+      host: session.host,
+    };
+    this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, payload);
   }
 
   private _generateFirstPreset(
@@ -118,7 +126,7 @@ export class SocketManager {
     if (player !== session.host) {
       return;
     }
-    session.increaseScore();
+
     const preset: PuzzlePayload = generateTiles(mapData, session.usedPresets);
     SocketManager._activeGames[roomId].usedPresets.push(preset.name);
     this._io.sockets
@@ -158,10 +166,10 @@ export class SocketManager {
 
   private _selectTile(
     roomId: string,
-    player: string,
+    playerId: string,
     tilePayload: TileSelectedPayload,
   ) {
-    if (!roomId || !player || !tilePayload) {
+    if (!roomId || !playerId || !tilePayload) {
       this._sendError(
         "selectTile",
         "There was an issue, please try again",
@@ -179,6 +187,27 @@ export class SocketManager {
     }
 
     this._io.sockets.in(roomId).emit(SocketEvents.TILE_SELECTED, tilePayload);
+  }
+
+  private _onClearClick(roomId: string, picture: boolean) {
+    if (!roomId) {
+      this._sendError(
+        "onClearClick",
+        "There was an issue, please try again",
+        "Missing Variables",
+      );
+      return;
+    }
+    if (!this._roomExists(roomId)) {
+      this._sendError(
+        "onClearClick",
+        "There was an issue, please try again",
+        `This room ${roomId} does not exist.`,
+      );
+      return;
+    }
+
+    this._io.sockets.in(roomId).emit(SocketEvents.CLEAR_CLICKED, picture);
   }
 
   private _sendError(where?: string, message?: string, error?: unknown) {

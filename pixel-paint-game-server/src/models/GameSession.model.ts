@@ -24,4 +24,8 @@ export class GameSession implements Game {
   increaseScore(): void {
     this.score++;
   }
+
+  addPlayer(playerId: string) {
+    this.players.push(playerId);
+  }
 }
