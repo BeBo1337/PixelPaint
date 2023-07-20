@@ -291,7 +291,7 @@ const heartHollow: Preset = {
     { i: 6, j: 5, highlighted: false },
     { i: 6, j: 6, highlighted: false },
   ],
-  amount: 14,
+  amount: 16,
   size: 49,
 };
 
@@ -6116,7 +6116,6 @@ const banner: Preset = {
 // amount: 0,
 // size: 64};
 
-
 export const presets: Preset[] = [
   target,
   diagonals,
@@ -6214,8 +6213,7 @@ export const presets: Preset[] = [
   xSign,
 ];
 
-export const byDifficulty = groupBy(presets, 'difficulty')
-
+export const byDifficulty = groupBy(presets, "difficulty");
 
 //7x7: lvl1 : 20, lvl2 : 21, lvl3 : 10
 

@@ -11,14 +11,12 @@ import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
 import { Errors } from '../utils/CommonErrors'
 
 interface MainMenuProps {
-    chooseGameMode: Function
-    setPlayersName: Function
+    setGameMode: Function
     setPlayerID: Function
 }
 
 const MainMenu: FC<MainMenuProps> = ({
-    chooseGameMode,
-    setPlayersName,
+    setGameMode,
     setPlayerID
 }: MainMenuProps) => {
     const [mode, setMode] = useState(0)
@@ -91,13 +89,18 @@ const MainMenu: FC<MainMenuProps> = ({
 
     const onRoomCreated = (p: CreateRoomPayload) => {
         console.log(p)
-        chooseGameMode(p.gameMode)
-        setPlayersName(p.host)
+        setGameMode(p.gameMode)
         setPlayerID(p.host)
 
-        setTimeout(() => {
-            navigate('/game')
-        }, 1000)
+        if (p.gameMode === Modes.CO_OP) {
+            setTimeout(() => {
+                navigate(`/create?roomId=${p.roomId}`)
+            }, 1000)
+        } else {
+            setTimeout(() => {
+                navigate('/game')
+            }, 1000)
+        }
     }
 
     // onMount

@@ -11,14 +11,19 @@ import EventsManager from './services/EventsManager'
 import { SocketEvents } from './services/SocketEvents.model'
 import JoinGameScreen from './components/JoinGameScreen'
 import PreGameScreen from './components/PregameScreen'
+import MsgModal from './components/MsgModal'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const App: FC<{}> = () => {
     const [gameMode, setGameMode] = useState(3)
     const [score, setScore] = useState(0)
-    /* just single player currently */
-    const [playerNamesArr, setplayerNamesArr] = useState<string[]>([])
+
+    const [modalMsg, setModalMsg] = useState<string>('')
+    const [showModal, setShowModal] = useState(false)
+    const [playerName, setPlayerName] = useState<string | null>(null)
     const [flag, setFlag] = useState(false)
-    const [hostID, setHostID] = useState('N/A')
+    const [hostID, setHostID] = useState<string | null>(null)
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
     const handleGameOver = (score: number) => setFlag(true)
@@ -41,63 +46,84 @@ const App: FC<{}> = () => {
         SocketManager.newInstance()
     }, [])
 
-    const setPlayers = (playerName: string) => {
-        setplayerNamesArr((playerNamesArr) => [...playerNamesArr, playerName])
-    }
-
     const resetGame = () => {
         setScore(0)
-        setplayerNamesArr([])
+        setPlayerName(null)
         setFlag(false)
     }
 
+    const goBack = (playerId: string) => {
+        navigate('/')
+        if (playerName !== playerId) {
+            setModalMsg('player disconnected')
+            setShowModal(true)
+        }
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+        setModalMsg('')
+    }
+
     return (
-        <Routes>
-            <Route
-                path="/test"
-                element={
-                    <PreGameScreen host={hostID} setPlayersNames={setPlayers} />
-                }
-            />
-            <Route
-                path="/join/*"
-                element={<JoinGameScreen setPlayersNames={setPlayers} />}
-            />
-            <Route
-                path="/"
-                element={
-                    <MainMenu
-                        chooseGameMode={setMode}
-                        setPlayersName={setPlayers}
-                        setPlayerID={setHostID}
-                    />
-                }
-            />
-            <Route
-                path="/game"
-                element={
-                    <GameManager
-                        score={score}
-                        setScore={setScore}
-                        gameMode={gameMode}
-                        handleGameOver={handleGameOver}
-                        player={hostID}
-                    />
-                }
-            />
-            <Route path="*" element={<NotFound />} />
-            <Route
-                path="/gameover"
-                element={
-                    <GameOverPage
-                        score={score}
-                        resetGame={resetGame}
-                        gameMode={gameMode}
-                        playerNamesArr={playerNamesArr}
-                    />
-                }
-            />
-        </Routes>
+        <>
+            {showModal && (
+                <MsgModal onClose={handleCloseModal} msg={modalMsg} />
+            )}
+            <Routes>
+                <Route
+                    path="/create/*"
+                    element={
+                        <PreGameScreen
+                            host={playerName}
+                            setPlayerID={setPlayerName}
+                        />
+                    }
+                />
+                <Route
+                    path="/join/*"
+                    element={
+                        <JoinGameScreen
+                            setGameMode={setGameMode}
+                            setPlayerID={setPlayerName}
+                        />
+                    }
+                />
+                <Route
+                    path="/"
+                    element={
+                        <MainMenu
+                            setGameMode={setMode}
+                            setPlayerID={setPlayerName}
+                        />
+                    }
+                />
+                <Route
+                    path="/game"
+                    element={
+                        <GameManager
+                            score={score}
+                            setScore={setScore}
+                            gameMode={gameMode}
+                            handleGameOver={handleGameOver}
+                            goBack={goBack}
+                        />
+                    }
+                />
+                <Route path="*" element={<NotFound />} />
+                <Route
+                    path="/gameover"
+                    element={
+                        <GameOverPage
+                            score={score}
+                            resetGame={resetGame}
+                            gameMode={gameMode}
+                        />
+                    }
+                />
+            </Routes>
+            <ToastContainer />
+        </>
     )
 }
 

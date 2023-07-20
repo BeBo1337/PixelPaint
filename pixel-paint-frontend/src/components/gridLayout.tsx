@@ -7,6 +7,7 @@ import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
 
 interface GridLayoutProps {
     rows: number
@@ -33,18 +34,22 @@ const GridLayout: FC<GridLayoutProps> = ({
     onClearClicked,
     gameMode
 }: GridLayoutProps) => {
+    // todo: Dont be a bad js developer
     var prevColor = ''
     const [canvas, setCanvas] = useState(cloneDeep(puzzle))
     const [tempColor, setTempColor] = useState(Colors.TILE_COLOR_A)
     const [color, setColor] = useState(Colors.TILE_COLOR_A)
     const [tileSize, setTileSize] = useState(getTileSize())
     const [picTileSize, setPicTileSize] = useState(getPicTileSize())
+    const stateRef = useRef<any>()
+    stateRef.current = canvas
 
     useEffect(() => {
         const newCanvas = cloneDeep(puzzle)
         if (!picture) {
             for (const tile of newCanvas) {
                 tile.highlighted = false
+                tile.color = ''
             }
         }
         setCanvas(newCanvas)
@@ -91,32 +96,31 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     const handleMouseUp = (index: number) => {
         if (clickableCanvas) {
+            let toHighlight = false
+            let toColor = ''
+
             if (gameMode === Modes.PAINT) {
                 if (!canvas[index].highlighted) {
-                    canvas[index].highlighted = true
-                    canvas[index].color = ''
+                    toHighlight = true
+                    toColor = ''
                 } else if (
                     canvas[index].highlighted &&
                     canvas[index].color === color
                 ) {
-                    canvas[index].highlighted = false
-                    canvas[index].color = ''
+                    toHighlight = false
+                    toColor = ''
                 } else {
-                    if (canvas[index].color !== color)
-                        canvas[index].highlighted = true
+                    if (canvas[index].color !== color) toHighlight = true
                 }
                 prevColor = canvas[index].color || ''
-                canvas[index].color = color
-            } else canvas[index].highlighted = !canvas[index].highlighted
-            if (onTileClicked) {
-                onTileClicked(
-                    index,
-                    canvas[index].highlighted,
-                    color,
-                    prevColor
-                )
+                toColor = color
+            } else {
+                toHighlight = !canvas[index].highlighted
             }
-            setCanvas(cloneDeep(canvas))
+
+            if (onTileClicked) {
+                onTileClicked(index, toHighlight, toColor, prevColor)
+            }
         }
     }
 
@@ -125,6 +129,36 @@ const GridLayout: FC<GridLayoutProps> = ({
             setTempColor(color)
         }
     }
+
+    const onTileSelected = (tileSelected: TileSelectedPayload) => {
+        const { tileIndex, highlighted, color, prevColor } = tileSelected
+
+        stateRef.current[tileIndex].highlighted = highlighted
+        stateRef.current[tileIndex].color = !highlighted ? '' : color
+
+        setCanvas(cloneDeep(stateRef.current))
+    }
+
+    useEffect(() => {
+        // @ts-ignore
+        window.canvas = canvas
+        if (!picture) {
+            // Attach the event listener
+            EventsManager.instance.on(
+                SocketEvents.TILE_SELECTED,
+                `GridLayout-${picture ? 'picture' : 'template'}`,
+                onTileSelected
+            )
+
+            // Cleanup the event listener
+            return () => {
+                EventsManager.instance.off(
+                    SocketEvents.TILE_SELECTED,
+                    `GridLayout-${picture ? 'picture' : 'template'}`
+                )
+            }
+        }
+    }, [])
 
     useEffect(() => {
         if (
@@ -159,9 +193,10 @@ const GridLayout: FC<GridLayoutProps> = ({
 
     const clearHighlightedTiles = () => {
         if (!picture) {
-            const newCanvas = cloneDeep(canvas)
+            const newCanvas = cloneDeep(stateRef.current)
             for (const tile of newCanvas) {
                 tile.highlighted = false
+                tile.color = ''
             }
             setCanvas(newCanvas)
             if (onClearClicked) {

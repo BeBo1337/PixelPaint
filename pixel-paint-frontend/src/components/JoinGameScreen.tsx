@@ -1,5 +1,5 @@
-import { useState, useEffect, FC, ChangeEvent } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { useState, useEffect, FC, ChangeEvent, useRef } from 'react'
+import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom'
 import styles from './styles.module.scss'
 import MsgModal from './MsgModal'
 import svgLogo from '../../public/PixelPaintLogo.png'
@@ -7,21 +7,33 @@ import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
 import { Errors } from '../utils/CommonErrors'
+import { debounce } from 'lodash'
+import { useMediaQuery } from '@mui/material'
+import { Modes } from '../utils/GameConstants'
 
 interface JoinGameScreenProps {
-    setPlayersNames: Function
+    setGameMode: Function
+    setPlayerID: Function
 }
-function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
+function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
     const [modalMsg, setModalMsg] = useState<string>('')
     const [showModal, setShowModal] = useState(false)
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    const [roomToJoin, setRoomToJoin] = useState<string>()
+    const [roomToJoin, setRoomToJoin] = useState<string>(
+        searchParams.get('roomId') ?? ''
+    )
     const navigate = useNavigate()
     const [name, setName] = useState('')
     const [isNameError, setIsNameError] = useState(false)
+    const [roomJoined, setRoomJoined] = useState(false)
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
+    }
+
+    const handleRoomIdChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setRoomToJoin(event.target.value)
     }
 
     const handleClick = () => {
@@ -61,28 +73,47 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
     }
 
     const onRoomJoined = (p: JoinRoomPayload) => {
-        //navigate to room game
+        setPlayerID(p.players[p.players.length - 1])
+        setRoomJoined(true)
     }
 
-    useEffect(() => {
-        //setRoomToJoin(link/url/roomid/combination of all???)
-    }, [])
+    const onGameStarted = () => {
+        navigate('/game')
+    }
+
     // onMount
     useEffect(() => {
+        setGameMode(Modes.CO_OP)
+
         EventsManager.instance.on(
             SocketEvents.ROOM_JOINED,
-            'MainMenu',
+            'JoinGameScreen',
             onRoomJoined
         )
+
+        EventsManager.instance.on(
+            SocketEvents.GAME_STARTED,
+            'JoinGameScreen',
+            onGameStarted
+        )
+
+        const roomId = searchParams.get('roomId')
+        if (roomId) {
+            setRoomToJoin(roomId)
+        }
     }, [])
 
     // onBeforeDestroy
     useEffect(
         () => () => {
-            EventsManager.instance.on(
+            EventsManager.instance.off(
                 SocketEvents.ROOM_JOINED,
-                'MainMenu',
-                onRoomJoined
+                'JoinGameScreen'
+            )
+
+            EventsManager.instance.off(
+                SocketEvents.GAME_STARTED,
+                'JoinGameScreen'
             )
         },
         []
@@ -106,6 +137,13 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
                 <h1>
                     Welcome to <span>Pixel</span>Paint
                 </h1>
+                {roomJoined ? (
+                    <div className={styles.waitingContainer}>
+                        <p>Joined! Waiting...</p>
+                    </div>
+                ) : (
+                    ''
+                )}
                 <form>
                     <input
                         className={isNameError ? styles.inputError : ''}
@@ -115,10 +153,17 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
                         value={name}
                         maxLength={8}
                         minLength={3}
+                        disabled={roomJoined}
                         onChange={handleNameChange}
                     ></input>
                 </form>
-                <button onClick={handleClick}>Join Game</button>
+                <button
+                    className={roomJoined ? styles.buttonDisabled : ''}
+                    onClick={handleClick}
+                    disabled={roomJoined}
+                >
+                    Join Game
+                </button>
             </section>
         </>
     )

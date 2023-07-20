@@ -4,4 +4,5 @@ export interface MapData {
     tilesToGen: number
     score: number
     gameMode: number
+    difficulty?: number
 }

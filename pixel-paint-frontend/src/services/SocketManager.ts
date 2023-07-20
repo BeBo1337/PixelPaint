@@ -18,6 +18,7 @@ export default class SocketManager {
     private static _instance: SocketManager
     private _roomId: string | null = null
     private _playerId: string | null = null
+    private _isHost: boolean = false
 
     public static get instance() {
         if (!SocketManager._instance) {
@@ -31,6 +32,16 @@ export default class SocketManager {
         return SocketManager._instance
     }
 
+    public get roomId() {
+        return this._roomId || null
+    }
+    public get playerId() {
+        return this._playerId || null
+    }
+    public get isHost() {
+        return this._isHost
+    }
+
     private _socket: Socket
     private _eventsManager: EventsManager
     constructor() {
@@ -39,12 +50,13 @@ export default class SocketManager {
             [SocketEvents.PING]: this._ping.bind(this),
             [SocketEvents.CREATE_ROOM]: this._createRoom.bind(this),
             [SocketEvents.JOIN_ROOM]: this._joinRoom.bind(this),
+            [SocketEvents.START_GAME]: this._startGame.bind(this),
             [SocketEvents.ON_DISCONNECT]: this._onDisconnect.bind(this),
             [SocketEvents.GENERATE_PRESET]: this._generatePreset.bind(this),
-            [SocketEvents.GENERATE_FIRST_PRESET]:
-                this._generateFirstPreset.bind(this),
             [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
-            [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this)
+            [SocketEvents.TIME]: this._onTime.bind(this),
+            [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this),
+            [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this)
         }
 
         const onsHandler = {
@@ -52,13 +64,12 @@ export default class SocketManager {
             [SocketEvents.ERROR]: this._onError.bind(this),
             [SocketEvents.ROOM_CREATED]: this._roomCreated.bind(this),
             [SocketEvents.ROOM_JOINED]: this._roomJoined.bind(this),
-            [SocketEvents.PLAYER_DISCONNECTED]:
-                this._playerDisconnected.bind(this),
-            [SocketEvents.FIRST_PRESET_GENERATED]:
-                this._firstPresetGenerated.bind(this),
+            [SocketEvents.GAME_STARTED]: this._gameStarted.bind(this),
             [SocketEvents.PRESET_GENERATED]: this._presetGenerated.bind(this),
             [SocketEvents.TILE_SELECTED]: this._tileSeleceted.bind(this),
-            [SocketEvents.CLEAR_CLICKED]: this._clearClicked.bind(this)
+            [SocketEvents.TIME_RET]: this._timeReturn.bind(this),
+            [SocketEvents.CLEAR_CLICKED]: this._clearClicked.bind(this),
+            [SocketEvents.DISBAND_GAME]: this._disbandGame.bind(this)
         }
 
         Object.entries(emitsHandler).forEach(([key, value]) =>
@@ -92,23 +103,21 @@ export default class SocketManager {
 
     private _joinRoom(data: any) {
         const { roomId, playerId } = data
+        this._playerId = playerId
         this._socket.emit(SocketEvents.JOIN_ROOM, roomId, playerId)
+    }
+
+    private _startGame(data: any) {
+        const { roomId, playerId } = data
+        this._socket.emit(SocketEvents.START_GAME, roomId, playerId)
     }
 
     private _onDisconnect() {
         this._socket.emit(SocketEvents.ON_DISCONNECT, {})
     }
 
-    private _generateFirstPreset(data: MapData) {
-        this._socket.emit(
-            SocketEvents.GENERATE_FIRST_PRESET,
-            this._roomId,
-            this._playerId,
-            data
-        )
-    }
-
     private _generatePreset(data: MapData) {
+        console.log(data.difficulty)
         this._socket.emit(
             SocketEvents.GENERATE_PRESET,
             this._roomId,
@@ -126,6 +135,10 @@ export default class SocketManager {
         )
     }
 
+    private _onTime() {
+        this._socket.emit(SocketEvents.TIME, this._roomId)
+    }
+
     private _onClear(data: any) {
         const { picture } = data
         if (picture === false)
@@ -134,6 +147,10 @@ export default class SocketManager {
                 this._roomId,
                 picture
             )
+    }
+
+    private _onGameLeave(playerId: string) {
+        this._socket.emit(SocketEvents.ON_GAME_LEAVE, this._roomId, playerId)
     }
     //#endregion
 
@@ -148,6 +165,7 @@ export default class SocketManager {
 
     private _roomCreated(p: CreateRoomPayload) {
         this._roomId = p.roomId
+        this._isHost = true
         this._eventsManager.trigger(SocketEvents.ROOM_CREATED, p)
     }
 
@@ -156,12 +174,8 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.ROOM_JOINED, p)
     }
 
-    private _playerDisconnected() {
-        this._eventsManager.trigger(SocketEvents.PLAYER_DISCONNECTED, {})
-    }
-
-    private _firstPresetGenerated(preset: PuzzlePayload) {
-        this._eventsManager.trigger(SocketEvents.FIRST_PRESET_GENERATED, preset)
+    private _gameStarted() {
+        this._eventsManager.trigger(SocketEvents.GAME_STARTED, {})
     }
 
     private _presetGenerated(preset: PuzzlePayload) {
@@ -172,10 +186,17 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.TILE_SELECTED, tilePayload)
     }
 
+    private _timeReturn(time: number) {
+        this._eventsManager.trigger(SocketEvents.TIME_RET, time)
+    }
+
     private _clearClicked() {
         this._eventsManager.trigger(SocketEvents.CLEAR_CLICKED, {})
     }
 
+    private _disbandGame(playerID: string) {
+        this._eventsManager.trigger(SocketEvents.DISBAND_GAME, playerID)
+    }
     //#endregion
 }
 

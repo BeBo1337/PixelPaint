@@ -7,19 +7,17 @@ import axios from 'axios'
 import '../assets/GameOverPage.scss'
 
 interface GameOverPageProps {
-    score?: number
-    playerNamesArr: string[]
+    score: number
     resetGame: Function
     gameMode: number
 }
 
 const GameOverPage: FC<GameOverPageProps> = ({
     score,
-    playerNamesArr,
     resetGame,
     gameMode
 }: GameOverPageProps) => {
-    const [displayNames, setDisplayNames] = useState<string[]>(playerNamesArr)
+    const [displayNames, setDisplayNames] = useState<string[]>([])
     const [displayScore, setDisplayScore] = useState(score)
     const [showScoreboard, setShowScoreboard] = useState(false)
     const navigate = useNavigate()
@@ -74,7 +72,6 @@ const GameOverPage: FC<GameOverPageProps> = ({
             </h1>
             <div className="player-cred-container">
                 <h2>
-                    {/* just single player currently */}
                     Players : <span>{displayNames?.toString()}</span>
                 </h2>
                 <h2>

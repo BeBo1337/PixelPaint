@@ -1,41 +1,40 @@
 import { FC, useState, useEffect } from 'react'
 import styles from './styles.module.scss'
+import { Modes } from '../utils/GameConstants'
+import EventsManager from '../services/EventsManager'
+import { SocketEvents } from '../services/SocketEvents.model'
+import SocketManager from '../services/SocketManager'
 
 interface TimerCountdownProps {
     time: number
     score: number
+    gameMode: number
     onTimeOver: Function
-    timeToAdd: number
 }
 
 const TimerCountdown: FC<TimerCountdownProps> = ({
     time,
     score,
-    onTimeOver,
-    timeToAdd
+    gameMode,
+    onTimeOver
 }: TimerCountdownProps) => {
-    const [extraTime, setExtraTime] = useState(0)
-    const [timeLeft, setTime] = useState(time)
+    const [timeLeft, setTime] = useState<number>(
+        gameMode === Modes.CO_OP ? 120 : 150
+    )
+    const [count, setCount] = useState<number>(0)
     const [warning, setWarning] = useState(false)
-    const [prevScore, setPrevScore] = useState(score)
 
     useEffect(() => {
         setTimeout(() => {
             if (timeLeft === 0) onTimeOver()
-            else setTime(timeLeft - 1)
+            else if (SocketManager.instance.isHost) {
+                setCount((prevCount) => prevCount + 1)
+                EventsManager.instance.trigger(SocketEvents.TIME, {})
+            }
             if (timeLeft <= 10) setWarning(true)
             else setWarning(false)
         }, 1000)
-        if (prevScore < score) {
-            if (extraTime >= 3) setTime(timeLeft + 3 + 1)
-            else setTime(timeLeft + extraTime + 1)
-            setPrevScore(score)
-        }
-    }, [timeLeft])
-
-    useEffect(() => {
-        setExtraTime(timeToAdd)
-    }, [prevScore])
+    }, [count])
 
     const calculateTime = (time: number) => {
         let mins = Math.floor(time / 60)
@@ -46,6 +45,26 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
             secs.toString().padStart(2, '0')
         return res
     }
+
+    const timeRet = (time: number) => {
+        setTime(time)
+    }
+
+    useEffect(() => {
+        EventsManager.instance.on(
+            SocketEvents.TIME_RET,
+            'TimerCountdown',
+            timeRet
+        )
+    }, [])
+
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            EventsManager.instance.off(SocketEvents.TIME_RET, 'TimerCountdown')
+        },
+        []
+    )
 
     return (
         <div

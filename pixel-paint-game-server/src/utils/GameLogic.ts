@@ -26,13 +26,13 @@ export const generateTiles = (
   usedPresets: string[],
 ): PuzzlePayload => {
   const { rows, columns, tilesToGen, score, gameMode } = mapData;
-  let n: number = Constants.SHOULD_GENERATE_RANDOM;
+  let n: number = 0;
 
   if (score >= Constants.SCORE_CHECKPOINT) {
     n = getNumberInRange(1, 3);
   }
 
-  if (presets.length > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
+  if (presets.length > 0 && n !== Constants.SHOULD_GENERATE_RANDOM) {
     return generatePresetTiles(rows, score, gameMode, usedPresets);
   }
 

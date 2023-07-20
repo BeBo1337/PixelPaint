@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, ChangeEvent } from 'react'
+import { useState, useEffect, FC, ChangeEvent, useRef } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import styles from './styles.module.scss'
 import MsgModal from './MsgModal'
@@ -7,16 +7,29 @@ import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
 import { Errors } from '../utils/CommonErrors'
+import SocketManager from '../services/SocketManager'
+import { toast } from 'react-toastify'
 
 interface PreGameScreenProps {
-    host: string
-    setPlayersNames: Function
+    host: string | null
+    setPlayerID: Function
 }
-function PreGameScreen({ host, setPlayersNames }: PreGameScreenProps) {
+
+function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
     const [modalMsg, setModalMsg] = useState<string>('')
     const [showModal, setShowModal] = useState(false)
     const [canStart, setCanStart] = useState(false)
     const navigate = useNavigate()
+    const stateRef = useRef<any>()
+    stateRef.current = canStart
+
+    if (!SocketManager.instance.roomId) {
+        navigate('/')
+        // FUCK ME
+        // NAVIGATE OUT OF HERE TO MAIN SCREEN
+        // SHOW ERROR TOAST
+        // CLEAN STATE
+    }
 
     const handleCloseModal = () => {
         setShowModal(false)
@@ -24,38 +37,76 @@ function PreGameScreen({ host, setPlayersNames }: PreGameScreenProps) {
     }
 
     const onRoomJoined = (p: JoinRoomPayload) => {
-        if (p.host !== host) {
+        if (p.host !== host || host === null) {
             setModalMsg('Something Went Wrong...Open a new lobby')
             setShowModal(true)
         } else {
-            setPlayersNames(p.players[p.players.length - 1])
             setCanStart(true)
-            //navigate to room game
+        }
+    }
+
+    const onGameStarted = () => {
+        if (stateRef.current) {
+            navigate('/game')
         }
     }
 
     useEffect(() => {
+        if (!SocketManager.instance.roomId) {
+            toast.error('Please create/join a room to enter a game', {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            navigate('/')
+        }
+
         EventsManager.instance.on(
             SocketEvents.ROOM_JOINED,
-            'MainMenu',
+            'PregameScreen',
             onRoomJoined
+        )
+
+        EventsManager.instance.on(
+            SocketEvents.GAME_STARTED,
+            'PregameScreen',
+            onGameStarted
         )
     }, [])
 
     // onBeforeDestroy
     useEffect(
         () => () => {
-            EventsManager.instance.on(
+            EventsManager.instance.off(
                 SocketEvents.ROOM_JOINED,
-                'MainMenu',
-                onRoomJoined
+                'PregameScreen'
+            )
+
+            EventsManager.instance.off(
+                SocketEvents.GAME_STARTED,
+                'PregameScreen'
             )
         },
         []
     )
 
     const handleClick = () => {
-        //start game
+        EventsManager.instance.trigger(SocketEvents.START_GAME, {
+            roomId: SocketManager.instance.roomId,
+            playerId: host
+        })
+    }
+
+    const handleLinkClick = () => {
+        navigator.clipboard.writeText(
+            'http://localhost:5173' +
+                '/join?roomId=' +
+                SocketManager.instance.roomId
+        )
+
+        toast.success('Successfully copied game link to clipboard', {
+            position: toast.POSITION.BOTTOM_CENTER,
+            toastId: 'copyToast',
+            autoClose: 3000
+        })
     }
 
     return (
@@ -88,6 +139,7 @@ function PreGameScreen({ host, setPlayersNames }: PreGameScreenProps) {
                 >
                     Start Game
                 </button>
+                <button onClick={handleLinkClick}>Invite Link</button>
             </section>
         </>
     )
