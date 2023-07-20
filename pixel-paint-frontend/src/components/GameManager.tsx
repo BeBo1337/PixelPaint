@@ -70,10 +70,6 @@ const GameManager: FC<GameManagerProps> = ({
                             (ColoredRegularTiles) => ColoredRegularTiles - 1
                         )
                 }
-                if (gameMode === Modes.MEMORY) {
-                    if (coloredObjectiveTiles + coloredRegularTiles === 2)
-                        setShowPic(false)
-                }
             }
         }
 
@@ -140,6 +136,10 @@ const GameManager: FC<GameManagerProps> = ({
     }
 
     useEffect(() => {
+        if (gameMode === Modes.MEMORY) {
+            if (coloredObjectiveTiles + coloredRegularTiles === 3)
+                setShowPic(false)
+        }
         if (coloredObjectiveTiles === amount && coloredRegularTiles === 0) {
             setScore(score + 1)
             if (score === Constants.CHECKPOINT_8X8) {

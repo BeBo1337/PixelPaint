@@ -28,4 +28,8 @@ export class GameSession implements Game {
   addPlayer(playerId: string) {
     this.players.push(playerId);
   }
+
+  addUsedPreset(preset: string) {
+    this.usedPresets.push(preset);
+  }
 }

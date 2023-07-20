@@ -4,7 +4,7 @@ import '../assets/MsgModal.scss'
 interface ModalProps {
     onClose: () => void
     msg: string
-    children: React.ReactNode
+    children?: React.ReactNode
 }
 
 const MsgModal: FC<ModalProps> = ({ onClose, msg }: ModalProps) => {
@@ -17,7 +17,7 @@ const MsgModal: FC<ModalProps> = ({ onClose, msg }: ModalProps) => {
     }
 
     return (
-        <div className="modalOverlay"  onClick={handleOverlayClick}>
+        <div className="modalOverlay" onClick={handleOverlayClick}>
             <div className="modalContent">
                 <div className="modalHeader">
                     <h2>Error</h2>

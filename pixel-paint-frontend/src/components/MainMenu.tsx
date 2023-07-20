@@ -8,6 +8,7 @@ import svgLogo from '../../public/PixelPaintLogo.png'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
+import { Errors } from '../utils/CommonErrors'
 
 interface MainMenuProps {
     chooseGameMode: Function
@@ -21,8 +22,10 @@ const MainMenu: FC<MainMenuProps> = ({
     setPlayerID
 }: MainMenuProps) => {
     const [mode, setMode] = useState(0)
-    const [name, setName] = useState('')
+    const [name, setName] = useState<string>('')
 
+    const [modalMsg, setModalMsg] = useState<string>('')
+    const [showModal, setShowModal] = useState(false)
     const [isNameError, setIsNameError] = useState(false)
     const [isModeError, setIsModeError] = useState(false)
 
@@ -45,11 +48,29 @@ const MainMenu: FC<MainMenuProps> = ({
         }
     }
 
+    const checkName = (name: string): boolean => {
+        const englishAndNumbersRegex = /^[A-Za-z0-9]+$/
+
+        return englishAndNumbersRegex.test(name)
+    }
+
     const handleClick = () => {
         if (!name && !mode) {
             setIsNameError(true)
             setIsModeError(true)
+        } else if (!checkName(name)) {
+            setShowModal(true)
+            setModalMsg(Errors.INVALID_NAME)
+            setIsNameError(true)
+            setIsModeError(false)
         } else if (name.length < 3) {
+            setShowModal(true)
+            setModalMsg(Errors.SHORT_NAME)
+            setIsNameError(true)
+            setIsModeError(false)
+        } else if (name.length > 8) {
+            setShowModal(true)
+            setModalMsg(Errors.LONG_NAME)
             setIsNameError(true)
             setIsModeError(false)
         } else if (!mode) {
@@ -100,12 +121,20 @@ const MainMenu: FC<MainMenuProps> = ({
         []
     )
 
+    const handleCloseModal = () => {
+        setShowModal(false)
+        setModalMsg('')
+    }
+
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
     }
 
     return (
         <>
+            {showModal && (
+                <MsgModal onClose={handleCloseModal} msg={modalMsg} />
+            )}
             <section className={`${styles.mainMenuContainer}`}>
                 <div className={`${styles.logoContainer}`}>
                     <img src={svgLogo} alt="Logo" className={styles.logo} />

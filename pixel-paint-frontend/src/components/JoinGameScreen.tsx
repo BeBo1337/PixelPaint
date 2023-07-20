@@ -6,11 +6,15 @@ import svgLogo from '../../public/PixelPaintLogo.png'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
+import { Errors } from '../utils/CommonErrors'
 
 interface JoinGameScreenProps {
     setPlayersNames: Function
 }
 function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
+    const [modalMsg, setModalMsg] = useState<string>('')
+    const [showModal, setShowModal] = useState(false)
+
     const [roomToJoin, setRoomToJoin] = useState<string>()
     const navigate = useNavigate()
     const [name, setName] = useState('')
@@ -23,9 +27,22 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
     const handleClick = () => {
         if (!name) {
             setIsNameError(true)
-        } else if (name.length < 3) {
+        } else if (!checkName(name)) {
+            setShowModal(true)
+            setModalMsg(Errors.INVALID_NAME)
             setIsNameError(true)
-        } else if (!isNameError) {
+        } else if (name.length < 3) {
+            setModalMsg(Errors.SHORT_NAME)
+            setShowModal(true)
+            setIsNameError(true)
+        } else if (name.length > 8) {
+            setModalMsg(Errors.LONG_NAME)
+            setShowModal(true)
+            setIsNameError(true)
+        } else if (!roomToJoin) {
+            setModalMsg(Errors.INVALID_ROOM)
+            setShowModal(true)
+        } else if (!isNameError && roomToJoin) {
             EventsManager.instance.trigger(SocketEvents.JOIN_ROOM, {
                 roomId: roomToJoin,
                 playerId: name
@@ -37,7 +54,14 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
         }, 1000)
     }
 
+    const checkName = (name: string): boolean => {
+        const englishAndNumbersRegex = /^[A-Za-z0-9]+$/
+
+        return englishAndNumbersRegex.test(name)
+    }
+
     const onRoomJoined = (p: JoinRoomPayload) => {
+        //this probably doesn't work since this setsPlayers only on this client app...name need to be added to game session in the backend
         setPlayersNames(p.players[p.players.length - 1])
         //navigate to room game
     }
@@ -66,8 +90,16 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
         []
     )
 
+    const handleCloseModal = () => {
+        setShowModal(false)
+        setModalMsg('')
+    }
+
     return (
         <>
+            {showModal && (
+                <MsgModal onClose={handleCloseModal} msg={modalMsg} />
+            )}
             <section className={`${styles.mainMenuContainer}`}>
                 <div className={`${styles.logoContainer}`}>
                     <img src={svgLogo} alt="Logo" className={styles.logo} />
@@ -81,7 +113,7 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
                         className={isNameError ? styles.inputError : ''}
                         name="players-name"
                         type="text"
-                        placeholder="Enter your name to join..."
+                        placeholder="Enter your name..."
                         value={name}
                         maxLength={8}
                         minLength={3}

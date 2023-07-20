@@ -128,7 +128,7 @@ export class SocketManager {
     }
 
     const preset: PuzzlePayload = generateTiles(mapData, session.usedPresets);
-    SocketManager._activeGames[roomId].usedPresets.push(preset.name);
+    session.addUsedPreset(preset.name);
     this._io.sockets
       .in(roomId)
       .emit(SocketEvents.FIRST_PRESET_GENERATED, preset);

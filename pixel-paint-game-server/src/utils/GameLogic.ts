@@ -1,7 +1,7 @@
 import { getNextPreset } from "../services/tileset.service";
+import { Colors } from "./ColorsConstants";
 import { getNumberInRange } from ".";
 import {
-  Colors,
   presets,
   Preset,
   Tile,
