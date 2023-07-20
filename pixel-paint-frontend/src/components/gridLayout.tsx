@@ -6,7 +6,6 @@ import { Modes } from '../utils/GameConstants'
 import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
 
-
 interface GridLayoutProps {
     rows: number
     columns: number

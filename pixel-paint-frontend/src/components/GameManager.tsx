@@ -4,7 +4,7 @@ import TopBar from './TopBar'
 import GridLayout from './gridLayout'
 import { generateTiles, isCorrectTile } from '../utils/GameFuncs'
 import { max } from 'lodash'
-import { Tile, MapData } from '../models'
+import { Tile, MapData, Preset } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import styles from './styles.module.scss'
@@ -119,8 +119,8 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
-    const onPresetGenerated = (preset: any) => {
-        setPayload(preset)
+    const onPresetGenerated = (puzzlePayload: PuzzlePayload) => {
+        setPayload(puzzlePayload)
     }
 
     useEffect(() => {

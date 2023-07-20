@@ -5,3 +5,4 @@ export * from "./colors";
 export * from "./Presets";
 export * from "./MapData.model";
 export * from "./PuzzlePayload.model";
+export * from "./CreateRoomPayload.model";

@@ -1,4 +1,4 @@
-import { useState, FC, ChangeEvent } from 'react'
+import { useState, useEffect, FC, ChangeEvent } from 'react'
 import { Button } from 'rsuite'
 import { Modes } from '../utils/GameConstants'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import MsgModal from './MsgModal'
 import svgLogo from '../../public/PixelPaintLogo.png'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
+import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
 
 interface MainMenuProps {
     chooseGameMode: Function
@@ -59,7 +60,7 @@ const MainMenu: FC<MainMenuProps> = ({
         } else if (!mode) {
             setIsNameError(false)
             setIsModeError(true)
-        } else {
+        } else if (!isModeError && !isNameError) {
             EventsManager.instance.trigger(SocketEvents.CREATE_ROOM, {
                 player: name,
                 gameMode: mode
@@ -72,20 +73,36 @@ const MainMenu: FC<MainMenuProps> = ({
         }, 1000)
     }
 
-    const onRoomCreated = () => {
-        chooseGameMode(mode)
-        setPlayersName(name)
-        setPlayerID(name)
+    const onRoomCreated = (p: CreateRoomPayload) => {
+        console.log(p)
+        chooseGameMode(p.gameMode)
+        setPlayersName(p.host)
+        setPlayerID(p.host)
 
         setTimeout(() => {
             navigate('/game')
         }, 1000)
     }
 
-    EventsManager.instance.on(
-        SocketEvents.ROOM_CREATED,
-        'MainMenu',
-        onRoomCreated
+    // onMount
+    useEffect(() => {
+        EventsManager.instance.on(
+            SocketEvents.ROOM_CREATED,
+            'MainMenu',
+            onRoomCreated
+        )
+    }, [])
+
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            EventsManager.instance.on(
+                SocketEvents.ROOM_CREATED,
+                'MainMenu',
+                onRoomCreated
+            )
+        },
+        []
     )
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -2,7 +2,13 @@ import { Server, Socket } from "socket.io";
 import { SocketEvents } from "./SocketEvents";
 import uniqid from "uniqid";
 import { generateTiles } from "../utils";
-import { MapData, Tile, Preset } from "../models";
+import {
+  MapData,
+  Tile,
+  Preset,
+  CreateRoomPayload,
+  PuzzlePayload,
+} from "../models";
 import { GameSession } from "../models/GameSession.model";
 
 export class SocketManager {
@@ -50,7 +56,12 @@ export class SocketManager {
       gameMode,
     );
     this._socket.join(room.toString());
-    this._socket.emit(SocketEvents.ROOM_CREATED, room);
+    const payload: CreateRoomPayload = {
+      roomId: room,
+      gameMode: gameMode,
+      host: player,
+    };
+    this._socket.emit(SocketEvents.ROOM_CREATED, payload);
   }
 
   private _joinRoom(roomId: string, playerId: string) {
@@ -101,7 +112,7 @@ export class SocketManager {
       return;
     }
     session.increaseScore();
-    const preset = generateTiles(mapData);
+    const preset: PuzzlePayload = generateTiles(mapData, session.usedPresets);
     SocketManager._activeGames[roomId].usedPresets.push(preset.name);
     this._io.sockets.in(roomId).emit(SocketEvents.PRESET_GENERATED, preset);
   }

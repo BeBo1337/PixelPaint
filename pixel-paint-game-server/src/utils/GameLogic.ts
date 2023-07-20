@@ -23,7 +23,7 @@ const colors: string[] = [
 
 export const generateTiles = (
   mapData: MapData,
-  usedPresets?: string[],
+  usedPresets: string[],
 ): PuzzlePayload => {
   const { rows, columns, tilesToGen, score, gameMode } = mapData;
   let n: number = Constants.SHOULD_GENERATE_RANDOM;
@@ -43,7 +43,7 @@ const generatePresetTiles = (
   size: number,
   score: number,
   gameMode: number,
-  usedPresets?: string[],
+  usedPresets: string[],
 ): PuzzlePayload => {
   let randomPreset = {} as Preset;
   if (size === 7)

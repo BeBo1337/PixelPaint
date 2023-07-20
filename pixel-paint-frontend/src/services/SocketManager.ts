@@ -2,6 +2,8 @@ import io, { Socket } from 'socket.io-client'
 import { SocketEvents } from './SocketEvents.model'
 import EventsManager from './EventsManager'
 import { MapData } from '../models'
+import { PuzzlePayload } from '../payloads/PuzzlePayload'
+import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
 const endpoint = 'localhost:3001'
 
 export interface SocketError {
@@ -123,9 +125,9 @@ export default class SocketManager {
         console.error(`[${where ?? 'Server Error'}] ${message};`, error)
     }
 
-    private _roomCreated(roomId: string) {
-        this._roomId = roomId
-        this._eventsManager.trigger(SocketEvents.ROOM_CREATED, {})
+    private _roomCreated(room: CreateRoomPayload) {
+        this._roomId = room.roomId
+        this._eventsManager.trigger(SocketEvents.ROOM_CREATED, room)
     }
 
     private _roomJoined() {
@@ -136,8 +138,8 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.PLAYER_DISCONNECTED, {})
     }
 
-    private _presetGenerated(preset: any) {
-        this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, { preset })
+    private _presetGenerated(preset: PuzzlePayload) {
+        this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, preset)
     }
 
     private _tileSeleceted() {

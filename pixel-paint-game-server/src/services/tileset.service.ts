@@ -6,7 +6,7 @@ export const getNextPreset = (
   difficulty: number,
   gameMode: number,
   score: number,
-  usedPresets?: string[],
+  usedPresets: string[],
 ): Preset => {
   if (!(difficulty in byDifficulty)) {
     throw new Error(`Invalid difficulty: ${difficulty}`);
