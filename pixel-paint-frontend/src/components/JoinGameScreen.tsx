@@ -61,8 +61,6 @@ function JoinGameScreen({ setPlayersNames }: JoinGameScreenProps) {
     }
 
     const onRoomJoined = (p: JoinRoomPayload) => {
-        //this probably doesn't work since this setsPlayers only on this client app...name need to be added to game session in the backend
-        setPlayersNames(p.players[p.players.length - 1])
         //navigate to room game
     }
 

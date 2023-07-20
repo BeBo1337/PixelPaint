@@ -10,6 +10,7 @@ import SocketManager from './services/SocketManager'
 import EventsManager from './services/EventsManager'
 import { SocketEvents } from './services/SocketEvents.model'
 import JoinGameScreen from './components/JoinGameScreen'
+import PreGameScreen from './components/PregameScreen'
 
 const App: FC<{}> = () => {
     const [gameMode, setGameMode] = useState(3)
@@ -17,7 +18,7 @@ const App: FC<{}> = () => {
     /* just single player currently */
     const [playerNamesArr, setplayerNamesArr] = useState<string[]>([])
     const [flag, setFlag] = useState(false)
-    const [playerID, setPlayerID] = useState('N/A')
+    const [hostID, setHostID] = useState('N/A')
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
     const handleGameOver = (score: number) => setFlag(true)
@@ -53,6 +54,12 @@ const App: FC<{}> = () => {
     return (
         <Routes>
             <Route
+                path="/test"
+                element={
+                    <PreGameScreen host={hostID} setPlayersNames={setPlayers} />
+                }
+            />
+            <Route
                 path="/join/*"
                 element={<JoinGameScreen setPlayersNames={setPlayers} />}
             />
@@ -62,7 +69,7 @@ const App: FC<{}> = () => {
                     <MainMenu
                         chooseGameMode={setMode}
                         setPlayersName={setPlayers}
-                        setPlayerID={setPlayerID}
+                        setPlayerID={setHostID}
                     />
                 }
             />
@@ -74,7 +81,7 @@ const App: FC<{}> = () => {
                         setScore={setScore}
                         gameMode={gameMode}
                         handleGameOver={handleGameOver}
-                        player={playerID}
+                        player={hostID}
                     />
                 }
             />
