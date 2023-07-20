@@ -44,10 +44,6 @@ const MainMenu: FC<MainMenuProps> = ({
                 setMode(Modes.CO_OP)
                 break
         }
-        setIsModeError(false)
-        setTimeout(() => {
-            setIsModeError(false)
-        }, 2000)
     }
 
     const handleClick = () => {
@@ -131,7 +127,9 @@ const MainMenu: FC<MainMenuProps> = ({
                         onChange={handleNameChange}
                     ></input>
                 </form>
-                <button onClick={handleClick}>Create Game</button>
+                <button onClick={handleClick}>
+                    {mode !== Modes.CO_OP ? 'Start Game' : 'Create Game'}
+                </button>
                 <DropdownMenu
                     onSelectOption={handleChange}
                     isModeSelected={isModeError}

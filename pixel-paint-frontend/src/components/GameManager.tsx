@@ -11,6 +11,7 @@ import styles from './styles.module.scss'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import SocketManager from '../services/SocketManager'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
 
 interface GameManagerProps {
     gameMode: number
@@ -44,63 +45,93 @@ const GameManager: FC<GameManagerProps> = ({
     const [amount, setAmount] = useState<number>(puzzlePayload.amount)
     const [showPic, setShowPic] = useState<boolean>(true)
 
+    useEffect(() => {
+        const onTileSelected = (tileSelected: TileSelectedPayload) => {
+            const { tileIndex, highlighted, color, prevColor } = tileSelected
+            const objectiveTile: boolean = puzzle[tileIndex].highlighted
+            if (gameMode === Modes.PAINT) onTileClickedPaint(tileSelected)
+            else {
+                if (objectiveTile) {
+                    if (highlighted) {
+                        setColoredObjectiveTiles(
+                            (ColoredObjectiveTiles) => ColoredObjectiveTiles + 1
+                        )
+                    } else {
+                        setColoredObjectiveTiles(
+                            (ColoredObjectiveTiles) => ColoredObjectiveTiles - 1
+                        )
+                    }
+                } else {
+                    if (highlighted) {
+                        setCurrentColored(
+                            (ColoredRegularTiles) => ColoredRegularTiles + 1
+                        )
+                    } else
+                        setCurrentColored(
+                            (ColoredRegularTiles) => ColoredRegularTiles - 1
+                        )
+                }
+                if (gameMode === Modes.MEMORY) {
+                    if (coloredObjectiveTiles + coloredRegularTiles === 2)
+                        setShowPic(false)
+                }
+            }
+        }
+
+        const onTileClickedPaint = (tileSelected: TileSelectedPayload) => {
+            const { tileIndex, highlighted, color, prevColor } = tileSelected
+            const objectiveTile: boolean = puzzle[tileIndex].highlighted
+            if (objectiveTile) {
+                setColoredObjectiveTiles(
+                    (coloredObjectiveTiles) =>
+                        coloredObjectiveTiles +
+                        isCorrectTile(
+                            puzzle[tileIndex],
+                            highlighted,
+                            color,
+                            prevColor
+                        )
+                )
+            } else {
+                if (highlighted) {
+                    if (prevColor === '')
+                        setCurrentColored(
+                            (ColoredRegularTiles) => ColoredRegularTiles + 1
+                        )
+                } else
+                    setCurrentColored(
+                        (ColoredRegularTiles) => ColoredRegularTiles - 1
+                    )
+            }
+        }
+        // Attach the event listener
+        EventsManager.instance.on(
+            SocketEvents.TILE_SELECTED,
+            'GameManager',
+            onTileSelected
+        )
+
+        // Cleanup the event listener
+        return () => {
+            EventsManager.instance.off(
+                SocketEvents.TILE_SELECTED,
+                'GameManager'
+            )
+        }
+    }, [puzzle])
+
     const onTileClicked = (
         tileIndex: number,
         highlighted: boolean,
         color: string,
         prevColor: string
     ) => {
-        const objectiveTile: boolean = puzzle[tileIndex].highlighted
-        // how to send new trigger
         EventsManager.instance.trigger(SocketEvents.SELECT_TILE, {
             tileIndex,
             highlighted,
             color,
             prevColor
-        })
-        if (gameMode === Modes.PAINT)
-            onTileClickedPaint(tileIndex, highlighted, color, prevColor)
-        else {
-            if (objectiveTile) {
-                if (highlighted) {
-                    setColoredObjectiveTiles(coloredObjectiveTiles + 1)
-                } else {
-                    setColoredObjectiveTiles(coloredObjectiveTiles - 1)
-                }
-            } else {
-                if (highlighted) {
-                    setCurrentColored(coloredRegularTiles + 1)
-                } else setCurrentColored(coloredRegularTiles - 1)
-            }
-            if (gameMode === Modes.MEMORY) {
-                if (coloredObjectiveTiles + coloredRegularTiles === 2)
-                    setShowPic(false)
-            }
-        }
-    }
-
-    const onTileClickedPaint = (
-        tileIndex: number,
-        highlighted: boolean,
-        color: string,
-        prevColor: string
-    ) => {
-        const objectiveTile: boolean = puzzle[tileIndex].highlighted
-        if (objectiveTile) {
-            setColoredObjectiveTiles(
-                coloredObjectiveTiles +
-                    isCorrectTile(
-                        puzzle[tileIndex],
-                        highlighted,
-                        color,
-                        prevColor
-                    )
-            )
-        } else {
-            if (highlighted) {
-                if (prevColor === '') setCurrentColored(coloredRegularTiles + 1)
-            } else setCurrentColored(coloredRegularTiles - 1)
-        }
+        } as TileSelectedPayload)
     }
 
     const onClearClicked = () => {
@@ -119,18 +150,6 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
-    const onPresetGenerated = (puzzlePayload: PuzzlePayload) => {
-        setPayload(puzzlePayload)
-    }
-
-    useEffect(() => {
-        setAmount(puzzlePayload.amount)
-        setPuzzle(puzzlePayload.tiles)
-        setColoredObjectiveTiles(0)
-        setCurrentColored(0)
-        setShowPic(true)
-    }, [puzzlePayload])
-
     useEffect(() => {
         if (score !== 0) {
             const mapData: MapData = {
@@ -147,10 +166,17 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [score])
 
-    const onTileSelected = (data: { player: string; tile: Tile }) => {
-        const { player, tile } = data
-        // handle tile click here ?
+    const onPresetGenerated = (puzzlePayload: PuzzlePayload) => {
+        setPayload(puzzlePayload)
     }
+
+    useEffect(() => {
+        setAmount(puzzlePayload.amount)
+        setPuzzle(puzzlePayload.tiles)
+        setColoredObjectiveTiles(0)
+        setCurrentColored(0)
+        setShowPic(true)
+    }, [puzzlePayload])
 
     // onMount
     useEffect(() => {
@@ -159,21 +185,12 @@ const GameManager: FC<GameManagerProps> = ({
             'GameManager',
             onPresetGenerated
         )
-        EventsManager.instance.on(
-            SocketEvents.TILE_SELECTED,
-            'GameManager',
-            onTileSelected
-        )
     }, [])
     // onBeforeDestroy
     useEffect(
         () => () => {
             EventsManager.instance.off(
                 SocketEvents.PRESET_GENERATED,
-                'GameManager'
-            )
-            EventsManager.instance.off(
-                SocketEvents.TILE_SELECTED,
                 'GameManager'
             )
         },

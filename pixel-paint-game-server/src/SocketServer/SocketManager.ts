@@ -8,6 +8,7 @@ import {
   Preset,
   CreateRoomPayload,
   PuzzlePayload,
+  TileSelectedPayload,
 } from "../models";
 import { GameSession } from "../models/GameSession.model";
 
@@ -33,6 +34,8 @@ export class SocketManager {
       [SocketEvents.JOIN_ROOM]: this._joinRoom.bind(this),
       [SocketEvents.GENERATE_PRESET]: this._generatePreset.bind(this),
       [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
+      [SocketEvents.GENERATE_FIRST_PRESET]:
+        this._generateFirstPreset.bind(this),
     };
 
     Object.entries(onHandlers).forEach(([key, value]) =>
@@ -87,6 +90,42 @@ export class SocketManager {
     this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, playerId);
   }
 
+  private _generateFirstPreset(
+    roomId: string,
+    player: string,
+    mapData: MapData,
+  ) {
+    if (!roomId || !player || !mapData) {
+      this._sendError(
+        "generatePreset",
+        "There was an issue, please try again",
+        "Missing Variables",
+      );
+
+      return;
+    }
+    if (!this._roomExists(roomId)) {
+      this._sendError(
+        "generatePreset",
+        "There was an issue, please try again",
+        `This room ${roomId} does not exist.`,
+      );
+      return;
+    }
+
+    const session = SocketManager._activeGames[roomId];
+
+    if (player !== session.host) {
+      return;
+    }
+    session.increaseScore();
+    const preset: PuzzlePayload = generateTiles(mapData, session.usedPresets);
+    SocketManager._activeGames[roomId].usedPresets.push(preset.name);
+    this._io.sockets
+      .in(roomId)
+      .emit(SocketEvents.FIRST_PRESET_GENERATED, preset);
+  }
+
   private _generatePreset(roomId: string, player: string, mapData: MapData) {
     if (!roomId || !player || !mapData) {
       this._sendError(
@@ -117,19 +156,29 @@ export class SocketManager {
     this._io.sockets.in(roomId).emit(SocketEvents.PRESET_GENERATED, preset);
   }
 
-  private _selectTile(roomId: string, player: string, tile: Tile) {
-    // if (!roomId || !player || !tile) {
-    //     this._sendError('selectTile', 'There was an issue, please try again', 'Missing Variables')
-    //     return
-    // }
-    // if (!this._roomExists(roomId)) {
-    //     this._sendError('selectTile', 'There was an issue, please try again', `This room ${roomId} does not exist.`)
-    //     return
-    // }
+  private _selectTile(
+    roomId: string,
+    player: string,
+    tilePayload: TileSelectedPayload,
+  ) {
+    if (!roomId || !player || !tilePayload) {
+      this._sendError(
+        "selectTile",
+        "There was an issue, please try again",
+        "Missing Variables",
+      );
+      return;
+    }
+    if (!this._roomExists(roomId)) {
+      this._sendError(
+        "selectTile",
+        "There was an issue, please try again",
+        `This room ${roomId} does not exist.`,
+      );
+      return;
+    }
 
-    this._io.sockets
-      .in(roomId)
-      .emit(SocketEvents.TILE_SELECTED, { player, tile });
+    this._io.sockets.in(roomId).emit(SocketEvents.TILE_SELECTED, tilePayload);
   }
 
   private _sendError(where?: string, message?: string, error?: unknown) {

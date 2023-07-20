@@ -4,6 +4,7 @@ import EventsManager from './EventsManager'
 import { MapData } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
 const endpoint = 'localhost:3001'
 
 export interface SocketError {
@@ -39,6 +40,8 @@ export default class SocketManager {
             [SocketEvents.JOIN_ROOM]: this._joinRoom.bind(this),
             [SocketEvents.ON_DISCONNECT]: this._onDisconnect.bind(this),
             [SocketEvents.GENERATE_PRESET]: this._generatePreset.bind(this),
+            [SocketEvents.GENERATE_FIRST_PRESET]:
+                this._generateFirstPreset.bind(this),
             [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
             [SocketEvents.CHANGE_COLOR]: this._changeColor.bind(this),
             [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this)
@@ -51,6 +54,8 @@ export default class SocketManager {
             [SocketEvents.ROOM_JOINED]: this._roomJoined.bind(this),
             [SocketEvents.PLAYER_DISCONNECTED]:
                 this._playerDisconnected.bind(this),
+            [SocketEvents.FIRST_PRESET_GENERATED]:
+                this._firstPresetGenerated.bind(this),
             [SocketEvents.PRESET_GENERATED]: this._presetGenerated.bind(this),
             [SocketEvents.TILE_SELECTED]: this._tileSeleceted.bind(this),
             [SocketEvents.COLOR_CHANGED]: this._colorChanged.bind(this),
@@ -94,6 +99,15 @@ export default class SocketManager {
         this._socket.emit(SocketEvents.ON_DISCONNECT, {})
     }
 
+    private _generateFirstPreset(data: MapData) {
+        this._socket.emit(
+            SocketEvents.GENERATE_FIRST_PRESET,
+            this._roomId,
+            this._playerId,
+            data
+        )
+    }
+
     private _generatePreset(data: MapData) {
         this._socket.emit(
             SocketEvents.GENERATE_PRESET,
@@ -103,8 +117,13 @@ export default class SocketManager {
         )
     }
 
-    private _selectTile() {
-        this._socket.emit(SocketEvents.SELECT_TILE, {})
+    private _selectTile(tilePayload: TileSelectedPayload) {
+        this._socket.emit(
+            SocketEvents.SELECT_TILE,
+            this._roomId,
+            this._playerId,
+            tilePayload
+        )
     }
 
     private _changeColor() {
@@ -138,12 +157,16 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.PLAYER_DISCONNECTED, {})
     }
 
+    private _firstPresetGenerated(preset: PuzzlePayload) {
+        this._eventsManager.trigger(SocketEvents.FIRST_PRESET_GENERATED, preset)
+    }
+
     private _presetGenerated(preset: PuzzlePayload) {
         this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, preset)
     }
 
-    private _tileSeleceted() {
-        this._eventsManager.trigger(SocketEvents.TILE_SELECTED, {})
+    private _tileSeleceted(tilePayload: TileSelectedPayload) {
+        this._eventsManager.trigger(SocketEvents.TILE_SELECTED, tilePayload)
     }
 
     private _colorChanged() {

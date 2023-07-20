@@ -33,7 +33,7 @@ const TopBar: FC<TopBarProps> = ({
                     LEAVE
                 </button>
                 <TimerCountdown
-                    time={40}
+                    time={120}
                     score={score}
                     onTimeOver={handleTimeOver}
                     timeToAdd={timeToAdd}
