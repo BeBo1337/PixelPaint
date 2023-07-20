@@ -7,17 +7,19 @@ interface TopBarProps {
     timeOverFunction: Function
     score: number
     timeToAdd: number
+    handleBack: Function
 }
 
 const TopBar: FC<TopBarProps> = ({
     timeOverFunction,
     score,
-    timeToAdd
+    timeToAdd,
+    handleBack
 }: TopBarProps) => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate('/')
+        handleBack()
     }
 
     const handleTimeOver = () => {
@@ -28,7 +30,7 @@ const TopBar: FC<TopBarProps> = ({
         <section className={`${styles.topBarContainer}`}>
             <div className={`${styles.topBarContent}`}>
                 <button className={`${styles.backBtn}`} onClick={handleClick}>
-                    BACK
+                    LEAVE
                 </button>
                 <TimerCountdown
                     time={40}

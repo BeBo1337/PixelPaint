@@ -6,6 +6,9 @@ import GameManager from './components/GameManager'
 import MainMenu from './components/MainMenu'
 import GameOverPage from './components/GameOverPage'
 import { useNavigate } from 'react-router-dom'
+import SocketManager from './services/SocketManager'
+import EventsManager from './services/EventsManager'
+import { SocketEvents } from './services/SocketEvents.model'
 
 const App: FC<{}> = () => {
     const [gameMode, setGameMode] = useState(3)
@@ -17,9 +20,23 @@ const App: FC<{}> = () => {
     const navigate = useNavigate()
     const handleGameOver = (score: number) => setFlag(true)
 
+    const eventManager = EventsManager.instance
+    eventManager.on(SocketEvents.PONG, 'app', () => {
+        console.log('WE PONGED')
+    })
+
+    eventManager.on(SocketEvents.CONNECTED, 'app', () => {
+        console.log('connected')
+        eventManager.trigger(SocketEvents.PING, 'ping')
+    })
+
     useEffect(() => {
         if (flag) navigate('/gameover')
     }, [flag])
+
+    useEffect(() => {
+        SocketManager.newInstance()
+    }, [])
 
     const setPlayers = (playerName: string) => {
         setplayerNamesArr((playerNamesArr) => [...playerNamesArr, playerName])

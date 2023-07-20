@@ -1,12 +1,8 @@
 import { Preset } from '.'
-import { Tile } from './Tile.model'
 import { presets as PresetsList } from './presets'
 import { getNumberInRange } from '../utils/GenericFuncs'
 import { Modes } from '../utils/GameConstants'
-import { Colors } from '../utils/ColorsConstants'
 import { colorizePreset } from '../utils/GameFuncs'
-import { each } from 'lodash'
-import { color } from 'framer-motion'
 
 interface PresetTable {
     [key: number]: Preset[]

@@ -37,6 +37,7 @@ const DropdownMenu: FC<DropdownProps> = ({
                 <li onClick={() => handleOptionSelect('Classic')}>Classic</li>
                 <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
                 <li onClick={() => handleOptionSelect('Paint')}>Paint</li>
+                <li onClick={() => handleOptionSelect('CO-OP')}>CO-OP</li>
             </ul>
         </section>
     )

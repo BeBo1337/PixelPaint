@@ -1,4 +1,5 @@
 import { useEffect, useState, FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TopBar from './TopBar'
 import GridLayout from './gridLayout'
 import { generateTiles, isCorrectTile } from '../utils/GameFuncs'
@@ -7,6 +8,9 @@ import { Tile } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import styles from './styles.module.scss'
+import EventsManager from '../services/EventsManager'
+import { SocketEvents } from '../services/SocketEvents.model'
+import SocketManager from '../services/SocketManager'
 
 interface GameManagerProps {
     gameMode: number
@@ -21,6 +25,7 @@ const GameManager: FC<GameManagerProps> = ({
     score,
     setScore
 }: GameManagerProps) => {
+    const navigate = useNavigate()
     const [gameOver, setGameOver] = useState<boolean>(false)
     const [rows, setRows] = useState(Constants.START_DIMENSIONS)
     const [columns, setColums] = useState(Constants.START_DIMENSIONS)
@@ -44,6 +49,8 @@ const GameManager: FC<GameManagerProps> = ({
         prevColor: string
     ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
+        // how to send new trigger
+        EventsManager.instance.trigger(SocketEvents.TILE_CLICKED, { })
         if (gameMode === Modes.PAINT)
             onTileClickedPaint(tileIndex, highlighted, color, prevColor)
         else {
@@ -105,12 +112,23 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [coloredObjectiveTiles, coloredRegularTiles])
 
+    const onPresetGenerated = (preset: any) => {
+        setPayload(preset)
+    }
+
+
     useEffect(() => {
-        if (score !== 0)
-            setPayload(
-                generateTiles(rows, columns, tilesToGen, score, gameMode)
-            )
+        if (score !== 0) {
+            EventsManager.instance.trigger(SocketEvents.GENERATE_PRESET, {
+                rows, columns, tilesToGen, score, gameMode
+            })
+        }
     }, [score])
+
+    const onTileSelected = (data: { player: string, tile: Tile}) => {
+        const { player, tile } = data
+        // handle tile click here ?
+    }
 
     useEffect(() => {
         setAmount(puzzlePayload.amount)
@@ -120,6 +138,20 @@ const GameManager: FC<GameManagerProps> = ({
         setShowPic(true)
     }, [puzzlePayload])
 
+    // onMount
+    useEffect(() => {
+        EventsManager.instance.on(SocketEvents.PRESET_GENERATED, 'GameManager', onPresetGenerated)
+        EventsManager.instance.on(SocketEvents.TILE_SELECTED, 'GameManager', onTileSelected)
+
+   }, [])
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            EventsManager.instance.off(SocketEvents.PRESET_GENERATED, 'GameManager')
+        },
+        []
+    )
+
     const handleTimeOver = () => {
         setGameOver(true)
         setClickable(!clickable)
@@ -128,12 +160,21 @@ const GameManager: FC<GameManagerProps> = ({
         }, 1500)
     }
 
+    const handleBackClick = () => {
+        if (gameMode !== Modes.CO_OP) {
+            setGameOver(true)
+            handleGameOver()
+            navigate('/')
+        }
+    }
+
     return (
         <div className="App">
             <TopBar
                 timeOverFunction={handleTimeOver}
                 score={score}
                 timeToAdd={puzzlePayload.difficulty}
+                handleBack={handleBackClick}
             />
             <div className={`${styles.gameContainer}`}>
                 <GridLayout

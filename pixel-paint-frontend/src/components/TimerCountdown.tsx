@@ -1,7 +1,5 @@
 import { FC, useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import { colors } from '@mui/material'
-import { getNumberInRange } from '../utils/GenericFuncs'
 
 interface TimerCountdownProps {
     time: number
