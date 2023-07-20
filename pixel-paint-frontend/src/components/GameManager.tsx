@@ -4,7 +4,7 @@ import TopBar from './TopBar'
 import GridLayout from './gridLayout'
 import { generateTiles, isCorrectTile } from '../utils/GameFuncs'
 import { max } from 'lodash'
-import { Tile } from '../models'
+import { Tile, MapData } from '../models'
 import { Constants, Modes } from '../utils/GameConstants'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import styles from './styles.module.scss'
@@ -17,13 +17,15 @@ interface GameManagerProps {
     handleGameOver: Function
     score: number
     setScore: Function
+    player: string
 }
 
 const GameManager: FC<GameManagerProps> = ({
     gameMode,
     handleGameOver,
     score,
-    setScore
+    setScore,
+    player
 }: GameManagerProps) => {
     const navigate = useNavigate()
     const [gameOver, setGameOver] = useState<boolean>(false)
@@ -50,7 +52,12 @@ const GameManager: FC<GameManagerProps> = ({
     ) => {
         const objectiveTile: boolean = puzzle[tileIndex].highlighted
         // how to send new trigger
-        EventsManager.instance.trigger(SocketEvents.TILE_CLICKED, { })
+        EventsManager.instance.trigger(SocketEvents.SELECT_TILE, {
+            tileIndex,
+            highlighted,
+            color,
+            prevColor
+        })
         if (gameMode === Modes.PAINT)
             onTileClickedPaint(tileIndex, highlighted, color, prevColor)
         else {
@@ -116,20 +123,6 @@ const GameManager: FC<GameManagerProps> = ({
         setPayload(preset)
     }
 
-
-    useEffect(() => {
-        if (score !== 0) {
-            EventsManager.instance.trigger(SocketEvents.GENERATE_PRESET, {
-                rows, columns, tilesToGen, score, gameMode
-            })
-        }
-    }, [score])
-
-    const onTileSelected = (data: { player: string, tile: Tile}) => {
-        const { player, tile } = data
-        // handle tile click here ?
-    }
-
     useEffect(() => {
         setAmount(puzzlePayload.amount)
         setPuzzle(puzzlePayload.tiles)
@@ -138,16 +131,51 @@ const GameManager: FC<GameManagerProps> = ({
         setShowPic(true)
     }, [puzzlePayload])
 
+    useEffect(() => {
+        if (score !== 0) {
+            const mapData: MapData = {
+                rows,
+                columns,
+                tilesToGen,
+                score,
+                gameMode
+            }
+            EventsManager.instance.trigger(
+                SocketEvents.GENERATE_PRESET,
+                mapData
+            )
+        }
+    }, [score])
+
+    const onTileSelected = (data: { player: string; tile: Tile }) => {
+        const { player, tile } = data
+        // handle tile click here ?
+    }
+
     // onMount
     useEffect(() => {
-        EventsManager.instance.on(SocketEvents.PRESET_GENERATED, 'GameManager', onPresetGenerated)
-        EventsManager.instance.on(SocketEvents.TILE_SELECTED, 'GameManager', onTileSelected)
-
-   }, [])
+        EventsManager.instance.on(
+            SocketEvents.PRESET_GENERATED,
+            'GameManager',
+            onPresetGenerated
+        )
+        EventsManager.instance.on(
+            SocketEvents.TILE_SELECTED,
+            'GameManager',
+            onTileSelected
+        )
+    }, [])
     // onBeforeDestroy
     useEffect(
         () => () => {
-            EventsManager.instance.off(SocketEvents.PRESET_GENERATED, 'GameManager')
+            EventsManager.instance.off(
+                SocketEvents.PRESET_GENERATED,
+                'GameManager'
+            )
+            EventsManager.instance.off(
+                SocketEvents.TILE_SELECTED,
+                'GameManager'
+            )
         },
         []
     )

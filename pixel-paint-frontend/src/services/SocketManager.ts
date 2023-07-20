@@ -1,6 +1,7 @@
 import io, { Socket } from 'socket.io-client'
 import { SocketEvents } from './SocketEvents.model'
 import EventsManager from './EventsManager'
+import { MapData } from '../models'
 const endpoint = 'localhost:3001'
 
 export interface SocketError {
@@ -11,6 +12,8 @@ export interface SocketError {
 
 export default class SocketManager {
     private static _instance: SocketManager
+    private _roomId: string | null = null
+    private _playerId: string | null = null
 
     public static get instance() {
         if (!SocketManager._instance) {
@@ -41,6 +44,7 @@ export default class SocketManager {
 
         const onsHandler = {
             [SocketEvents.PONG]: this._pong.bind(this),
+            [SocketEvents.ERROR]: this._onError.bind(this),
             [SocketEvents.ROOM_CREATED]: this._roomCreated.bind(this),
             [SocketEvents.ROOM_JOINED]: this._roomJoined.bind(this),
             [SocketEvents.PLAYER_DISCONNECTED]:
@@ -56,8 +60,9 @@ export default class SocketManager {
             this._eventsManager.on(key, 'socket-manager', value)
         )
 
-        debugger
-        this._socket = io(endpoint)
+        this._socket = io(endpoint, {
+            transports: ['websocket']
+        })
         this._socket.on(SocketEvents.CONNECTED, this._connected.bind(this))
         Object.entries(onsHandler).forEach(([key, value]) =>
             this._socket.on(key, value)
@@ -73,8 +78,10 @@ export default class SocketManager {
         this._socket.emit(SocketEvents.PING, {})
     }
 
-    private _createRoom() {
-        this._socket.emit(SocketEvents.CREATE_ROOM, {})
+    private _createRoom(data: any) {
+        const { player, gameMode } = data
+        this._playerId = player
+        this._socket.emit(SocketEvents.CREATE_ROOM, player, gameMode)
     }
 
     private _joinRoom() {
@@ -85,8 +92,13 @@ export default class SocketManager {
         this._socket.emit(SocketEvents.ON_DISCONNECT, {})
     }
 
-    private _generatePreset(data: any) {
-        this._socket.emit(SocketEvents.GENERATE_PRESET, 'blalba', data)
+    private _generatePreset(data: MapData) {
+        this._socket.emit(
+            SocketEvents.GENERATE_PRESET,
+            this._roomId,
+            this._playerId,
+            data
+        )
     }
 
     private _selectTile() {
@@ -107,7 +119,12 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.PONG, {})
     }
 
-    private _roomCreated() {
+    private _onError(where?: string, message?: string, error?: unknown) {
+        console.error(`[${where ?? 'Server Error'}] ${message};`, error)
+    }
+
+    private _roomCreated(roomId: string) {
+        this._roomId = roomId
         this._eventsManager.trigger(SocketEvents.ROOM_CREATED, {})
     }
 
@@ -119,8 +136,8 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.PLAYER_DISCONNECTED, {})
     }
 
-    private _presetGenerated() {
-        this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, {})
+    private _presetGenerated(preset: any) {
+        this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, { preset })
     }
 
     private _tileSeleceted() {
@@ -137,3 +154,6 @@ export default class SocketManager {
 
     //#endregion
 }
+
+// @ts-ignore
+window.SocketManager = SocketManager

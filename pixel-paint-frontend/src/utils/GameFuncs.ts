@@ -22,7 +22,7 @@ var presetsAvailable = presets.length
 export const generateTiles = (
     rows: number,
     columns: number,
-    maxCount: number,
+    tilesToGen: number,
     score: number,
     gameMode: number
 ): PuzzlePayload => {
@@ -36,7 +36,7 @@ export const generateTiles = (
         return generatePresetTiles(rows, score, gameMode)
     }
 
-    return generateRandomTiles(rows, columns, maxCount, score, gameMode)
+    return generateRandomTiles(rows, columns, tilesToGen, score, gameMode)
 }
 
 const generatePresetTiles = (
@@ -51,6 +51,7 @@ const generatePresetTiles = (
         randomPreset = getNextPreset(getNumberInRange(4, 5), gameMode, score)
 
     return {
+        name: randomPreset.name,
         tiles: randomPreset.picture,
         amount: randomPreset.amount,
         difficulty: randomPreset.difficulty
@@ -98,7 +99,12 @@ const generateRandomTiles = (
     }
     if (gameMode == Modes.PAINT) colorizePreset(randomTilesPreset, score)
 
-    return { tiles: randomTilesPreset.picture, amount: maxCount, difficulty: 1 }
+    return {
+        name: 'random',
+        tiles: randomTilesPreset.picture,
+        amount: maxCount,
+        difficulty: 1
+    }
 }
 
 //Relevant in PAINT mode

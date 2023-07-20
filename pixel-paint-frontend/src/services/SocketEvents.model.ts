@@ -13,6 +13,7 @@ enum EventsSocketReceives {
 /** What the server sends, Client receives */
 enum EventsSocketEmits {
     PONG = 'pong',
+    ERROR = 'error',
     CONNECTED = 'connected',
     ROOM_CREATED = 'room_created',
     ROOM_JOINED = 'room_joined',

@@ -1,7 +1,7 @@
 export interface MapData {
   rows: number;
   columns: number;
-  maxCount: number;
+  tilesToGen: number;
   score: number;
   gameMode: number;
 }

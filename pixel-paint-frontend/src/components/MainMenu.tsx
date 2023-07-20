@@ -6,15 +6,19 @@ import styles from './styles.module.scss'
 import DropdownMenu from './GameModeMenu'
 import MsgModal from './MsgModal'
 import svgLogo from '../../public/PixelPaintLogo.png'
+import EventsManager from '../services/EventsManager'
+import { SocketEvents } from '../services/SocketEvents.model'
 
 interface MainMenuProps {
     chooseGameMode: Function
     setPlayersName: Function
+    setPlayerID: Function
 }
 
 const MainMenu: FC<MainMenuProps> = ({
     chooseGameMode,
-    setPlayersName
+    setPlayersName,
+    setPlayerID
 }: MainMenuProps) => {
     const [mode, setMode] = useState(0)
     const [name, setName] = useState('')
@@ -55,19 +59,34 @@ const MainMenu: FC<MainMenuProps> = ({
         } else if (!mode) {
             setIsNameError(false)
             setIsModeError(true)
-        } else if (!isModeError && !isNameError) {
-            chooseGameMode(mode)
-            setPlayersName(name)
-            setTimeout(() => {
-                navigate('/game')
-            }, 1000)
-            return
+        } else {
+            EventsManager.instance.trigger(SocketEvents.CREATE_ROOM, {
+                player: name,
+                gameMode: mode
+            })
         }
+
         setTimeout(() => {
             setIsNameError(false)
             setIsModeError(false)
         }, 1000)
     }
+
+    const onRoomCreated = () => {
+        chooseGameMode(mode)
+        setPlayersName(name)
+        setPlayerID(name)
+
+        setTimeout(() => {
+            navigate('/game')
+        }, 1000)
+    }
+
+    EventsManager.instance.on(
+        SocketEvents.ROOM_CREATED,
+        'MainMenu',
+        onRoomCreated
+    )
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)

@@ -21,8 +21,11 @@ const colors: string[] = [
   Colors.TILE_COLOR_F,
 ];
 
-export const generateTiles = (mapData: MapData): PuzzlePayload => {
-  const { rows, columns, maxCount, score, gameMode } = mapData;
+export const generateTiles = (
+  mapData: MapData,
+  usedPresets?: string[],
+): PuzzlePayload => {
+  const { rows, columns, tilesToGen, score, gameMode } = mapData;
   let n: number = Constants.SHOULD_GENERATE_RANDOM;
 
   if (score >= Constants.SCORE_CHECKPOINT) {
@@ -30,24 +33,36 @@ export const generateTiles = (mapData: MapData): PuzzlePayload => {
   }
 
   if (presets.length > 0 && n === Constants.SHOULD_GENERATE_RANDOM) {
-    return generatePresetTiles(rows, score, gameMode);
+    return generatePresetTiles(rows, score, gameMode, usedPresets);
   }
 
-  return generateRandomTiles(rows, columns, maxCount, score, gameMode);
+  return generateRandomTiles(rows, columns, tilesToGen, score, gameMode);
 };
 
 const generatePresetTiles = (
   size: number,
   score: number,
-  gameMode: number
+  gameMode: number,
+  usedPresets?: string[],
 ): PuzzlePayload => {
   let randomPreset = {} as Preset;
   if (size === 7)
-    randomPreset = getNextPreset(getNumberInRange(1, 3), gameMode, score);
+    randomPreset = getNextPreset(
+      getNumberInRange(1, 3),
+      gameMode,
+      score,
+      usedPresets,
+    );
   if (size === 8)
-    randomPreset = getNextPreset(getNumberInRange(4, 5), gameMode, score);
+    randomPreset = getNextPreset(
+      getNumberInRange(4, 5),
+      gameMode,
+      score,
+      usedPresets,
+    );
 
   return {
+    name: randomPreset.name,
     tiles: randomPreset.picture,
     amount: randomPreset.amount,
     difficulty: randomPreset.difficulty,
@@ -60,7 +75,7 @@ const generateRandomTiles = (
   columns: number,
   maxCount: number,
   score: number,
-  gameMode: number
+  gameMode: number,
 ): PuzzlePayload => {
   const randomTilesPreset: Preset = {
     picture: [],
@@ -95,7 +110,12 @@ const generateRandomTiles = (
   }
   if (gameMode == Modes.PAINT) colorizePreset(randomTilesPreset, score);
 
-  return { tiles: randomTilesPreset.picture, amount: maxCount, difficulty: 1 };
+  return {
+    name: "random",
+    tiles: randomTilesPreset.picture,
+    amount: maxCount,
+    difficulty: 1,
+  };
 };
 
 //Relevant in PAINT mode
@@ -122,7 +142,7 @@ export const isCorrectTile = (
   tile: Tile,
   highlighted: boolean,
   color?: string,
-  prevColor?: string
+  prevColor?: string,
 ): number => {
   if (highlighted && tile.color === color) return 1;
   if (highlighted && tile.color !== color && prevColor === tile.color)

@@ -16,6 +16,7 @@ const App: FC<{}> = () => {
     /* just single player currently */
     const [playerNamesArr, setplayerNamesArr] = useState<string[]>([])
     const [flag, setFlag] = useState(false)
+    const [playerID, setPlayerID] = useState('N/A')
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
     const handleGameOver = (score: number) => setFlag(true)
@@ -56,6 +57,7 @@ const App: FC<{}> = () => {
                     <MainMenu
                         chooseGameMode={setMode}
                         setPlayersName={setPlayers}
+                        setPlayerID={setPlayerID}
                     />
                 }
             />
@@ -67,6 +69,7 @@ const App: FC<{}> = () => {
                         setScore={setScore}
                         gameMode={gameMode}
                         handleGameOver={handleGameOver}
+                        player={playerID}
                     />
                 }
             />
