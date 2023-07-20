@@ -7,7 +7,7 @@ import { Colors } from '../utils/ColorsConstants'
 import ColorPicker from './ColorPicker'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
-import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload'
 
 interface GridLayoutProps {
     rows: number
@@ -140,8 +140,6 @@ const GridLayout: FC<GridLayoutProps> = ({
     }
 
     useEffect(() => {
-        // @ts-ignore
-        window.canvas = canvas
         if (!picture) {
             // Attach the event listener
             EventsManager.instance.on(

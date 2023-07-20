@@ -27,9 +27,11 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
     useEffect(() => {
         setTimeout(() => {
             if (timeLeft === 0) onTimeOver()
-            else if (SocketManager.instance.isHost) {
+            else {
+                if (SocketManager.instance.isHost) {
+                    EventsManager.instance.trigger(SocketEvents.TIME, {})
+                }
                 setCount((prevCount) => prevCount + 1)
-                EventsManager.instance.trigger(SocketEvents.TIME, {})
             }
             if (timeLeft <= 10) setWarning(true)
             else setWarning(false)

@@ -10,6 +10,7 @@ import {
   PuzzlePayload,
   TileSelectedPayload,
   JoinRoomPayload,
+  GameOverPayload,
 } from "../models";
 import { GameSession } from "../models/GameSession.model";
 
@@ -39,6 +40,7 @@ export class SocketManager {
       [SocketEvents.TIME]: this._onTime.bind(this),
       [SocketEvents.ON_CLEAR_CLICK]: this._onClearClick.bind(this),
       [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this),
+      [SocketEvents.GAMEOVER]: this._onGameOver.bind(this),
     };
 
     Object.entries(onHandlers).forEach(([key, value]) =>
@@ -247,6 +249,35 @@ export class SocketManager {
       return;
     }
     this._io.sockets.in(roomId).emit(SocketEvents.DISBAND_GAME, playerId);
+    delete SocketManager._activeGames[roomId];
+    console.log("room removed");
+  }
+
+  private _onGameOver(roomId: string) {
+    if (!roomId) {
+      this._sendError(
+        "onGameOver",
+        "There was an issue, please try again",
+        "Missing Variables",
+      );
+      return;
+    }
+    if (!this._roomExists(roomId)) {
+      this._sendError(
+        "onGameOver",
+        "There was an issue, please try again",
+        `This room ${roomId} does not exist.`,
+      );
+      return;
+    }
+    const session = SocketManager._activeGames[roomId];
+    const payload: GameOverPayload = {
+      players: session.players,
+      host: session.host,
+      gameMode: session.gameMode,
+      score: session.score,
+    };
+    this._io.sockets.in(roomId).emit(SocketEvents.GAMEOVER_RET, payload);
   }
 
   private _sendError(where?: string, message?: string, error?: unknown) {

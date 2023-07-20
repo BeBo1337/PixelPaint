@@ -7,7 +7,7 @@ import MsgModal from './MsgModal'
 import svgLogo from '../../public/PixelPaintLogo.png'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
-import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
+import { CreateRoomPayload } from '../payloads/CreateRoomPayload'
 import { Errors } from '../utils/CommonErrors'
 
 interface MainMenuProps {

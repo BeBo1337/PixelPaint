@@ -7,3 +7,4 @@ export * from "./PuzzlePayload.model";
 export * from "./JoinRoomPayload.model";
 export * from "./CreateRoomPayload.model";
 export * from "./TileSelectedPayload.model";
+export * from "./GameOverPayload.model";

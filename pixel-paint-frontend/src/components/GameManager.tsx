@@ -10,13 +10,12 @@ import { PuzzlePayload } from '../payloads/PuzzlePayload'
 import styles from './styles.module.scss'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
-import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload'
 import SocketManager from '../services/SocketManager'
 import { toast } from 'react-toastify'
 
 interface GameManagerProps {
     gameMode: number
-    handleGameOver: Function
     score: number
     setScore: Function
     goBack: Function
@@ -24,7 +23,6 @@ interface GameManagerProps {
 
 const GameManager: FC<GameManagerProps> = ({
     gameMode,
-    handleGameOver,
     score,
     setScore,
     goBack
@@ -47,6 +45,20 @@ const GameManager: FC<GameManagerProps> = ({
         puzzlePayload?.difficulty ?? 0
     )
     const [showPic, setShowPic] = useState<boolean>(true)
+
+    const onTileClicked = (
+        tileIndex: number,
+        highlighted: boolean,
+        color: string,
+        prevColor: string
+    ) => {
+        EventsManager.instance.trigger(SocketEvents.SELECT_TILE, {
+            tileIndex,
+            highlighted,
+            color,
+            prevColor
+        } as TileSelectedPayload)
+    }
 
     useEffect(() => {
         const onTileSelected = (tileSelected: TileSelectedPayload) => {
@@ -119,20 +131,6 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [puzzle])
 
-    const onTileClicked = (
-        tileIndex: number,
-        highlighted: boolean,
-        color: string,
-        prevColor: string
-    ) => {
-        EventsManager.instance.trigger(SocketEvents.SELECT_TILE, {
-            tileIndex,
-            highlighted,
-            color,
-            prevColor
-        } as TileSelectedPayload)
-    }
-
     const onClearClicked = () => {
         setColoredObjectiveTiles(0)
         setCurrentColored(0)
@@ -187,6 +185,14 @@ const GameManager: FC<GameManagerProps> = ({
         setShowPic(true)
     }, [puzzlePayload])
 
+    const handleTimeOver = () => {
+        setGameOver(true)
+        setClickable(!clickable)
+        setTimeout(() => {
+            navigate('/gameover')
+        }, 1000)
+    }
+
     // onMount
     useEffect(() => {
         if (!SocketManager.instance.roomId) {
@@ -217,6 +223,7 @@ const GameManager: FC<GameManagerProps> = ({
             )
         }
     }, [])
+
     // onBeforeDestroy
     useEffect(
         () => () => {
@@ -227,14 +234,6 @@ const GameManager: FC<GameManagerProps> = ({
         },
         []
     )
-
-    const handleTimeOver = () => {
-        setGameOver(true)
-        setClickable(!clickable)
-        setTimeout(() => {
-            handleGameOver()
-        }, 1500)
-    }
 
     const handleBackClick = (playerId: string) => {
         goBack(playerId)

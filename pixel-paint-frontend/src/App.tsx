@@ -26,7 +26,6 @@ const App: FC<{}> = () => {
     const [hostID, setHostID] = useState<string | null>(null)
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
-    const handleGameOver = (score: number) => setFlag(true)
 
     const eventManager = EventsManager.instance
     eventManager.on(SocketEvents.PONG, 'app', () => {
@@ -37,10 +36,6 @@ const App: FC<{}> = () => {
         console.log('connected')
         eventManager.trigger(SocketEvents.PING, 'ping')
     })
-
-    useEffect(() => {
-        if (flag) navigate('/gameover')
-    }, [flag])
 
     useEffect(() => {
         SocketManager.newInstance()
@@ -105,7 +100,6 @@ const App: FC<{}> = () => {
                             score={score}
                             setScore={setScore}
                             gameMode={gameMode}
-                            handleGameOver={handleGameOver}
                             goBack={goBack}
                         />
                     }

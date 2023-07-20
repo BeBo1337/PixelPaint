@@ -1,9 +1,13 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Scoreboard from './Scoreboard'
+import { GameOverPayload } from '../payloads/GameOverPayload'
 import { Modes } from '../utils/GameConstants'
 import axios from 'axios'
-
+import EventsManager from '../services/EventsManager'
+import SocketManager from '../services/SocketManager'
+import { SocketEvents } from '../services/SocketEvents.model'
+import { toast } from 'react-toastify'
 import '../assets/GameOverPage.scss'
 
 interface GameOverPageProps {
@@ -30,12 +34,56 @@ const GameOverPage: FC<GameOverPageProps> = ({
         setShowScoreboard(true)
     }
 
+    const handleGameOver = (p: GameOverPayload) => {
+        console.log(p)
+        if (p) {
+            setDisplayScore(p.score)
+            setDisplayNames(p.players)
+        }
+    }
+
+    // onMount
     useEffect(() => {
+        if (!SocketManager.instance.roomId) {
+            toast.error('Please create/join a room to enter a game', {
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500
+            })
+            navigate('/')
+        }
+
+        EventsManager.instance.on(
+            SocketEvents.GAMEOVER_RET,
+            'GameOverPage',
+            handleGameOver
+        )
+
+        if (SocketManager.instance.isHost) {
+            EventsManager.instance.trigger(SocketEvents.GAMEOVER, {})
+        }
         resetGame()
-        axios
-            .post(`${import.meta.env.VITE_API_URL}/score`, result())
-            .catch((error) => console.log(error))
     }, [])
+
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            EventsManager.instance.off(
+                SocketEvents.GAMEOVER_RET,
+                'GameOverPage'
+            )
+        },
+        []
+    )
+
+    useEffect(() => {
+        if (displayNames.length > 0) {
+            if (SocketManager.instance.isHost) {
+                axios
+                    .post(`${import.meta.env.VITE_API_URL}/score`, result())
+                    .catch((error) => console.log(error))
+            }
+        }
+    }, [displayNames])
 
     const result = () => {
         let collection: String

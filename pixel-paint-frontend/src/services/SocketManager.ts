@@ -3,9 +3,10 @@ import { SocketEvents } from './SocketEvents.model'
 import EventsManager from './EventsManager'
 import { MapData } from '../models'
 import { PuzzlePayload } from '../payloads/PuzzlePayload'
-import { CreateRoomPayload } from '../payloads/CreateRoomPayload.model'
-import { TileSelectedPayload } from '../payloads/TileSelectedPayload.model'
-import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
+import { CreateRoomPayload } from '../payloads/CreateRoomPayload'
+import { TileSelectedPayload } from '../payloads/TileSelectedPayload'
+import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
+import { GameOverPayload } from '../payloads/GameOverPayload'
 const endpoint = 'localhost:3001'
 
 export interface SocketError {
@@ -56,7 +57,8 @@ export default class SocketManager {
             [SocketEvents.SELECT_TILE]: this._selectTile.bind(this),
             [SocketEvents.TIME]: this._onTime.bind(this),
             [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this),
-            [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this)
+            [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this),
+            [SocketEvents.GAMEOVER]: this._onGameOver.bind(this)
         }
 
         const onsHandler = {
@@ -69,7 +71,8 @@ export default class SocketManager {
             [SocketEvents.TILE_SELECTED]: this._tileSeleceted.bind(this),
             [SocketEvents.TIME_RET]: this._timeReturn.bind(this),
             [SocketEvents.CLEAR_CLICKED]: this._clearClicked.bind(this),
-            [SocketEvents.DISBAND_GAME]: this._disbandGame.bind(this)
+            [SocketEvents.DISBAND_GAME]: this._disbandGame.bind(this),
+            [SocketEvents.GAMEOVER_RET]: this._gameOverReturn.bind(this)
         }
 
         Object.entries(emitsHandler).forEach(([key, value]) =>
@@ -117,7 +120,6 @@ export default class SocketManager {
     }
 
     private _generatePreset(data: MapData) {
-        console.log(data.difficulty)
         this._socket.emit(
             SocketEvents.GENERATE_PRESET,
             this._roomId,
@@ -152,6 +154,10 @@ export default class SocketManager {
     private _onGameLeave(playerId: string) {
         this._socket.emit(SocketEvents.ON_GAME_LEAVE, this._roomId, playerId)
     }
+
+    private _onGameOver() {
+        if (this._isHost) this._socket.emit(SocketEvents.GAMEOVER, this._roomId)
+    }
     //#endregion
 
     //#region ons
@@ -182,8 +188,8 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.PRESET_GENERATED, preset)
     }
 
-    private _tileSeleceted(tilePayload: TileSelectedPayload) {
-        this._eventsManager.trigger(SocketEvents.TILE_SELECTED, tilePayload)
+    private _tileSeleceted(p: TileSelectedPayload) {
+        this._eventsManager.trigger(SocketEvents.TILE_SELECTED, p)
     }
 
     private _timeReturn(time: number) {
@@ -195,7 +201,14 @@ export default class SocketManager {
     }
 
     private _disbandGame(playerID: string) {
+        this._isHost = false
+        this._playerId = null
+        this._roomId = null
         this._eventsManager.trigger(SocketEvents.DISBAND_GAME, playerID)
+    }
+
+    private _gameOverReturn(p: GameOverPayload) {
+        this._eventsManager.trigger(SocketEvents.GAMEOVER_RET, p)
     }
     //#endregion
 }

@@ -5,7 +5,7 @@ import MsgModal from './MsgModal'
 import svgLogo from '../../public/PixelPaintLogo.png'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
-import { JoinRoomPayload } from '../payloads/JoinRoomPayload.model'
+import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
 import SocketManager from '../services/SocketManager'
 import { toast } from 'react-toastify'
@@ -54,7 +54,8 @@ function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
     useEffect(() => {
         if (!SocketManager.instance.roomId) {
             toast.error('Please create/join a room to enter a game', {
-                position: toast.POSITION.BOTTOM_CENTER
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500
             })
             navigate('/')
         }
@@ -105,7 +106,7 @@ function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
         toast.success('Successfully copied game link to clipboard', {
             position: toast.POSITION.BOTTOM_CENTER,
             toastId: 'copyToast',
-            autoClose: 3000
+            autoClose: 1500
         })
     }
 

@@ -6,11 +6,11 @@ enum EventsSocketReceives {
   START_GAME = "start_game",
   ON_DISCONNECT = "disconnect_game",
   GENERATE_PRESET = "generate_preset",
-  GENERATE_FIRST_PRESET = "generate_first_preset",
   SELECT_TILE = "select_tile",
   TIME = "time",
   ON_CLEAR_CLICK = "on_clear_click",
   ON_GAME_LEAVE = "on_game_leave",
+  GAMEOVER = "gameover",
 }
 
 /** What the server sends, Client receives */
@@ -22,11 +22,11 @@ enum EventsSocketEmits {
   ROOM_JOINED = "room_joined",
   GAME_STARTED = "game_started",
   PRESET_GENERATED = "preset_generated",
-  FIRST_PRESET_GENERATED = "first_preset_generated",
   TILE_SELECTED = "tile_selected",
   TIME_RET = "time_ret",
   CLEAR_CLICKED = "clear_clicked",
   DISBAND_GAME = "disband_game",
+  GAMEOVER_RET = "gameover_ret",
 }
 
 export const SocketEvents = { ...EventsSocketReceives, ...EventsSocketEmits };

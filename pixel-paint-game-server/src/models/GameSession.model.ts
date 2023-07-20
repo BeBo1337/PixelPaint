@@ -11,7 +11,7 @@ export interface Game {
 
 export class GameSession implements Game {
   roomId: string = "";
-  score: number = 0;
+  score: number = -1;
   timeLeft: number = 0;
   players: string[] = [];
   gameMode: number = 0;
@@ -23,10 +23,10 @@ export class GameSession implements Game {
     this.roomId = roomId;
     this.players = players;
     this.gameMode = gameMode;
-    if (gameMode === 4)
+    if (gameMode === Modes.CO_OP)
       //if COOP
       this.timeLeft = 120;
-    else this.timeLeft = 150;
+    else this.timeLeft = 30;
   }
 
   incrementScore(): void {
@@ -38,7 +38,7 @@ export class GameSession implements Game {
   }
 
   decrementTime() {
-    this.timeLeft--;
+    if (this.timeLeft > 0) this.timeLeft--;
   }
 
   addTime(timeToAdd?: number) {
