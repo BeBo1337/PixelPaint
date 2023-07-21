@@ -29,6 +29,10 @@ export default class SocketManager {
     }
 
     public static newInstance() {
+        if (SocketManager._instance) {
+            SocketManager._instance.dispose()
+        }
+
         SocketManager._instance = new SocketManager()
         return SocketManager._instance
     }
@@ -43,10 +47,13 @@ export default class SocketManager {
         return this._isHost
     }
 
+    private _unsubscribers: (() => void)[]
     private _socket: Socket
     private _eventsManager: EventsManager
     constructor() {
         this._eventsManager = EventsManager.instance
+        this._unsubscribers = []
+
         const emitsHandler = {
             [SocketEvents.PING]: this._ping.bind(this),
             [SocketEvents.CREATE_ROOM]: this._createRoom.bind(this),
@@ -75,15 +82,19 @@ export default class SocketManager {
             [SocketEvents.GAMEOVER_RET]: this._gameOverReturn.bind(this)
         }
 
-        Object.entries(emitsHandler).forEach(([key, value]) =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const [key, value] of Object.entries(emitsHandler)) {
             this._eventsManager.on(key, 'socket-manager', value)
-        )
+            this._unsubscribers.push(() =>
+                this._eventsManager.off(key, 'socket-manager')
+            )
+        }
 
         this._socket = io(endpoint, {
             transports: ['websocket']
         })
+
         this._socket.on(SocketEvents.CONNECTED, this._connected.bind(this))
+
         Object.entries(onsHandler).forEach(([key, value]) =>
             this._socket.on(key, value)
         )
@@ -211,6 +222,12 @@ export default class SocketManager {
         this._eventsManager.trigger(SocketEvents.GAMEOVER_RET, p)
     }
     //#endregion
+
+    public dispose() {
+        for (const unsub of this._unsubscribers) {
+            unsub()
+        }
+    }
 }
 
 // @ts-ignore

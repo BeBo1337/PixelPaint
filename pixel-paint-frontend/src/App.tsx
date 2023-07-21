@@ -16,7 +16,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const App: FC<{}> = () => {
-    const [gameMode, setGameMode] = useState(3)
+    const [gameMode, setGameMode] = useState(1)
     const [score, setScore] = useState(0)
 
     const [modalMsg, setModalMsg] = useState<string>('')
@@ -25,19 +25,29 @@ const App: FC<{}> = () => {
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
 
-    const eventManager = EventsManager.instance
-    eventManager.on(SocketEvents.PONG, 'app', () => {
-        console.log('WE PONGED')
-    })
-
-    eventManager.on(SocketEvents.CONNECTED, 'app', () => {
-        console.log('connected')
-        eventManager.trigger(SocketEvents.PING, 'ping')
-    })
-
     useEffect(() => {
+        const eventManager = EventsManager.instance
+
+        eventManager.on(SocketEvents.PONG, 'app', () => {
+            console.log('WE PONGED')
+        })
+
+        eventManager.on(SocketEvents.CONNECTED, 'app', () => {
+            console.log('connected')
+            eventManager.trigger(SocketEvents.PING, 'ping')
+        })
+
         SocketManager.newInstance()
     }, [])
+
+    useEffect(
+        () => () => {
+            const eventManager = EventsManager.instance
+            eventManager.off(SocketEvents.PONG, 'app')
+            eventManager.off(SocketEvents.CONNECTED, 'app')
+        },
+        []
+    )
 
     const resetGame = () => {
         setScore(0)
