@@ -250,7 +250,7 @@ export class SocketManager {
     }
     this._io.sockets.in(roomId).emit(SocketEvents.DISBAND_GAME, playerId);
     delete SocketManager._activeGames[roomId];
-    console.log("room removed");
+    console.log(`${roomId} removed`);
   }
 
   private _onGameOver(roomId: string) {
@@ -278,6 +278,8 @@ export class SocketManager {
       score: session.score,
     };
     this._io.sockets.in(roomId).emit(SocketEvents.GAMEOVER_RET, payload);
+    delete SocketManager._activeGames[roomId];
+    console.log(`${roomId} removed`);
   }
 
   private _sendError(where?: string, message?: string, error?: unknown) {

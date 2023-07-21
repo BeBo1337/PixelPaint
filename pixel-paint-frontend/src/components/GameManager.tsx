@@ -197,30 +197,31 @@ const GameManager: FC<GameManagerProps> = ({
     useEffect(() => {
         if (!SocketManager.instance.roomId) {
             toast.error('Please create/join a room to enter a game', {
-                position: toast.POSITION.BOTTOM_CENTER
+                position: toast.POSITION.BOTTOM_CENTER,
+                autoClose: 1500
             })
             navigate('/')
-        }
-
-        EventsManager.instance.on(
-            SocketEvents.PRESET_GENERATED,
-            'GameManager',
-            onPresetGenerated
-        )
-
-        if (SocketManager.instance.isHost) {
-            const mapData: MapData = {
-                rows,
-                columns,
-                tilesToGen,
-                score,
-                gameMode,
-                difficulty
-            }
-            EventsManager.instance.trigger(
-                SocketEvents.GENERATE_PRESET,
-                mapData
+        } else {
+            EventsManager.instance.on(
+                SocketEvents.PRESET_GENERATED,
+                'GameManager',
+                onPresetGenerated
             )
+
+            if (SocketManager.instance.isHost) {
+                const mapData: MapData = {
+                    rows,
+                    columns,
+                    tilesToGen,
+                    score,
+                    gameMode,
+                    difficulty
+                }
+                EventsManager.instance.trigger(
+                    SocketEvents.GENERATE_PRESET,
+                    mapData
+                )
+            }
         }
     }, [])
 

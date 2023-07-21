@@ -22,8 +22,6 @@ const App: FC<{}> = () => {
     const [modalMsg, setModalMsg] = useState<string>('')
     const [showModal, setShowModal] = useState(false)
     const [playerName, setPlayerName] = useState<string | null>(null)
-    const [flag, setFlag] = useState(false)
-    const [hostID, setHostID] = useState<string | null>(null)
     const setMode = (mode: number) => setGameMode(mode)
     const navigate = useNavigate()
 
@@ -44,7 +42,6 @@ const App: FC<{}> = () => {
     const resetGame = () => {
         setScore(0)
         setPlayerName(null)
-        setFlag(false)
     }
 
     const goBack = (playerId: string) => {

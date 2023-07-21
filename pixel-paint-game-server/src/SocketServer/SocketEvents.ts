@@ -1,4 +1,4 @@
-/** What the client sends, Server Receives */
+// What the client sends, Server Receives
 enum EventsSocketReceives {
   PING = "ping",
   CREATE_ROOM = "create_room",
@@ -13,7 +13,7 @@ enum EventsSocketReceives {
   GAMEOVER = "gameover",
 }
 
-/** What the server sends, Client receives */
+// What the server sends, Client receives
 enum EventsSocketEmits {
   PONG = "pong",
   ERROR = "error",
@@ -29,4 +29,5 @@ enum EventsSocketEmits {
   GAMEOVER_RET = "gameover_ret",
 }
 
+// All of them
 export const SocketEvents = { ...EventsSocketReceives, ...EventsSocketEmits };
