@@ -46,6 +46,7 @@ const App: FC<{}> = () => {
 
     const goBack = (playerId: string) => {
         navigate('/')
+        resetGame()
         if (playerName !== playerId) {
             setModalMsg('player disconnected')
             setShowModal(true)
