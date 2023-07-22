@@ -24,5 +24,5 @@ export default class ScoreDto {
     // Validate non-empty string
     @IsString()
     @IsNotEmpty()
-    name: string[]
+    name: string
 }
