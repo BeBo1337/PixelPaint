@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../assets/Scoreboard.scss'
 import '../assets/GameOverPage.scss'
+import { Collection } from '../utils/CollectionsConstants'
 
 function Scoreboard() {
     interface ScoreResult {
@@ -10,6 +11,10 @@ function Scoreboard() {
         score: number
     }
 
+    const [displayCollection, setDisplayCollection] = useState<string | null>(
+        null
+    )
+    const [stats, setPlayerStats] = useState<JSX.Element[]>([])
     const navigate = useNavigate()
     const GetPlayersFromDb = async (
         collectionName: string
@@ -65,28 +70,59 @@ function Scoreboard() {
         }
     }
 
-    const [stats, setPlayerStats] = useState<JSX.Element[]>([])
+    const fetchPlayerStats = async (collection: string) => {
+        const formattedPlayerStats = await GetPlayerFromDbFormatted(collection)
+        setPlayerStats(formattedPlayerStats)
+    }
 
     useEffect(() => {
-        const fetchPlayerStats = async () => {
-            const formattedPlayerStats = await GetPlayerFromDbFormatted(
-                'ScoreClassic'
-            )
-            setPlayerStats(formattedPlayerStats)
-        }
-
-        fetchPlayerStats()
+        debugger
+        fetchPlayerStats(Collection.CLASSIC)
     }, [])
+
+    useEffect(() => {
+        if (displayCollection) {
+            fetchPlayerStats(displayCollection)
+        }
+    }, [displayCollection])
 
     return (
         <>
             <section className="scoreboard-container">
                 <h1 className="leaderboards-header">Leaderboards</h1>
                 <div className="gamemodes-container">
-                    <div className="classic">Classic</div>
-                    <div className="memory">Memory</div>
-                    <div className="paint">Paint</div>
-                    <div className="co-op">CO-OP</div>
+                    <div
+                        className="classic"
+                        onClick={() => {
+                            setDisplayCollection(Collection.CLASSIC)
+                        }}
+                    >
+                        Classic
+                    </div>
+                    <div
+                        className="memory"
+                        onClick={() => {
+                            setDisplayCollection(Collection.MEMORY)
+                        }}
+                    >
+                        Memory
+                    </div>
+                    <div
+                        className="paint"
+                        onClick={() => {
+                            setDisplayCollection(Collection.PAINT)
+                        }}
+                    >
+                        Paint
+                    </div>
+                    <div
+                        className="co-op"
+                        onClick={() => {
+                            setDisplayCollection(Collection.CO_OP)
+                        }}
+                    >
+                        CO-OP
+                    </div>
                 </div>
 
                 <div className="players-stats-container">{stats}</div>
