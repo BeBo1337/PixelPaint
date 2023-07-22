@@ -79,8 +79,9 @@ const GameOverPage: FC<GameOverPageProps> = ({
     useEffect(() => {
         if (displayNames.length > 0) {
             if (SocketManager.instance.isHost) {
+                console.log(`${import.meta.env.VITE_API_URL}/score`, result())
                 axios
-                    .post(`${import.meta.env.VITE_API_URL}/score`, result())
+                    .post(`http://localhost:3000/score`, result())
                     .catch((error) => console.log(error))
             }
         }
@@ -104,14 +105,15 @@ const GameOverPage: FC<GameOverPageProps> = ({
             default:
                 collection = 'NA'
         }
-        if (collection !== 'NA')
+        if (collection !== 'NA') {
             return {
                 collectionName: collection,
                 score: {
-                    name: displayNames.toString(),
+                    name: displayNames.join(', '),
                     score: displayScore
                 }
             }
+        }
     }
 
     if (showScoreboard) {

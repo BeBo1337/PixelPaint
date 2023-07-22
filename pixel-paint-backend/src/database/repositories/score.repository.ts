@@ -53,7 +53,6 @@ export default class ScoreRepository implements IScoreRepository {
         scoreData: CreateScoreDto
     ) {
         const rank = rankScore(scores, scoreData.score)
-        console.log(rank)
         if (rank != -1) {
             const scoreToInsert = {
                 uuid: uuidv4(),

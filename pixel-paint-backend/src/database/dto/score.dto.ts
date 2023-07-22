@@ -1,10 +1,11 @@
 import { Exclude, Expose } from 'class-transformer'
 import {
     IsNotEmpty,
+    IsNumber,
     IsOptional,
-    IsPositive,
     IsString,
-    IsUUID
+    IsUUID,
+    Min
 } from 'class-validator'
 
 // Data-Transfer-Object representation of a score.
@@ -16,11 +17,12 @@ export default class ScoreDto {
     uuid: string
 
     // Validate positive number.
-    @IsPositive()
+    @IsNumber()
+    @Min(0)
     score: number
 
     // Validate non-empty string
     @IsString()
     @IsNotEmpty()
-    name: string
+    name: string[]
 }

@@ -1,4 +1,3 @@
-import { ALL_SCORES } from 'src/common/constants'
 import ScoreDto from 'src/database/dto/score.dto'
 
 export const rankScore = (arr: ScoreDto[], newScore: ScoreDto): number => {
@@ -9,5 +8,5 @@ export const rankScore = (arr: ScoreDto[], newScore: ScoreDto): number => {
         l--
     }
 
-    return l > 0 ? l : -1
+    return l >= 0 ? l : -1
 }
