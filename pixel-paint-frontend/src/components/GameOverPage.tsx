@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Scoreboard from './Scoreboard'
 import { GameOverPayload } from '../payloads/GameOverPayload'
 import { Modes } from '../utils/GameConstants'
+import { Collection } from '../utils/CollectionsConstants'
 import axios from 'axios'
 import EventsManager from '../services/EventsManager'
 import SocketManager from '../services/SocketManager'
@@ -89,24 +90,28 @@ const GameOverPage: FC<GameOverPageProps> = ({
         let collection: String
         switch (gameMode) {
             case Modes.CLASSIC:
-                collection = 'ScoreClassic'
+                collection = Collection.CLASSIC
                 break
             case Modes.MEMORY:
-                collection = 'ScoreMemory'
+                collection = Collection.MEMORY
                 break
             case Modes.PAINT:
-                collection = 'ScorePaint'
+                collection = Collection.PAINT
+                break
+            case Modes.CO_OP:
+                collection = Collection.CO_OP
                 break
             default:
                 collection = 'NA'
         }
-        return {
-            collectionName: collection,
-            score: {
-                name: displayNames.toString(),
-                score: displayScore
+        if (collection !== 'NA')
+            return {
+                collectionName: collection,
+                score: {
+                    name: displayNames.toString(),
+                    score: displayScore
+                }
             }
-        }
     }
 
     if (showScoreboard) {
