@@ -255,8 +255,15 @@ html {
         }
     }
 }
-
+// TODO: check screens sizes
+// TODO: fix position and containers
+// TODO: leaderboards
+// TODO: confetti
+// TODO: flags
 .loadingAnimation {
+    position: absolute;
+    left: 0;
+    margin-left: 25px;
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
@@ -310,6 +317,8 @@ html {
 .fadeIn {
     opacity: 1;
     visibility: visible;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 .dropdownMenu li {
     border-radius: 10px;
@@ -329,8 +338,11 @@ html {
 }
 
 // media queries
-
 @media (max-width: 1600px) {
+    .loadingAnimation {
+        margin-left: 50px;
+    }
+
     .topBarContainer {
         height: 11vh;
         width: 100%;
@@ -350,7 +362,14 @@ html {
         font-size: 30px;
         margin: 15px 5px;
     }
+    .dropdownMenu {
+        gap: 15px;
+    }
 
+    .dropdownMenu li {
+        font-size: 17px;
+        padding: 10px 0px;
+    }
     .gameBtns {
         button {
             padding-top: 10px;

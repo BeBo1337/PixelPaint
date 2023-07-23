@@ -82,13 +82,17 @@ $logoColor: rgb(244, 162, 162);
         .player-stats {
             position: static;
             display: flex;
+            gap: 20px;
             align-items: center;
             box-sizing: border-box;
             border-bottom: 1px solid black;
             width: 100%;
             color: white;
             text-shadow: 1px 1px 1px black;
-            padding: 10px;
+            padding: 5px 10px;
+            img{
+                width: 40px;
+            }
             .left-content {
                 display: flex;
                 align-items: center;
@@ -204,6 +208,7 @@ $logoColor: rgb(244, 162, 162);
                     display: flex;
                     align-items: center;
                 }
+
                 h1 {
                     font-size: 1.2em;
                     span:nth-child(1) {
