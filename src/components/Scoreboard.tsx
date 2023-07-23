@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import '../assets/Scoreboard.scss'
 import '../assets/GameOverPage.scss'
-
+import { random, toInteger } from 'lodash'
+import { getNumberInRange } from '../utils/GenericFuncs'
 function Scoreboard() {
     interface ScoreResult {
         name: string
         score: number
+        nationality: string
     }
 
     const navigate = useNavigate()
@@ -28,11 +30,38 @@ function Scoreboard() {
         }
     }
 
+    const getRandomCountry = () => {
+        const countries = [
+            'IL',
+            'AR',
+            'FR',
+            'BS',
+            'GH',
+            'GB',
+            'KP',
+            'LB',
+            ''
+        ]
+        const randomNum = getNumberInRange(0, countries.length - 1)
+        console.log(randomNum)
+        return countries[randomNum]
+    }
+
     const GetPlayerFromDbFormatted = async (collectionName: string) => {
         const result = await GetPlayersFromDb(collectionName)
 
         return result.map((player, index) => (
             <div className="player-stats" key={index}>
+                {/* The way it should be after the users nation is written in DB */}
+                <img
+                    src={`https://flagsapi.com/${
+                        player.nationality
+                            ? player.nationality
+                            : getRandomCountry()
+                    }/shiny/64.png`}
+                    className="flag-icon"
+                />
+                {/* <img src={`https://flagsapi.com/IL/shiny/64.png`} className='flag-icon'/> */}
                 <h1>
                     <div className="left-content">
                         <span className={getPlayerColor(index)}>

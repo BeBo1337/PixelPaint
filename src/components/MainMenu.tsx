@@ -89,7 +89,7 @@ const MainMenu: FC<MainMenuProps> = ({
                         type="text"
                         placeholder="Enter your name..."
                         value={name}
-                        maxLength={16}
+                        maxLength={8}
                         minLength={3}
                         onChange={handleNameChange}
                     ></input>
