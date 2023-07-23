@@ -35,9 +35,17 @@ const DropdownMenu: FC<DropdownProps> = ({
             </p>
             <ul className={`${styles.dropdownMenu} ${isOpen && styles.fadeIn}`}>
                 <li onClick={() => handleOptionSelect('Classic')}>Classic</li>
-                <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
+                <li onClick={() => handleOptionSelect('CO-OP Classic')}>
+                    CO-OP Classic
+                </li>
                 <li onClick={() => handleOptionSelect('Paint')}>Paint</li>
-                <li onClick={() => handleOptionSelect('CO-OP')}>CO-OP</li>
+                <li onClick={() => handleOptionSelect('CO-OP Paint')}>
+                    CO-OP Paint
+                </li>
+                <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
+                <li onClick={() => handleOptionSelect('CO-OP Memory')}>
+                    CO-OP Memory
+                </li>
             </ul>
         </section>
     )

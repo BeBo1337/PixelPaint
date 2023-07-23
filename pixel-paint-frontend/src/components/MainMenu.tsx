@@ -40,7 +40,7 @@ const MainMenu: FC<MainMenuProps> = ({
             case 'Paint':
                 setMode(Modes.PAINT)
                 break
-            case 'CO-OP':
+            case 'CO-OP Classic':
                 setMode(Modes.CO_OP)
                 break
         }
