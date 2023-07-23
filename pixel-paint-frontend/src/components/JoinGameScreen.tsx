@@ -7,8 +7,6 @@ import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
-import { debounce } from 'lodash'
-import { useMediaQuery } from '@mui/material'
 import { Modes } from '../utils/GameConstants'
 
 interface JoinGameScreenProps {
@@ -30,10 +28,6 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-    }
-
-    const handleRoomIdChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setRoomToJoin(event.target.value)
     }
 
     const handleClick = () => {
