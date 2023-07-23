@@ -12,24 +12,15 @@ import { toast } from 'react-toastify'
 
 interface PreGameScreenProps {
     host: string | null
-    setPlayerID: Function
 }
 
-function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
+function PreGameScreen({ host }: PreGameScreenProps) {
     const [modalMsg, setModalMsg] = useState<string>('')
     const [showModal, setShowModal] = useState(false)
     const [canStart, setCanStart] = useState(false)
     const navigate = useNavigate()
     const stateRef = useRef<any>()
     stateRef.current = canStart
-
-    if (!SocketManager.instance.roomId) {
-        navigate('/')
-        // FUCK ME
-        // NAVIGATE OUT OF HERE TO MAIN SCREEN
-        // SHOW ERROR TOAST
-        // CLEAN STATE
-    }
 
     const handleCloseModal = () => {
         setShowModal(false)
