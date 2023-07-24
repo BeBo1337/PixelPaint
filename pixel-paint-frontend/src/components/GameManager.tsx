@@ -64,7 +64,8 @@ const GameManager: FC<GameManagerProps> = ({
         const onTileSelected = (tileSelected: TileSelectedPayload) => {
             const { tileIndex, highlighted, color } = tileSelected
             const objectiveTile: boolean = puzzle[tileIndex].highlighted
-            if (gameMode === Modes.PAINT) onTileClickedPaint(tileSelected)
+            if (gameMode === Modes.PAINT || gameMode === Modes.CO_OP_PAINT)
+                onTileClickedPaint(tileSelected)
             else {
                 if (objectiveTile) {
                     if (highlighted) {
@@ -138,7 +139,7 @@ const GameManager: FC<GameManagerProps> = ({
     }
 
     useEffect(() => {
-        if (gameMode === Modes.MEMORY) {
+        if (gameMode === Modes.MEMORY || gameMode === Modes.CO_OP_MEM) {
             if (coloredObjectiveTiles + coloredRegularTiles === 3)
                 setShowPic(false)
         }

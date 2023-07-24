@@ -23,7 +23,11 @@ export class GameSession implements Game {
     this.roomId = roomId;
     this.players = players;
     this.gameMode = gameMode;
-    if (gameMode === Modes.CO_OP)
+    if (
+      gameMode === Modes.CO_OP ||
+      gameMode === Modes.CO_OP_MEM ||
+      gameMode === Modes.CO_OP_PAINT
+    )
       //if COOP
       this.timeLeft = 120;
     else this.timeLeft = 30;

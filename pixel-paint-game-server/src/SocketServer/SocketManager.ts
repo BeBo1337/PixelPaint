@@ -40,6 +40,7 @@ export class SocketManager {
       [SocketEvents.TIME]: this._onTime.bind(this),
       [SocketEvents.ON_CLEAR_CLICK]: this._onClearClick.bind(this),
       [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this),
+      [SocketEvents.LEAVE_ROOM]: this._onRoomLeave.bind(this),
       [SocketEvents.GAMEOVER]: this._onGameOver.bind(this),
     };
 
@@ -90,15 +91,19 @@ export class SocketManager {
       return;
     }
 
-    this._socket.join(roomId);
     const session = SocketManager._activeGames[roomId];
-
-    session.addPlayer(playerId);
     const payload: JoinRoomPayload = {
       roomId: session.roomId,
+      gameMode: session.gameMode,
       players: session.players,
       host: session.host,
+      playerJoined: true,
     };
+    this._socket.join(roomId);
+    if (session.players.length < 2) {
+      session.addPlayer(playerId);
+    } else payload.playerJoined = false;
+
     this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, payload);
   }
 
@@ -251,6 +256,26 @@ export class SocketManager {
     this._io.sockets.in(roomId).emit(SocketEvents.DISBAND_GAME, playerId);
     delete SocketManager._activeGames[roomId];
     console.log(`${roomId} removed`);
+  }
+
+  private _onRoomLeave(roomId: string, playerId: string) {
+    if (!roomId || !playerId) {
+      this._sendError(
+        "onRoomLeave",
+        "There was an issue, please try again",
+        "Missing Variables",
+      );
+      return;
+    }
+    if (!this._roomExists(roomId)) {
+      this._sendError(
+        "onRoomLeave",
+        "There was an issue, please try again",
+        `This room ${roomId} does not exist.`,
+      );
+      return;
+    }
+    this._socket.leave(roomId);
   }
 
   private _onGameOver(roomId: string) {

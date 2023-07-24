@@ -8,6 +8,7 @@ import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
 import { Modes } from '../utils/GameConstants'
+import SocketManager from '../services/SocketManager'
 
 interface JoinGameScreenProps {
     setGameMode: Function
@@ -67,8 +68,17 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
     }
 
     const onRoomJoined = (p: JoinRoomPayload) => {
-        setPlayerID(p.players[p.players.length - 1])
-        setRoomJoined(true)
+        if (p && p.playerJoined) {
+            setGameMode(p.gameMode)
+            setPlayerID(p.players[p.players.length - 1])
+            setRoomJoined(true)
+        } else if (
+            p.players[p.players.length - 1] !== SocketManager.instance.playerId
+        ) {
+            EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
+            setModalMsg(Errors.BAD_FULL)
+            setShowModal(true)
+        }
     }
 
     const onGameStarted = () => {
@@ -77,8 +87,6 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
 
     // onMount
     useEffect(() => {
-        setGameMode(Modes.CO_OP)
-
         EventsManager.instance.on(
             SocketEvents.ROOM_JOINED,
             'JoinGameScreen',

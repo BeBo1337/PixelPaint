@@ -65,6 +65,7 @@ export default class SocketManager {
             [SocketEvents.TIME]: this._onTime.bind(this),
             [SocketEvents.ON_CLEAR_CLICK]: this._onClear.bind(this),
             [SocketEvents.ON_GAME_LEAVE]: this._onGameLeave.bind(this),
+            [SocketEvents.LEAVE_ROOM]: this._onRoomLeave.bind(this),
             [SocketEvents.GAMEOVER]: this._onGameOver.bind(this)
         }
 
@@ -166,6 +167,10 @@ export default class SocketManager {
         this._socket.emit(SocketEvents.ON_GAME_LEAVE, this._roomId, playerId)
     }
 
+    private _onRoomLeave() {
+        this._socket.emit(SocketEvents.LEAVE_ROOM, this._roomId, this._playerId)
+    }
+
     private _onGameOver() {
         if (this._isHost) this._socket.emit(SocketEvents.GAMEOVER, this._roomId)
     }
@@ -187,8 +192,10 @@ export default class SocketManager {
     }
 
     private _roomJoined(p: JoinRoomPayload) {
-        this._roomId = p.roomId
-        this._eventsManager.trigger(SocketEvents.ROOM_JOINED, p)
+        if (p) {
+            this._roomId = p.roomId
+            this._eventsManager.trigger(SocketEvents.ROOM_JOINED, p)
+        }
     }
 
     private _gameStarted() {

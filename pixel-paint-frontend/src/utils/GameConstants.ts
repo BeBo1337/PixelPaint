@@ -11,5 +11,6 @@ export const Modes = {
     MEMORY: 2,
     PAINT: 3,
     CO_OP: 4,
-    ONE_VS_ONE: 5
+    CO_OP_MEM: 5,
+    CO_OP_PAINT: 6
 }

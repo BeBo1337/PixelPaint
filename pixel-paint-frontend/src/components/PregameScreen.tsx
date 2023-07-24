@@ -31,7 +31,7 @@ function PreGameScreen({ host }: PreGameScreenProps) {
         if (p.host !== host || host === null) {
             setModalMsg('Something Went Wrong...Open a new lobby')
             setShowModal(true)
-        } else {
+        } else if (p.playerJoined) {
             setCanStart(true)
         }
     }
