@@ -260,6 +260,7 @@ html {
 // TODO: leaderboards
 // TODO: confetti
 // TODO: flags
+// TODO: invite link page mobile fix
 .loadingAnimation {
     position: absolute;
     left: 0;
@@ -337,8 +338,40 @@ html {
     color: white;
 }
 
+@media (max-width: 2000px) {
+    .mainMenuContainer {
+        .dropdownMenu{
+            li{
+                width: 100%;
+                font-size: 20px
+            }
+            li{
+                &:last-child{
+                    font-size: 17px;
+                }
+            }            
+        }
+    }
+}
+
 // media queries
-@media (max-width: 1600px) {
+@media (max-width: 1300px) {
+    .mainMenuContainer {
+        background-color: #fff;
+        width: 100px;
+        width: 100%;
+        button {
+            width: 30vw;
+        }
+        .dropdownMenu {
+            li {
+                font-size: 17px;
+                &:last-child{
+                    font-size: 15px;
+                }
+            }
+        }
+    }
     .loadingAnimation {
         margin-left: 50px;
     }
@@ -396,7 +429,7 @@ html {
     display: grid;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
     .gameContainer {
         .pictureContainer {
             margin: 0px;
