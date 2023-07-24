@@ -87,51 +87,119 @@ function Scoreboard() {
     }, [displayCollection])
 
     return (
-        <>
-            <section className="scoreboard-container">
-                <h1 className="leaderboards-header">Leaderboards</h1>
-                <div className="gamemodes-container">
-                    <div
+        <section className="scoreboard-container">
+            {window.innerWidth < 1200 ? (
+                <ul>
+                    <h1 className="leaderboards-header">Leaderboards</h1>
+                    <li
                         className="classic"
                         onClick={() => {
                             setDisplayCollection(Collection.CLASSIC)
                         }}
                     >
                         Classic
-                    </div>
-                    <div
+                    </li>
+                    <li
                         className="memory"
                         onClick={() => {
                             setDisplayCollection(Collection.MEMORY)
                         }}
                     >
                         Memory
-                    </div>
-                    <div
+                    </li>
+                    <li
                         className="paint"
                         onClick={() => {
                             setDisplayCollection(Collection.PAINT)
                         }}
                     >
                         Paint
-                    </div>
-                    <div
+                    </li>
+                    <li
                         className="co-op"
                         onClick={() => {
                             setDisplayCollection(Collection.CO_OP)
                         }}
                     >
-                        CO-OP
+                        CO-OP Classic
+                    </li>
+                    <li
+                        className="co-op"
+                        onClick={() => {
+                            setDisplayCollection(Collection.CO_OP)
+                        }}
+                    >
+                        CO-OP Paint
+                    </li>
+                    <li
+                        className="co-op"
+                        onClick={() => {
+                            setDisplayCollection(Collection.CO_OP)
+                        }}
+                    >
+                        CO-OP Memory
+                    </li>
+                </ul>
+            ) : (
+                <>
+                    <h1 className="leaderboards-header">Leaderboards</h1>
+                    <div className="gamemodes-container">
+                        <div
+                            className="classic"
+                            onClick={() => {
+                                setDisplayCollection(Collection.CLASSIC)
+                            }}
+                        >
+                            Classic
+                        </div>
+                        <div
+                            className="memory"
+                            onClick={() => {
+                                setDisplayCollection(Collection.MEMORY)
+                            }}
+                        >
+                            Memory
+                        </div>
+                        <div
+                            className="paint"
+                            onClick={() => {
+                                setDisplayCollection(Collection.PAINT)
+                            }}
+                        >
+                            Paint
+                        </div>
+                        <div
+                            className="co-op"
+                            onClick={() => {
+                                setDisplayCollection(Collection.CO_OP)
+                            }}
+                        >
+                            CO-OP Classic
+                        </div>
+                        <div
+                            className="co-op"
+                            onClick={() => {
+                                setDisplayCollection(Collection.CO_OP)
+                            }}
+                        >
+                            CO-OP Paint
+                        </div>
+                        <div
+                            className="co-op"
+                            onClick={() => {
+                                setDisplayCollection(Collection.CO_OP)
+                            }}
+                        >
+                            CO-OP Memory
+                        </div>
                     </div>
-                </div>
-
-                <div className="players-stats-container">{stats}</div>
-
-                <button className="menu-btn" onClick={handleBackToMenuClick}>
-                    BACK TO MENU
-                </button>
-            </section>
-        </>
+                    <div className="players-stats-container">{stats}</div>
+                </>
+            )}
+            <button className="menu-btn" onClick={handleBackToMenuClick}>
+                BACK TO MENU
+            </button>
+        </section>
     )
 }
 

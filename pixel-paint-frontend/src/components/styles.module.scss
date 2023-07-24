@@ -255,9 +255,8 @@ html {
         }
     }
 }
-// TODO: check screens sizes
-// TODO: fix position and containers
-// TODO: leaderboards
+//  // TODO: fix position and containers of loader
+// // TODO: leaderboards
 // TODO: confetti
 // TODO: flags
 // TODO: invite link page mobile fix
@@ -340,32 +339,31 @@ html {
 
 @media (max-width: 2000px) {
     .mainMenuContainer {
-        .dropdownMenu{
-            li{
+        .dropdownMenu {
+            li {
                 width: 100%;
-                font-size: 20px
+                font-size: 20px;
             }
-            li{
-                &:last-child{
-                    font-size: 17px;
-                }
-            }            
         }
     }
 }
 
 // media queries
-@media (max-width: 1300px) {
+@media (max-width: 1350px) {
+
     .mainMenuContainer {
         width: 100px;
         width: 100%;
+        p {
+            font-size: 25px;
+        }
         button {
             width: 30vw;
         }
         .dropdownMenu {
             li {
                 font-size: 17px;
-                &:last-child{
+                &:last-child {
                     font-size: 15px;
                 }
             }
@@ -537,7 +535,7 @@ html {
         font-weight: 900;
         width: 100px;
         height: 60px;
-        font-size: 20px;
+        font-size: 17px;
         margin: 10px 5px;
     }
 }
