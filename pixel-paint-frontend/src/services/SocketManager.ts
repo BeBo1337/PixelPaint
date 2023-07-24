@@ -80,6 +80,7 @@ export default class SocketManager {
             [SocketEvents.TIME_RET]: this._timeReturn.bind(this),
             [SocketEvents.CLEAR_CLICKED]: this._clearClicked.bind(this),
             [SocketEvents.DISBAND_GAME]: this._disbandGame.bind(this),
+            [SocketEvents.PLAYER_LEFT_LOBBY]: this._onPlayerLeft.bind(this),
             [SocketEvents.GAMEOVER_RET]: this._gameOverReturn.bind(this)
         }
 
@@ -223,6 +224,10 @@ export default class SocketManager {
         this._playerId = null
         this._roomId = null
         this._eventsManager.trigger(SocketEvents.DISBAND_GAME, playerID)
+    }
+
+    private _onPlayerLeft(playerId: string) {
+        this._eventsManager.trigger(SocketEvents.PLAYER_LEFT_LOBBY, playerId)
     }
 
     private _gameOverReturn(p: GameOverPayload) {

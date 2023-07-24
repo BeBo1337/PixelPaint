@@ -36,10 +36,20 @@ function PreGameScreen({ host }: PreGameScreenProps) {
         }
     }
 
+    const onPlayerLeft = () => {
+        setModalMsg('Player Left')
+        setShowModal(true)
+        setCanStart(false)
+    }
+
     const onGameStarted = () => {
         if (stateRef.current) {
             navigate('/game')
         }
+    }
+
+    const handleBeforeUnload = () => {
+        EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
     }
 
     useEffect(() => {
@@ -62,6 +72,14 @@ function PreGameScreen({ host }: PreGameScreenProps) {
             'PregameScreen',
             onGameStarted
         )
+
+        EventsManager.instance.on(
+            SocketEvents.PLAYER_LEFT_LOBBY,
+            'PregameScreen',
+            onPlayerLeft
+        )
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
     }, [])
 
     // onBeforeDestroy
@@ -76,6 +94,12 @@ function PreGameScreen({ host }: PreGameScreenProps) {
                 SocketEvents.GAME_STARTED,
                 'PregameScreen'
             )
+
+            EventsManager.instance.off(
+                SocketEvents.PLAYER_LEFT_LOBBY,
+                'PregameScreen'
+            )
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         },
         []
     )

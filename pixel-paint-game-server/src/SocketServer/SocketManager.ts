@@ -90,21 +90,22 @@ export class SocketManager {
       );
       return;
     }
+    if (roomId in SocketManager._activeGames) {
+      const session = SocketManager._activeGames[roomId];
+      const payload: JoinRoomPayload = {
+        roomId: session.roomId,
+        gameMode: session.gameMode,
+        players: session.players,
+        host: session.host,
+        playerJoined: true,
+      };
+      this._socket.join(roomId);
+      if (session.players.length < 2) {
+        session.addPlayer(playerId);
+      } else payload.playerJoined = false;
 
-    const session = SocketManager._activeGames[roomId];
-    const payload: JoinRoomPayload = {
-      roomId: session.roomId,
-      gameMode: session.gameMode,
-      players: session.players,
-      host: session.host,
-      playerJoined: true,
-    };
-    this._socket.join(roomId);
-    if (session.players.length < 2) {
-      session.addPlayer(playerId);
-    } else payload.playerJoined = false;
-
-    this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, payload);
+      this._io.sockets.in(roomId).emit(SocketEvents.ROOM_JOINED, payload);
+    }
   }
 
   private _startGame(roomId: string, playerId: string) {
@@ -275,7 +276,18 @@ export class SocketManager {
       );
       return;
     }
-    this._socket.leave(roomId);
+    const session = SocketManager._activeGames[roomId];
+    if (playerId === session.host) {
+      this._io.sockets.in(roomId).emit(SocketEvents.DISBAND_GAME, playerId);
+      delete SocketManager._activeGames[roomId];
+      console.log(`${roomId} removed`);
+    } else if (session.players.includes(playerId)) {
+      session.removePlayer(playerId);
+      this._socket.leave(roomId);
+      this._io.sockets
+        .in(roomId)
+        .emit(SocketEvents.PLAYER_LEFT_LOBBY, playerId);
+    } else this._socket.leave(roomId);
   }
 
   private _onGameOver(roomId: string) {

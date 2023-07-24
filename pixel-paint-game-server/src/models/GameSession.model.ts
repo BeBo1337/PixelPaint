@@ -41,6 +41,13 @@ export class GameSession implements Game {
     this.players.push(playerId);
   }
 
+  removePlayer(playerId: string) {
+    const index = this.players.findIndex((player) => player === playerId);
+    if (index !== -1) {
+      this.players.splice(index, 1);
+    }
+  }
+
   decrementTime() {
     if (this.timeLeft > 0) this.timeLeft--;
   }

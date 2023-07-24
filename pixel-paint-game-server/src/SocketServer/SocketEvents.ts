@@ -27,7 +27,7 @@ enum EventsSocketEmits {
   TIME_RET = "time_ret",
   CLEAR_CLICKED = "clear_clicked",
   DISBAND_GAME = "disband_game",
-  ROOM_LEFT = "room_left",
+  PLAYER_LEFT_LOBBY = "player_left_lobby",
   GAMEOVER_RET = "gameover_ret",
 }
 

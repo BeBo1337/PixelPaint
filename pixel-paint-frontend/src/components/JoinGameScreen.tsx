@@ -81,10 +81,21 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
         }
     }
 
+    const onDisbandGame = () => {
+        setModalMsg(Errors.ROOM_DISBANDED)
+        setShowModal(true)
+        setTimeout(() => {
+            navigate('/')
+        }, 2000)
+    }
+
     const onGameStarted = () => {
         navigate('/game')
     }
 
+    const handleBeforeUnload = () => {
+        EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
+    }
     // onMount
     useEffect(() => {
         EventsManager.instance.on(
@@ -98,6 +109,14 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
             'JoinGameScreen',
             onGameStarted
         )
+
+        EventsManager.instance.on(
+            SocketEvents.DISBAND_GAME,
+            'PregameScreen',
+            onDisbandGame
+        )
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
 
         const roomId = searchParams.get('roomId')
         if (roomId) {
@@ -117,6 +136,13 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
                 SocketEvents.GAME_STARTED,
                 'JoinGameScreen'
             )
+
+            EventsManager.instance.off(
+                SocketEvents.DISBAND_GAME,
+                'PregameScreen'
+            )
+
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         },
         []
     )
