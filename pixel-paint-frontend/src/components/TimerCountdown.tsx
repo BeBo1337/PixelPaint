@@ -19,7 +19,11 @@ const TimerCountdown: FC<TimerCountdownProps> = ({
     onTimeOver
 }: TimerCountdownProps) => {
     const [timeLeft, setTime] = useState<number>(
-        gameMode === Modes.CO_OP ? 120 : 150 
+        gameMode === Modes.CO_OP ||
+            gameMode === Modes.CO_OP_MEM ||
+            gameMode === Modes.CO_OP_PAINT
+            ? 120
+            : 150
     )
     const [count, setCount] = useState<number>(0)
     const [warning, setWarning] = useState(false)

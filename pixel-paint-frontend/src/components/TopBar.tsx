@@ -19,8 +19,6 @@ const TopBar: FC<TopBarProps> = ({
     gameMode,
     handleBack
 }: TopBarProps) => {
-    const navigate = useNavigate()
-
     const handleClick = () => {
         EventsManager.instance.trigger(
             SocketEvents.ON_GAME_LEAVE,

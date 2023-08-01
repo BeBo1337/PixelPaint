@@ -23,7 +23,11 @@ export class GameSession implements Game {
     this.roomId = roomId;
     this.players = players;
     this.gameMode = gameMode;
-    if (gameMode === Modes.CO_OP)
+    if (
+      gameMode === Modes.CO_OP ||
+      gameMode === Modes.CO_OP_MEM ||
+      gameMode === Modes.CO_OP_PAINT
+    )
       //if COOP
       this.timeLeft = 120;
     else this.timeLeft = 30;
@@ -35,6 +39,13 @@ export class GameSession implements Game {
 
   addPlayer(playerId: string) {
     this.players.push(playerId);
+  }
+
+  removePlayer(playerId: string) {
+    const index = this.players.findIndex((player) => player === playerId);
+    if (index !== -1) {
+      this.players.splice(index, 1);
+    }
   }
 
   decrementTime() {

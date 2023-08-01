@@ -76,12 +76,7 @@ const App: FC<{}> = () => {
             <Routes>
                 <Route
                     path="/create/*"
-                    element={
-                        <PreGameScreen
-                            host={playerName}
-                            setPlayerID={setPlayerName}
-                        />
-                    }
+                    element={<PreGameScreen host={playerName} />}
                 />
                 <Route
                     path="/join/*"

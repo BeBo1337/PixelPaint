@@ -99,7 +99,7 @@ const GridLayout: FC<GridLayoutProps> = ({
             let toHighlight = false
             let toColor = ''
 
-            if (gameMode === Modes.PAINT) {
+            if (gameMode === Modes.PAINT || gameMode === Modes.CO_OP_PAINT) {
                 if (!canvas[index].highlighted) {
                     toHighlight = true
                     toColor = ''
@@ -236,9 +236,11 @@ const GridLayout: FC<GridLayoutProps> = ({
                 picture ? `${styles.pictureContainer} ` : 'container-fluid'
             }
         >
-            {picture && gameMode === Modes.PAINT && (
-                <ColorPicker score={score} />
-            )}
+            {picture &&
+                (gameMode === Modes.PAINT ||
+                    gameMode === Modes.CO_OP_PAINT) && (
+                    <ColorPicker score={score} />
+                )}
             <div className={`${styles.rowsContainer}`}>
                 {Array.from({ length: rows }, (_, i) => {
                     return (

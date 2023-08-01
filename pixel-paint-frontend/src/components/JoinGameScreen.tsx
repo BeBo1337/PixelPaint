@@ -7,9 +7,8 @@ import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
-import { debounce } from 'lodash'
-import { useMediaQuery } from '@mui/material'
 import { Modes } from '../utils/GameConstants'
+import SocketManager from '../services/SocketManager'
 
 interface JoinGameScreenProps {
     setGameMode: Function
@@ -30,10 +29,6 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value)
-    }
-
-    const handleRoomIdChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setRoomToJoin(event.target.value)
     }
 
     const handleClick = () => {
@@ -73,18 +68,36 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
     }
 
     const onRoomJoined = (p: JoinRoomPayload) => {
-        setPlayerID(p.players[p.players.length - 1])
-        setRoomJoined(true)
+        if (p && p.playerJoined) {
+            setGameMode(p.gameMode)
+            setPlayerID(p.players[p.players.length - 1])
+            setRoomJoined(true)
+        } else if (
+            p.players[p.players.length - 1] !== SocketManager.instance.playerId
+        ) {
+            EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
+            setModalMsg(Errors.BAD_FULL)
+            setShowModal(true)
+        }
+    }
+
+    const onDisbandGame = () => {
+        setModalMsg(Errors.ROOM_DISBANDED)
+        setShowModal(true)
+        setTimeout(() => {
+            navigate('/')
+        }, 2000)
     }
 
     const onGameStarted = () => {
         navigate('/game')
     }
 
+    const handleBeforeUnload = () => {
+        EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
+    }
     // onMount
     useEffect(() => {
-        setGameMode(Modes.CO_OP)
-
         EventsManager.instance.on(
             SocketEvents.ROOM_JOINED,
             'JoinGameScreen',
@@ -96,6 +109,14 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
             'JoinGameScreen',
             onGameStarted
         )
+
+        EventsManager.instance.on(
+            SocketEvents.DISBAND_GAME,
+            'PregameScreen',
+            onDisbandGame
+        )
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
 
         const roomId = searchParams.get('roomId')
         if (roomId) {
@@ -115,6 +136,13 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
                 SocketEvents.GAME_STARTED,
                 'JoinGameScreen'
             )
+
+            EventsManager.instance.off(
+                SocketEvents.DISBAND_GAME,
+                'PregameScreen'
+            )
+
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         },
         []
     )

@@ -10,6 +10,7 @@ enum EventsSocketReceives {
     TIME = 'time',
     ON_CLEAR_CLICK = 'on_clear_click',
     ON_GAME_LEAVE = 'on_game_leave',
+    LEAVE_ROOM = 'on_room_leave',
     GAMEOVER = 'gameover'
 }
 
@@ -26,6 +27,7 @@ enum EventsSocketEmits {
     TIME_RET = 'time_ret',
     CLEAR_CLICKED = 'clear_clicked',
     DISBAND_GAME = 'disband_game',
+    PLAYER_LEFT_LOBBY = 'player_left_lobby',
     GAMEOVER_RET = 'gameover_ret'
 }
 

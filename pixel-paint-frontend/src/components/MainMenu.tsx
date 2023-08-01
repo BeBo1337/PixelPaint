@@ -43,6 +43,12 @@ const MainMenu: FC<MainMenuProps> = ({
             case 'CO-OP Classic':
                 setMode(Modes.CO_OP)
                 break
+            case 'CO-OP Memory':
+                setMode(Modes.CO_OP_MEM)
+                break
+            case 'CO-OP Paint':
+                setMode(Modes.CO_OP_PAINT)
+                break
         }
     }
 
@@ -92,7 +98,11 @@ const MainMenu: FC<MainMenuProps> = ({
         setGameMode(p.gameMode)
         setPlayerID(p.host)
 
-        if (p.gameMode === Modes.CO_OP) {
+        if (
+            p.gameMode === Modes.CO_OP ||
+            p.gameMode === Modes.CO_OP_MEM ||
+            p.gameMode === Modes.CO_OP_PAINT
+        ) {
             setTimeout(() => {
                 navigate(`/create?roomId=${p.roomId}`)
             }, 1000)

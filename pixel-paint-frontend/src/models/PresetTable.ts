@@ -26,7 +26,7 @@ export const getNextPreset = (
     var presetsList: Preset[] = presetTable[difficulty]
     var numInRange: number = getNumberInRange(0, presetsList.length - 1)
     var res: Preset = presetsList[numInRange]
-    if (gameMode === Modes.PAINT) {
+    if (gameMode === Modes.PAINT || gameMode === Modes.CO_OP_PAINT) {
         colorizePreset(res, score)
     }
 

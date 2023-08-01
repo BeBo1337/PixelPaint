@@ -12,24 +12,15 @@ import { toast } from 'react-toastify'
 
 interface PreGameScreenProps {
     host: string | null
-    setPlayerID: Function
 }
 
-function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
+function PreGameScreen({ host }: PreGameScreenProps) {
     const [modalMsg, setModalMsg] = useState<string>('')
     const [showModal, setShowModal] = useState(false)
     const [canStart, setCanStart] = useState(false)
     const navigate = useNavigate()
     const stateRef = useRef<any>()
     stateRef.current = canStart
-
-    if (!SocketManager.instance.roomId) {
-        navigate('/')
-        // FUCK ME
-        // NAVIGATE OUT OF HERE TO MAIN SCREEN
-        // SHOW ERROR TOAST
-        // CLEAN STATE
-    }
 
     const handleCloseModal = () => {
         setShowModal(false)
@@ -40,15 +31,25 @@ function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
         if (p.host !== host || host === null) {
             setModalMsg('Something Went Wrong...Open a new lobby')
             setShowModal(true)
-        } else {
+        } else if (p.playerJoined) {
             setCanStart(true)
         }
+    }
+
+    const onPlayerLeft = () => {
+        setModalMsg('Player Left')
+        setShowModal(true)
+        setCanStart(false)
     }
 
     const onGameStarted = () => {
         if (stateRef.current) {
             navigate('/game')
         }
+    }
+
+    const handleBeforeUnload = () => {
+        EventsManager.instance.trigger(SocketEvents.LEAVE_ROOM, {})
     }
 
     useEffect(() => {
@@ -71,6 +72,14 @@ function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
             'PregameScreen',
             onGameStarted
         )
+
+        EventsManager.instance.on(
+            SocketEvents.PLAYER_LEFT_LOBBY,
+            'PregameScreen',
+            onPlayerLeft
+        )
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
     }, [])
 
     // onBeforeDestroy
@@ -85,6 +94,12 @@ function PreGameScreen({ host, setPlayerID }: PreGameScreenProps) {
                 SocketEvents.GAME_STARTED,
                 'PregameScreen'
             )
+
+            EventsManager.instance.off(
+                SocketEvents.PLAYER_LEFT_LOBBY,
+                'PregameScreen'
+            )
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         },
         []
     )
