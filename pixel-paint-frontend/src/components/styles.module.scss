@@ -235,9 +235,8 @@ html {
 }
 .waitingContainer {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-right: 10px;
-    margin-left: 10px;
     gap: 10px;
     h2 {
         margin-top: 13px;
@@ -255,15 +254,12 @@ html {
         }
     }
 }
-// TODO: check screens sizes
-// TODO: fix position and containers
-// TODO: leaderboards
+//  // TODO: fix position and containers of loader
+// // TODO: leaderboards
 // TODO: confetti
 // TODO: flags
+// // TODO: invite link page mobile fix
 .loadingAnimation {
-    position: absolute;
-    left: 0;
-    margin-left: 25px;
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
@@ -337,11 +333,59 @@ html {
     color: white;
 }
 
-// media queries
-@media (max-width: 1600px) {
-    .loadingAnimation {
-        margin-left: 50px;
+@media (max-width: 2000px) {
+    .mainMenuContainer {
+        .dropdownMenu {
+            li {
+                width: 100%;
+                font-size: 20px;
+            }
+        }
     }
+}
+
+// media queries
+@media (max-width: 1350px) {
+    .waitingContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        h2 {
+            margin-top: 0px;
+            padding: 0px 0px; 
+        }
+        p {
+            background: rgb(180, 255, 205);
+            color: green;
+            &:hover {
+                filter: brightness(100%);
+                background: rgb(180, 255, 205);
+                color: green;
+            }
+        }
+    }
+    .mainMenuContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        p {
+            font-size: 25px;
+        }
+        button {
+            width: 30vw;
+        }
+        .dropdownMenu {
+            li {
+                font-size: 17px;
+                &:last-child {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+
 
     .topBarContainer {
         height: 11vh;
@@ -396,7 +440,9 @@ html {
     display: grid;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
+    .loadingAnimation {
+    }
     .gameContainer {
         .pictureContainer {
             margin: 0px;
@@ -450,7 +496,6 @@ html {
     .gameBtns {
         button {
             padding-top: 10px;
-            position: absolute;
             right: 0;
             top: 0;
             margin: 10px 5px;
@@ -505,7 +550,7 @@ html {
         font-weight: 900;
         width: 100px;
         height: 60px;
-        font-size: 20px;
+        font-size: 17px;
         margin: 10px 5px;
     }
 }
