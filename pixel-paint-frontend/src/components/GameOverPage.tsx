@@ -10,6 +10,7 @@ import SocketManager from '../services/SocketManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { toast } from 'react-toastify'
 import '../assets/GameOverPage.scss'
+import Confetti from './Confetti'
 
 interface GameOverPageProps {
     score: number
@@ -22,6 +23,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
     resetGame,
     gameMode
 }: GameOverPageProps) => {
+    const [isConffetiOn, setIsConfettiOn] = useState<boolean>(false)
     const [displayNames, setDisplayNames] = useState<string[]>([])
     const [displayScore, setDisplayScore] = useState(score)
     const [showScoreboard, setShowScoreboard] = useState(false)
@@ -45,6 +47,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
 
     // onMount
     useEffect(() => {
+        setIsConfettiOn(true)
         if (!SocketManager.instance.roomId) {
             toast.error('Please create/join a room to enter a game', {
                 position: toast.POSITION.BOTTOM_CENTER,
@@ -52,29 +55,33 @@ const GameOverPage: FC<GameOverPageProps> = ({
             })
             navigate('/')
         }
-
+        
         EventsManager.instance.on(
             SocketEvents.GAMEOVER_RET,
             'GameOverPage',
             handleGameOver
-        )
-
-        if (SocketManager.instance.isHost) {
-            EventsManager.instance.trigger(SocketEvents.GAMEOVER, {})
-        }
-        resetGame()
-    }, [])
-
-    // onBeforeDestroy
-    useEffect(
-        () => () => {
-            EventsManager.instance.off(
-                SocketEvents.GAMEOVER_RET,
-                'GameOverPage'
             )
-        },
-        []
-    )
+            
+            if (SocketManager.instance.isHost) {
+                EventsManager.instance.trigger(SocketEvents.GAMEOVER, {})
+            }
+            setTimeout(() => {
+                setIsConfettiOn(false)
+            }, 5000)
+            
+            resetGame()
+        }, [])
+        
+        // onBeforeDestroy
+        useEffect(
+            () => () => {
+                EventsManager.instance.off(
+                    SocketEvents.GAMEOVER_RET,
+                    'GameOverPage'
+                    )
+                },
+                []
+                )
 
     useEffect(() => {
         if (displayNames.length > 0) {
@@ -123,6 +130,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
             <h1>
                 Game <span>Over!</span>
             </h1>
+            <Confetti isRecycleOn={isConffetiOn} />
             <div className="player-cred-container">
                 <h2>
                     Players : <span>{displayNames?.toString()}</span>

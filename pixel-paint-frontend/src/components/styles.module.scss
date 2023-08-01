@@ -235,9 +235,8 @@ html {
 }
 .waitingContainer {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-right: 10px;
-    margin-left: 10px;
     gap: 10px;
     h2 {
         margin-top: 13px;
@@ -259,11 +258,8 @@ html {
 // // TODO: leaderboards
 // TODO: confetti
 // TODO: flags
-// TODO: invite link page mobile fix
+// // TODO: invite link page mobile fix
 .loadingAnimation {
-    position: absolute;
-    left: 0;
-    margin-left: 25px;
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
@@ -350,9 +346,29 @@ html {
 
 // media queries
 @media (max-width: 1350px) {
-
+    .waitingContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        h2 {
+            margin-top: 0px;
+            padding: 0px 0px; 
+        }
+        p {
+            background: rgb(180, 255, 205);
+            color: green;
+            &:hover {
+                filter: brightness(100%);
+                background: rgb(180, 255, 205);
+                color: green;
+            }
+        }
+    }
     .mainMenuContainer {
-        width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 100%;
         p {
             font-size: 25px;
@@ -369,9 +385,7 @@ html {
             }
         }
     }
-    .loadingAnimation {
-        margin-left: 50px;
-    }
+
 
     .topBarContainer {
         height: 11vh;
@@ -427,6 +441,8 @@ html {
 }
 
 @media (max-width: 1050px) {
+    .loadingAnimation {
+    }
     .gameContainer {
         .pictureContainer {
             margin: 0px;
@@ -480,7 +496,6 @@ html {
     .gameBtns {
         button {
             padding-top: 10px;
-            position: absolute;
             right: 0;
             top: 0;
             margin: 10px 5px;
