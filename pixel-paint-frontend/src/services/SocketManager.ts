@@ -20,6 +20,7 @@ export default class SocketManager {
     private _roomId: string | null = null
     private _playerId: string | null = null
     private _isHost: boolean = false
+    private _remoteAddr: string | null = null
 
     public static get instance() {
         if (!SocketManager._instance) {
@@ -100,6 +101,10 @@ export default class SocketManager {
         Object.entries(onsHandler).forEach(([key, value]) =>
             this._socket.on(key, value)
         )
+    }
+
+    getRemoteAddress(): string | null {
+        return this._remoteAddr
     }
 
     private _connected() {
@@ -186,9 +191,10 @@ export default class SocketManager {
         console.error(`[${where ?? 'Server Error'}] ${message};`, error)
     }
 
-    private _roomCreated(p: CreateRoomPayload) {
+    private _roomCreated(p: CreateRoomPayload, addr: string) {
         this._roomId = p.roomId
         this._isHost = true
+        this._remoteAddr = addr
         this._eventsManager.trigger(SocketEvents.ROOM_CREATED, p)
     }
 
@@ -223,6 +229,7 @@ export default class SocketManager {
         this._isHost = false
         this._playerId = null
         this._roomId = null
+        this._remoteAddr = null
         this._eventsManager.trigger(SocketEvents.DISBAND_GAME, playerID)
     }
 

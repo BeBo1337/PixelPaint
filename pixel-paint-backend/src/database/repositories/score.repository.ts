@@ -28,10 +28,18 @@ import {
 } from '../constants/constants'
 import { ALL_SCORES } from 'src/common/constants'
 import { rankScore } from 'src/utils/rank-score.helper'
+import { HttpService } from '@nestjs/axios'
+import { AxiosError } from 'axios'
+import { ConfigService } from '@nestjs/config'
+import { firstValueFrom } from 'rxjs'
 
 @Injectable()
 export default class ScoreRepository implements IScoreRepository {
-    constructor(private readonly db: Firestore) {}
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly db: Firestore,
+        private readonly httpService: HttpService
+    ) {}
 
     public async createScore(scoreData: CreateScoreDto): Promise<ScoreDto> {
         try {
@@ -52,25 +60,40 @@ export default class ScoreRepository implements IScoreRepository {
         scores: ScoreDto[],
         scoreData: CreateScoreDto
     ) {
-        const rank = rankScore(scores, scoreData.score)
-        console.log(rank)
-        if (rank != -1) {
-            const scoreToInsert = {
-                uuid: uuidv4(),
-                ...scoreData.score
-            } satisfies ScoreDto
-            await setDoc(
-                doc(this.db, scoreData.collectionName, scoreToInsert.uuid),
-                scoreToInsert
+        try {
+            const rank = rankScore(scores, scoreData.score)
+            const res$ = this.httpService.get(
+                `https://api.ipgeolocation.io/ipgeo?ip=${
+                    scoreData.ipAddr
+                }&apiKey=${this.configService.get<string>('GEO_LOC_API_KEY')}`
             )
-            if (scores.length >= 100)
-                await deleteDoc(
-                    doc(
-                        this.db,
-                        scoreData.collectionName,
-                        scores[scores.length - 1].uuid
-                    )
+
+            const { country_code3 } = await (await firstValueFrom(res$)).data
+
+            if (rank != -1) {
+                const scoreToInsert = {
+                    uuid: uuidv4(),
+                    countryCode: country_code3,
+                    ...scoreData.score
+                } satisfies ScoreDto
+                await setDoc(
+                    doc(this.db, scoreData.collectionName, scoreToInsert.uuid),
+                    scoreToInsert
                 )
+                if (scores.length >= 100)
+                    await deleteDoc(
+                        doc(
+                            this.db,
+                            scoreData.collectionName,
+                            scores[scores.length - 1].uuid
+                        )
+                    )
+            }
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                console.log(error.message)
+            }
+            throw new InternalServerErrorException()
         }
     }
 

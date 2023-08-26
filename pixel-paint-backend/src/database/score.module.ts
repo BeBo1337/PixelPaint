@@ -5,6 +5,7 @@ import ScoreRepository from './repositories/score.repository'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { Firestore, getFirestore } from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
+import { HttpModule } from '@nestjs/axios'
 
 function getConfigObject(configService: ConfigService) {
     return {
@@ -33,6 +34,6 @@ function getConfigObject(configService: ConfigService) {
     ],
     controllers: [ScoreController],
     exports: [ScoreService],
-    imports: [ConfigModule]
+    imports: [ConfigModule, HttpModule]
 })
 export class ScoreModule {}

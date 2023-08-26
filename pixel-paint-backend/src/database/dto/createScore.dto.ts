@@ -1,5 +1,6 @@
 import ScoreDto from './score.dto'
 import {
+    IsIP,
     IsNotEmpty,
     IsNotEmptyObject,
     IsString,
@@ -13,6 +14,9 @@ export default class CreateScoreDto {
     @IsString()
     @IsNotEmpty()
     collectionName: string
+
+    @IsIP()
+    ipAddr: string
 
     // Validate that the inner dto is not empty, and transform it into
     // a ScoreDto to enable inner validation.

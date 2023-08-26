@@ -6,8 +6,8 @@ interface ConfettiProps {
 
 export default (props: ConfettiProps) => {
     const { width, height } = {
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: window.outerWidth,
+        height: window.outerHeight
     }
     return (
         <Confetti
