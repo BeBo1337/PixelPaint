@@ -19,6 +19,7 @@ import * as Joi from 'joi'
                 FIREBASE_MESSAGING_SENDER_ID: Joi.string().required(),
                 FIREBASE_APP_ID: Joi.string().required(),
                 FIREBASE_MEASURMENT_ID: Joi.string().required(),
+                GEO_LOC_API_KEY: Joi.string().required(),
                 PORT: Joi.number().required()
             })
         })

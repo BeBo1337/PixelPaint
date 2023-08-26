@@ -19,6 +19,10 @@ export default class ScoreDto {
     @IsPositive()
     score: number
 
+    @IsString()
+    @IsOptional()
+    countryCode: string
+
     // Validate non-empty string
     @IsString()
     @IsNotEmpty()
