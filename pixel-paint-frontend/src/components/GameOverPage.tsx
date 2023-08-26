@@ -55,33 +55,33 @@ const GameOverPage: FC<GameOverPageProps> = ({
             })
             navigate('/')
         }
-        
+
         EventsManager.instance.on(
             SocketEvents.GAMEOVER_RET,
             'GameOverPage',
             handleGameOver
+        )
+
+        if (SocketManager.instance.isHost) {
+            EventsManager.instance.trigger(SocketEvents.GAMEOVER, {})
+        }
+        setTimeout(() => {
+            setIsConfettiOn(false)
+        }, 5000)
+
+        resetGame()
+    }, [])
+
+    // onBeforeDestroy
+    useEffect(
+        () => () => {
+            EventsManager.instance.off(
+                SocketEvents.GAMEOVER_RET,
+                'GameOverPage'
             )
-            
-            if (SocketManager.instance.isHost) {
-                EventsManager.instance.trigger(SocketEvents.GAMEOVER, {})
-            }
-            setTimeout(() => {
-                setIsConfettiOn(false)
-            }, 5000)
-            
-            resetGame()
-        }, [])
-        
-        // onBeforeDestroy
-        useEffect(
-            () => () => {
-                EventsManager.instance.off(
-                    SocketEvents.GAMEOVER_RET,
-                    'GameOverPage'
-                    )
-                },
-                []
-                )
+        },
+        []
+    )
 
     useEffect(() => {
         if (displayNames.length > 0) {
@@ -111,14 +111,17 @@ const GameOverPage: FC<GameOverPageProps> = ({
             default:
                 collection = 'NA'
         }
-        if (collection !== 'NA')
+        if (collection !== 'NA') {
+            console.log(SocketManager.instance.getRemoteAddress())
             return {
                 collectionName: collection,
+                ipAddr: SocketManager.instance.getRemoteAddress(),
                 score: {
                     name: displayNames.toString(),
                     score: displayScore
                 }
             }
+        }
     }
 
     if (showScoreboard) {
