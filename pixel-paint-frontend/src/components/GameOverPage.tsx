@@ -84,16 +84,23 @@ const GameOverPage: FC<GameOverPageProps> = ({
     )
 
     useEffect(() => {
-        if (displayNames.length > 0) {
-            if (SocketManager.instance.isHost) {
-                axios
-                    .post(`${import.meta.env.VITE_API_URL}/score`, result())
-                    .catch((error) => console.log(error))
+        const postScore = async () => {
+            if (displayNames.length > 0) {
+                if (SocketManager.instance.isHost) {
+                    const resultData = await result()
+                    axios
+                        .post(
+                            `${import.meta.env.VITE_API_URL}/score`,
+                            resultData
+                        )
+                        .catch((error) => console.log(error))
+                }
             }
         }
+        postScore()
     }, [displayNames])
 
-    const result = () => {
+    const result = async () => {
         let collection: String
         switch (gameMode) {
             case Modes.CLASSIC:
@@ -112,10 +119,20 @@ const GameOverPage: FC<GameOverPageProps> = ({
                 collection = 'NA'
         }
         if (collection !== 'NA') {
-            console.log(SocketManager.instance.getRemoteAddress())
+            let ipAddr = ''
+            try {
+                const response = await fetch(
+                    'https://api.ipify.org?format=json'
+                )
+                const data = await response.json()
+                ipAddr = data.ip
+            } catch (error) {
+                console.error('Error getting IP address:', error)
+            }
+            console.log(ipAddr)
             return {
                 collectionName: collection,
-                ipAddr: SocketManager.instance.getRemoteAddress(),
+                ipAddr: ipAddr,
                 score: {
                     name: displayNames.toString(),
                     score: displayScore

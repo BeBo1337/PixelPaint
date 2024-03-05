@@ -53,7 +53,7 @@ export class ScoreController {
      */
     @Post()
     public async createScore(@Body() score: CreateScoreDto) {
-        Logger.log(score)
+        Logger.log(score.score)
         return this.scoreService.createScore(score)
     }
 }

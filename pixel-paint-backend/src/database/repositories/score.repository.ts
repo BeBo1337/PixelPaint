@@ -24,7 +24,8 @@ import {
     SORT_PARAM,
     GET_NAME,
     GET_SCORE,
-    GET_UUID
+    GET_UUID,
+    GET_CCODE
 } from '../constants/constants'
 import { ALL_SCORES } from 'src/common/constants'
 import { rankScore } from 'src/utils/rank-score.helper'
@@ -47,9 +48,9 @@ export default class ScoreRepository implements IScoreRepository {
                 scoreData.collectionName,
                 ALL_SCORES
             )
+
             await this.insertScoreToDb(scores, scoreData)
         } catch (error) {
-            console.log(error)
             throw new InternalServerErrorException()
         }
 
@@ -69,7 +70,7 @@ export default class ScoreRepository implements IScoreRepository {
             )
 
             const { country_code3 } = await (await firstValueFrom(res$)).data
-
+            console.log(rank)
             if (rank != -1) {
                 const scoreToInsert = {
                     uuid: uuidv4(),
@@ -122,7 +123,8 @@ export default class ScoreRepository implements IScoreRepository {
                 data.push({
                     uuid: doc.get(GET_UUID),
                     name: doc.get(GET_NAME),
-                    score: doc.get(GET_SCORE)
+                    score: doc.get(GET_SCORE),
+                    countryCode: doc.get(GET_CCODE)
                 })
             )
 
