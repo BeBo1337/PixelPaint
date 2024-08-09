@@ -13,7 +13,7 @@ import { SocketEvents } from '../services/SocketEvents.model'
 import { TileSelectedPayload } from '../payloads/TileSelectedPayload'
 import SocketManager from '../services/SocketManager'
 import { toast } from 'react-toastify'
-
+import '../assets/GameBoardStyle.scss'
 interface GameManagerProps {
     gameMode: number
     score: number
@@ -132,7 +132,7 @@ const GameManager: FC<GameManagerProps> = ({
         }
     }, [puzzle])
 
-    const onClearClicked = () => {
+    const handleClearClicked = () => {
         setColoredObjectiveTiles(0)
         setCurrentColored(0)
         setShowPic(true)
@@ -201,7 +201,7 @@ const GameManager: FC<GameManagerProps> = ({
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             })
-            navigate('/')
+            // navigate('/')
         } else {
             EventsManager.instance.on(
                 SocketEvents.PRESET_GENERATED,
@@ -242,37 +242,35 @@ const GameManager: FC<GameManagerProps> = ({
     }
 
     return (
-        <div className="App">
-            <div>
-                <TopBar
-                    timeOverFunction={handleTimeOver}
-                    score={score}
+        <div className="game-route-container">
+            <TopBar
+                timeOverFunction={handleTimeOver}
+                score={score}
+                gameMode={gameMode}
+                handleBack={handleBackClick}
+            />
+            <div className={`gameContainer mode-${gameMode}`}>
+                <GridLayout
+                    rows={rows}
+                    columns={columns}
+                    picture={true}
+                    showPicture={showPic}
+                    puzzle={puzzle}
                     gameMode={gameMode}
-                    handleBack={handleBackClick}
+                    score={score}
                 />
-                <div className={`${styles.gameContainer}`}>
-                    <GridLayout
-                        rows={rows}
-                        columns={columns}
-                        picture={true}
-                        showPicture={showPic}
-                        puzzle={puzzle}
-                        gameMode={gameMode}
-                        score={score}
-                    />
-                    <GridLayout
-                        rows={rows}
-                        columns={columns}
-                        showPicture={true}
-                        picture={false}
-                        score={score}
-                        clickableCanvas={clickable}
-                        puzzle={puzzle}
-                        gameMode={gameMode}
-                        onTileClicked={onTileClicked}
-                        onClearClicked={onClearClicked}
-                    />
-                </div>
+                <GridLayout
+                    rows={rows}
+                    columns={columns}
+                    showPicture={true}
+                    picture={false}
+                    score={score}
+                    clickableCanvas={clickable}
+                    puzzle={puzzle}
+                    gameMode={gameMode}
+                    onTileClicked={onTileClicked}
+                    onClearClicked={handleClearClicked}
+                />
             </div>
         </div>
     )

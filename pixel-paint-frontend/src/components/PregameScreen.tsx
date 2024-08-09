@@ -9,6 +9,7 @@ import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
 import SocketManager from '../services/SocketManager'
 import { toast } from 'react-toastify'
+import { GridLoader } from 'react-spinners'
 
 interface PreGameScreenProps {
     host: string | null
@@ -58,7 +59,7 @@ function PreGameScreen({ host }: PreGameScreenProps) {
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             })
-            navigate('/')
+            // navigate('/') // ! remove from comment
         }
 
         EventsManager.instance.on(
@@ -138,9 +139,18 @@ function PreGameScreen({ host }: PreGameScreenProps) {
                 <h1>
                     Welcome to <span>Pixel</span>Paint
                 </h1>
+                <button
+                    onClick={handleClick}
+                    disabled={!canStart}
+                    style={{ background: 'white' }}
+                    className={canStart ? '' : styles.buttonDisabled}
+                >
+                    Start Game
+                </button>
                 {!canStart ? (
                     <div className={styles.waitingContainer}>
-                        <div className={styles.loadingAnimation}></div>
+                        {/* <div className={styles.loadingAnimation}></div> */}
+                        <GridLoader />
                         <h2>Waiting for player...</h2>
                     </div>
                 ) : (
@@ -148,13 +158,7 @@ function PreGameScreen({ host }: PreGameScreenProps) {
                         <p>Player Joined!</p>
                     </div>
                 )}
-                <button
-                    onClick={handleClick}
-                    disabled={!canStart}
-                    className={canStart ? '' : styles.buttonDisabled}
-                >
-                    Start Game
-                </button>
+
                 <button onClick={handleLinkClick}>Invite Link</button>
             </section>
         </>

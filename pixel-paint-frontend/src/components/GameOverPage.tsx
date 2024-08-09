@@ -53,7 +53,7 @@ const GameOverPage: FC<GameOverPageProps> = ({
                 position: toast.POSITION.BOTTOM_CENTER,
                 autoClose: 1500
             })
-            navigate('/')
+            // navigate('/') //! remove from comment
         }
 
         EventsManager.instance.on(
@@ -159,17 +159,12 @@ const GameOverPage: FC<GameOverPageProps> = ({
                     Score : <span className="score">{displayScore}</span>
                 </h2>
             </div>
-            <div className="game-btns">
-                <button className="menu-btn" onClick={handleBackToMenuClick}>
-                    BACK TO MENU
-                </button>
-                <button
-                    className="scoreboard-btn"
-                    onClick={handleScoreboardClick}
-                >
-                    SCOREBOARD
-                </button>
-            </div>
+            <button className="menu-btn" onClick={handleBackToMenuClick}>
+                BACK TO MENU
+            </button>
+            <button className="scoreboard-btn" onClick={handleScoreboardClick}>
+                SCOREBOARD
+            </button>
         </section>
     )
 }

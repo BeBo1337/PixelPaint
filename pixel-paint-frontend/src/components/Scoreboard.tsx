@@ -76,7 +76,6 @@ function Scoreboard() {
     }
 
     useEffect(() => {
-        debugger
         fetchPlayerStats(Collection.CLASSIC)
     }, [])
 

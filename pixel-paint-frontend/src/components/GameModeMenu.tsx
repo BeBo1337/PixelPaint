@@ -1,4 +1,4 @@
-import React, { useState, FC, MouseEvent } from 'react'
+import React, { useState, FC } from 'react'
 import styles from './styles.module.scss'
 
 interface DropdownProps {
@@ -10,21 +10,33 @@ const DropdownMenu: FC<DropdownProps> = ({
     onSelectOption,
     isModeSelected
 }: DropdownProps) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
     const [selectedOption, setSelectedOption] = useState('Select Game Mode')
 
-    const handleToggle = () => {
-        setIsOpen(!isOpen)
+    const handleToggle = () => {}
+
+    const selectedStyle = {
+        color: 'white',
+        background: 'lightcoral',
+        outline: '2.5px solid black'
     }
+
+    const options = [
+        'Classic',
+        'CO-OP Classic',
+        'Paint',
+        'CO-OP Paint',
+        'Memory',
+        'CO-OP Memory'
+    ]
 
     const handleOptionSelect = (option: string) => {
         setSelectedOption(option)
         onSelectOption(option)
-        setIsOpen(false)
     }
 
     return (
-        <section className={`${styles.dropdown} `}>
+        <>
             <p
                 className={`${styles.dropdownToggle} ${
                     isModeSelected ? styles.modeError : ''
@@ -33,21 +45,26 @@ const DropdownMenu: FC<DropdownProps> = ({
             >
                 {selectedOption}
             </p>
-            <ul className={`${styles.dropdownMenu} ${isOpen && styles.fadeIn}`}>
-                <li onClick={() => handleOptionSelect('Classic')}>Classic</li>
-                <li onClick={() => handleOptionSelect('CO-OP Classic')}>
-                    CO-OP Classic
-                </li>
-                <li onClick={() => handleOptionSelect('Paint')}>Paint</li>
-                <li onClick={() => handleOptionSelect('CO-OP Paint')}>
-                    CO-OP Paint
-                </li>
-                <li onClick={() => handleOptionSelect('Memory')}>Memory</li>
-                <li onClick={() => handleOptionSelect('CO-OP Memory')}>
-                    CO-OP Memory
-                </li>
+            <ul
+                className={`${styles.dropdownMenu} ${
+                    isOpen ? styles.fadeIn : ''
+                }`}
+            >
+                {options.map((option) => (
+                    <li
+                        key={option}
+                        style={
+                            selectedOption === option
+                                ? selectedStyle
+                                : undefined
+                        }
+                        onClick={() => handleOptionSelect(option)}
+                    >
+                        {option}
+                    </li>
+                ))}
             </ul>
-        </section>
+        </>
     )
 }
 

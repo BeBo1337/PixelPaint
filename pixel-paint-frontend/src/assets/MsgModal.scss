@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Madimi+One&display=swap');
 
 .modalOverlay {
-    font-family: 'Bruno Ace';
+    font-family: 'Madimi One', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
@@ -10,34 +10,45 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.832);
+    background-color: rgba(88, 88, 88, 0.832);
     z-index: 9999;
 }
 
+p {
+    margin: 0 !important;
+}
+
 .modalContent {
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0px;
     background-color: rgb(61, 61, 61);
     color: rgb(255, 255, 255);
     p {
-        font-size: 2em;
+        font-size: 2.5em;
     }
 
     text-align: center;
     width: 50vw;
     height: fit-content;
-    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 20px;
+    outline: 2px solid black;
     .modalHeader {
         button {
-            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 5px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            scale: 1.4;
-            outline: 1px solid black;
-            margin-inline-end: 5px;
+            font-size: 30px;
+            border: none;
             &:hover {
                 background-color: lightcoral;
                 color: white;
                 box-sizing: border-box;
-                outline: 1px solid white;
             }
         }
         h2 {
@@ -56,24 +67,23 @@
         padding: 16px;
         display: flex;
         justify-content: center;
+        padding: 50px;
     }
 
     .closeButton {
         padding: 8px 16px;
         border: none;
         border-radius: 4px;
-        background-color: #ccc;
         color: #fff;
         cursor: pointer;
     }
 
     .closeButton:hover {
-        background-color: #999;
     }
 }
 
-@media  (max-width: 768px) {
-    .modalContent{
+@media (max-width: 768px) {
+    .modalContent {
         width: 90vw;
     }
 }

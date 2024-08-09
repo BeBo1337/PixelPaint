@@ -1,20 +1,21 @@
 .colorPickerContainer {
-    margin-bottom: 10px;
-    margin-top: 15px;
     display: flex;
     justify-content: center;
-    gap: 30px;
-    grid-template-columns: repeat(3, 30px);
+    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
     .colorItem {
+        justify-self: center;
+        align-self: center;
         border-radius: 5px;
         box-shadow: 0px 2px 1px 1px rgb(0, 0, 0);
         transition: transform 0.1s ease-in-out;
         display: flex;
         justify-content: center;
         align-items: center;
+
         h3 {
             font-size: 30px;
-            font-family: 'Bruno Ace';
+            font-family: 'Madimi One', sans-serif;
             color: rgb(0, 0, 0);
             font-weight: 500;
             margin: 0;
@@ -25,18 +26,40 @@
         }
         padding: 20px;
         background-color: lavender;
-        width: 59px;
+        width: 70px;
         height: 50px;
+        transition: scale 0.1s ease-in-out;
     }
     .selected {
+        scale: 1.1123;
         outline: rgb(0, 0, 0) 3px solid;
-        transform: scale(1.2);
         h3 {
             font-weight: 900;
         }
     }
-
-    .displayTile {
+}
+.colorPickerContainer {
+    margin-top: 0px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    &:nth-child(n) {
+        align-self: center;
+    }
+    .colorItem2 {
+        grid-row: 1;
+    }
+    .colorItem3 {
+        grid-row: 1;
+        grid-column: 1;
+    }
+    .colorItem4 {
+        grid-row: 2;
+    }
+    .colorItem5 {
+        grid-row: 2;
+    }
+    .colorItem6 {
+        grid-row: 2;
     }
 }
 
@@ -44,44 +67,55 @@
     .colorPickerContainer {
         margin-top: 0px;
         display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding-right: 5px;
+        .colorItem {
+            padding-inline-end: 5px;
+            width: 35px;
+            border-radius: 0;
+        }
+
+        .colorItem.selected {
+            scale: 1;
+            opacity: 0.5;
+            outline: none;
+        }
+        .colorItem1 {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
         .colorItem2 {
+            grid-column: 2;
             grid-row: 2;
         }
         .colorItem3 {
             grid-row: 3;
+            grid-column: 2;
         }
         .colorItem4 {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 1;
         }
         .colorItem5 {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 2;
         }
         .colorItem6 {
-            grid-column: 2;
+            grid-column: 1;
             grid-row: 3;
         }
-        grid-template-columns: 1fr 65px;
-        gap: 22px;
+
         h3 {
             visibility: hidden;
         }
-        .colorItem {
-            width: 65px;
-            height: 50px;
-            border-radius: 5px;
-            box-shadow: 0px 2px 1px 1px rgb(0, 0, 0);
-            transition: transform 0.1s ease-in-out;
-            &:hover {
-                cursor: pointer;
-                opacity: 0.9;
-            }
-            padding: 20px;
-        }
+
         .selected {
             outline: none;
             outline: rgb(0, 0, 0) 3px solid;
         }
     }
 }
+.selected-gamemode {
+    background: black;
+} /*  */

@@ -42,6 +42,9 @@ const TopBar: FC<TopBarProps> = ({
         )
     }, [])
 
+    //handle cleartodo
+    const handleClearClicked = () => {}
+
     // onBeforeDestroy
     useEffect(
         () => () => {
@@ -51,20 +54,28 @@ const TopBar: FC<TopBarProps> = ({
     )
 
     return (
-        <section className={`${styles.topBarContainer}`}>
-            <div className={`${styles.topBarContent}`}>
+        <>
+            <section className={`${styles.topBarContainer}`}>
                 <button className={`${styles.backBtn}`} onClick={handleClick}>
                     LEAVE
                 </button>
-                <TimerCountdown
-                    time={120}
-                    score={score}
-                    gameMode={gameMode}
-                    onTimeOver={handleTimeOver}
-                />
-                <h1>SCORE: {score}</h1>
-            </div>
-        </section>
+                <div className={`${styles.gameBtns} clearBtn`}>
+                    <button onClick={handleClearClicked}>CLEAR</button>
+                </div>
+                <div className={`${styles.topBarContent}`}>
+                    <TimerCountdown
+                        time={120}
+                        score={score}
+                        gameMode={gameMode}
+                        onTimeOver={handleTimeOver}
+                    />
+                </div>
+            </section>
+            <footer>
+                <span>SCORE:</span>
+                <span>{score}</span>
+            </footer>
+        </>
     )
 }
 

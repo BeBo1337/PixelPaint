@@ -9,6 +9,7 @@ import { JoinRoomPayload } from '../payloads/JoinRoomPayload'
 import { Errors } from '../utils/CommonErrors'
 import { Modes } from '../utils/GameConstants'
 import SocketManager from '../services/SocketManager'
+import { color } from 'framer-motion'
 
 interface JoinGameScreenProps {
     setGameMode: Function
@@ -85,7 +86,7 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
         setModalMsg(Errors.ROOM_DISBANDED)
         setShowModal(true)
         setTimeout(() => {
-            navigate('/')
+            // navigate('/')
         }, 2000)
     }
 
@@ -157,14 +158,14 @@ function JoinGameScreen({ setGameMode, setPlayerID }: JoinGameScreenProps) {
             {showModal && (
                 <MsgModal onClose={handleCloseModal} msg={modalMsg} />
             )}
+            <h1>
+                Welcome to <span style={{ color: '#e0b0b0' }}>Pixel</span>Paint
+            </h1>
             <section className={`${styles.mainMenuContainer}`}>
                 <div className={`${styles.logoContainer}`}>
                     <img src={svgLogo} alt="Logo" className={styles.logo} />
                 </div>
 
-                <h1>
-                    Welcome to <span>Pixel</span>Paint
-                </h1>
                 {roomJoined ? (
                     <div className={styles.waitingContainer}>
                         <p>Joined! Waiting...</p>

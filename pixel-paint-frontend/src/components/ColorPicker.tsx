@@ -15,8 +15,8 @@ const ColorPicker: FC<ColorPickerProps & any> = ({
 
     const colorOptions = [
         { color: Colors.TILE_COLOR_A, label: '1' },
-        { color: Colors.TILE_COLOR_B, label: '2' },
-        { color: Colors.TILE_COLOR_C, label: '3' },
+        { color: Colors.TILE_COLOR_C, label: '2' },
+        { color: Colors.TILE_COLOR_B, label: '3' },
         { color: Colors.TILE_COLOR_D, label: '4' },
         { color: Colors.TILE_COLOR_E, label: '5' },
         { color: Colors.TILE_COLOR_F, label: '6' }

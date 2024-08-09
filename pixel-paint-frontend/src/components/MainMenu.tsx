@@ -153,9 +153,21 @@ const MainMenu: FC<MainMenuProps> = ({
                     <img src={svgLogo} alt="Logo" className={styles.logo} />
                 </div>
 
-                <h1>
-                    Welcome to <span>Pixel</span>Paint
+                <h1 style={{ color: 'white', textShadow: '1px 1px 1px black' }}>
+                    Welcome to{' '}
+                    <span
+                        style={{
+                            color: '#e0b0b0',
+                            textShadow: 'black 1px 1px 1px'
+                        }}
+                    >
+                        Pixel
+                    </span>
+                    Paint !
                 </h1>
+                <button onClick={handleClick}>
+                    {mode !== Modes.CO_OP ? 'Start Game' : 'Create Game'}
+                </button>
                 <form>
                     <input
                         className={isNameError ? styles.inputError : ''}
@@ -168,9 +180,6 @@ const MainMenu: FC<MainMenuProps> = ({
                         onChange={handleNameChange}
                     ></input>
                 </form>
-                <button onClick={handleClick}>
-                    {mode !== Modes.CO_OP ? 'Start Game' : 'Create Game'}
-                </button>
                 <DropdownMenu
                     onSelectOption={handleChange}
                     isModeSelected={isModeError}

@@ -8,7 +8,7 @@ import ColorPicker from './ColorPicker'
 import EventsManager from '../services/EventsManager'
 import { SocketEvents } from '../services/SocketEvents.model'
 import { TileSelectedPayload } from '../payloads/TileSelectedPayload'
-
+import '../assets/GameBoardStyle.scss'
 interface GridLayoutProps {
     rows: number
     columns: number
@@ -45,6 +45,18 @@ const GridLayout: FC<GridLayoutProps> = ({
     stateRef.current = canvas
 
     useEffect(() => {
+        function handleResize() {
+            setTileSize(getTileSize())
+            setPicTileSize(getPicTileSize())
+        }
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
+
+    useEffect(() => {
         const newCanvas = cloneDeep(puzzle)
         if (!picture) {
             for (const tile of newCanvas) {
@@ -75,23 +87,11 @@ const GridLayout: FC<GridLayoutProps> = ({
     }, [])
 
     function getTileSize() {
-        const screenWidth = window.innerWidth
-        if (screenWidth <= 1600) {
-            return '3em'
-        } else {
-            return '4em'
-        }
+        return '100%'
     }
 
     function getPicTileSize() {
-        const screenWidth = window.innerWidth
-        if (screenWidth <= 768) {
-            return '25px'
-        } else if (screenWidth <= 1600) {
-            return '20px'
-        } else {
-            return '25px'
-        }
+        return '25px'
     }
 
     const handleMouseUp = (index: number) => {
@@ -231,32 +231,27 @@ const GridLayout: FC<GridLayoutProps> = ({
     )
 
     return (
-        <div
-            className={
-                picture ? `${styles.pictureContainer} ` : 'container-fluid'
-            }
-        >
+        <>
             {picture &&
                 (gameMode === Modes.PAINT ||
                     gameMode === Modes.CO_OP_PAINT) && (
                     <ColorPicker score={score} />
                 )}
-            <div className={`${styles.rowsContainer}`}>
+            <div className={picture ? 'preset-container' : 'board-container'}>
                 {Array.from({ length: rows }, (_, i) => {
                     return (
-                        <div
-                            className={`row justify-content-center ${styles.tileRow}`}
-                            key={i}
-                        >
+                        <>
                             {Array.from({ length: columns }, (_, j) => {
                                 const index = i * columns + j
                                 const currTile = canvas[index]
                                 const isHighlighted = currTile?.highlighted
                                 return (
                                     <div
-                                        className={`${
-                                            picture ? '' : styles.tile
-                                        }`}
+                                        className={
+                                            picture
+                                                ? 'preset-tile'
+                                                : 'board-tile'
+                                        }
                                         key={`${i}-${j}`}
                                         style={{
                                             backgroundColor: isHighlighted
@@ -264,15 +259,7 @@ const GridLayout: FC<GridLayoutProps> = ({
                                                     ? currTile.color
                                                     : Colors.TILE_COLOR_HIGHLIGHTED
                                                 : Colors.TILE_COLOR_DEFAULT,
-                                            margin: picture
-                                                ? '-2.5px 2.5px'
-                                                : '0px 5px',
-                                            width: picture
-                                                ? picTileSize
-                                                : tileSize,
-                                            height: picture
-                                                ? picTileSize
-                                                : tileSize,
+
                                             visibility: showPicture
                                                 ? 'visible'
                                                 : 'hidden'
@@ -282,18 +269,11 @@ const GridLayout: FC<GridLayoutProps> = ({
                                     ></div>
                                 )
                             })}
-                        </div>
+                        </>
                     )
                 })}
             </div>
-            {!picture && (
-                <div className={`${styles.gameBtns}`}>
-                    <button onClick={handleClearClicked}>
-                        <h1>CLEAR</h1>
-                    </button>
-                </div>
-            )}
-        </div>
+        </>
     )
 }
 
